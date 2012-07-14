@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    elastic_record (0.0.1)
+
+PATH
+  remote: ~/code/arelastic
+  specs:
+    arelastic (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  arelastic!
+  elastic_record!

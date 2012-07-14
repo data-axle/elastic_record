@@ -1,0 +1,1 @@
+require 'elastic_record/relation'
