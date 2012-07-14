@@ -97,6 +97,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
   private
     def relation
-      @relation ||= ElasticRecord::Relation.new
+      @relation ||= ElasticRecord::Relation.new(TestModel)
     end
 end

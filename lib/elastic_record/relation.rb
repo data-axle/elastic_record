@@ -1,10 +1,16 @@
-require 'elastic_record/relation/search_methods'
-require 'elastic_record/relation/delegation'
-
 module ElasticRecord
   class Relation
-    include ElasticRecord::Relation::SearchMethods
-    include ElasticRecord::Relation::Delegation
+    MULTI_VALUE_METHODS  = [:filter, :facet, :sort]
+    SINGLE_VALUE_METHODS = [:query, :limit, :offset]
+
+    include Delegation, SearchMethods
+
+    attr_reader :klass
+
+    def initialize(klass)
+      @klass = klass
+      @values = {}
+    end
 
     def count
       to_hits.total_entries
@@ -15,11 +21,22 @@ module ElasticRecord
     end
 
     def to_a
+      @records ||= klass.find(to_ids)
+    end
+
+    def to_ids
       to_hits.to_a
     end
 
     def to_hits
-      search_client.search(as_elastic)
+      @hits ||= search_client.search(as_elastic)
+    end
+
+    def scoping
+      previous, klass.current_scope = klass.current_scope, self
+      yield
+    ensure
+      klass.current_scope = previous
     end
   end
 end
