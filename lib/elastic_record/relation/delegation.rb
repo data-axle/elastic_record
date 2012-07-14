@@ -1,5 +1,5 @@
 module ElasticRecord
-  module Relation
+  class Relation
     module Delegation
       private
         def method_missing(method, *args, &block)
