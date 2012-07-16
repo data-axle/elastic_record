@@ -38,5 +38,9 @@ module ElasticRecord
     ensure
       klass.current_scope = previous
     end
+
+    def arelastic
+      @arelastic ||= Arelastic::Builders::Search.new
+    end
   end
 end
