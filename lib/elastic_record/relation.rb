@@ -25,11 +25,11 @@ module ElasticRecord
     end
 
     def to_ids
-      to_hits.to_a
+      to_hits.to_a.map(&:id)
     end
 
     def to_hits
-      @hits ||= search_client.search(as_elastic)
+      @hits ||= klass.elastic_connection.search(as_elastic)#, ids_only: true)
     end
 
     def scoping

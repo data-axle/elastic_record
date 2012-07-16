@@ -1,11 +1,15 @@
 module ElasticRecord
   module Scoping
-    def current_scope #:nodoc:
-      Thread.current["#{self}_current_scope"]
+    def elastic_scoped
+      
     end
 
-    def current_scope=(scope) #:nodoc:
-      Thread.current["#{self}_current_scope"] = scope
+    def current_elastic_scope #:nodoc:
+      Thread.current["#{self}_current_elastic_scope"]
+    end
+
+    def current_elastic_scope=(scope) #:nodoc:
+      Thread.current["#{self}_current_elastic_scope"] = scope
     end
   end
 end

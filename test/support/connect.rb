@@ -1,1 +1,1 @@
-# ElasticSearch.new(ES_CONFIG["servers"], ES_CONFIG["options"].merge(index: search_index, type: search_type, server_max_requests: 100))
+TestModel.elastic_connection = ElasticSearch.new('127.0.0.1:9200', index: 'widgets', type: 'widget')

@@ -2,8 +2,8 @@ module ElasticRecord
   module Model
     def self.included(base)
       base.class_eval do
-        include Connection
-        include Scoping
+        extend Connection
+        extend Scoping
       end
     end
   end
