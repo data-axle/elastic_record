@@ -26,7 +26,7 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_facets
-    facets = relation.facet(relation.search.facet['popular_colors'].terms('color')).facets
+    facets = relation.facet(relation.elastic_builder.facet['popular_colors'].terms('color')).facets
 
     assert_equal 2, facets['popular_colors']['total']
   end

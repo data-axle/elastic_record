@@ -25,8 +25,8 @@ module ElasticRecord
     end
     
     
-    def search
-      @search ||= Arelastic::Builders::Search.new
+    def elastic_builder
+      @elastic_builder ||= Arelastic::Builders::Search.new
     end
 
     def query!(value)
@@ -103,13 +103,13 @@ module ElasticRecord
         query = build_query(query)
         filter = build_filter(filters)
         if query && filter
-          search.query.filtered(query, filter)
+          elastic_builder.query.filtered(query, filter)
         elsif query
           query
         elsif filter
-          search.query.constant_score(filter)
+          elastic_builder.query.constant_score(filter)
         else
-          search.query.match_all
+          elastic_builder.query.match_all
         end
       end
 

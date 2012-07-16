@@ -9,7 +9,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
   def test_query_with_only_filters
     relation.filter!('foo' => 'bar')
-    relation.filter!(relation.search['faz'].in ['baz', 'fum'])
+    relation.filter!(relation.elastic_builder['faz'].in ['baz', 'fum'])
     
     expected = {
       "constant_score" => {
@@ -35,7 +35,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
   def test_query_with_both_filter_and_query
     relation.query!('field' => {'name' => 'joe'})
-    relation.filter!(relation.search['name'].prefix "mat")
+    relation.filter!(relation.elastic_builder['name'].prefix "mat")
 
     expected = {
       "filtered" => {
@@ -56,7 +56,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
   end
 
   def test_facet
-    relation.facet!(relation.search.facet['popular_tags'].terms('tags'))
+    relation.facet!(relation.elastic_builder.facet['popular_tags'].terms('tags'))
 
     expected = {
       "popular_tags" => {
