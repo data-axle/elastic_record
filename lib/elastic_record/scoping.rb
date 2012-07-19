@@ -1,7 +1,11 @@
 module ElasticRecord
   module Scoping
     def elastic_scoped
-      
+      if current_scope
+        current_scope.clone
+      else
+        relation
+      end
     end
 
     def current_elastic_scope #:nodoc:

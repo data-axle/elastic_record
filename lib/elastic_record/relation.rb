@@ -5,10 +5,11 @@ module ElasticRecord
 
     include Delegation, SearchMethods
 
-    attr_reader :klass
+    attr_reader :klass, :arelastic
 
-    def initialize(klass)
+    def initialize(klass, arelastic)
       @klass = klass
+      @arelastic = arelastic
       @values = {}
     end
 
@@ -37,10 +38,6 @@ module ElasticRecord
       yield
     ensure
       klass.current_scope = previous
-    end
-
-    def arelastic
-      @arelastic ||= Arelastic::Builders::Search.new
     end
   end
 end
