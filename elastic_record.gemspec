@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
 
   # s.add_dependency 'arelastic'
   s.add_dependency 'rubberband', '0.1.1'
+  s.add_dependency 'activemodel'
 end

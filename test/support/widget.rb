@@ -1,4 +1,5 @@
 class Widget
+  extend ActiveModel::Naming
   include ElasticRecord::Model
 
   class << self
