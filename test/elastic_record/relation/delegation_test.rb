@@ -18,6 +18,15 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   end
 
   def test_delegate_to_klass
-    
+    model = Class.new(TestModel) do
+      def self.do_it
+        elastic_scoped.as_elastic
+      end
+    end
+
+    result = model.relation.filter('foo' => 'bar').do_it
+
+    expected = {"query"=>{"constant_score"=>{"filter"=>{"term"=>{"foo"=>"bar"}}}}}
+    assert_equal expected, result 
   end
 end

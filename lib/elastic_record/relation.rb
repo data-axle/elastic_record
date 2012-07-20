@@ -34,10 +34,10 @@ module ElasticRecord
     end
 
     def scoping
-      previous, klass.current_scope = klass.current_scope, self
+      previous, klass.current_elastic_scope = klass.current_elastic_scope, self
       yield
     ensure
-      klass.current_scope = previous
+      klass.current_elastic_scope = previous
     end
   end
 end

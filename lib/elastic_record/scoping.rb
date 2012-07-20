@@ -1,8 +1,8 @@
 module ElasticRecord
   module Scoping
     def elastic_scoped
-      if current_scope
-        current_scope.clone
+      if current_elastic_scope
+        current_elastic_scope.clone
       else
         relation
       end
