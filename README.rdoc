@@ -1,0 +1,23 @@
+Expects that your model implements find(*ids)
+
+class Widgets
+  include ElasticRecord::Model
+end
+
+scope = Widgets.filter(color: 'red').order(:price)
+
+scope.count
+scope.first
+scope.last
+scope.all
+scope.each
+
+Class methods are executed within scopes:
+
+class Widgets
+  def self.ouput_to_screen
+    all.each do { |widget| puts widget }
+  end
+end
+
+scope.output_to_screen
