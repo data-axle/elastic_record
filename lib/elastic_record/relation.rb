@@ -3,7 +3,7 @@ module ElasticRecord
     MULTI_VALUE_METHODS  = [:filter, :facet, :sort]
     SINGLE_VALUE_METHODS = [:query, :limit, :offset]
 
-    include Delegation, SearchMethods
+    include Delegation, FinderMethods, SearchMethods
 
     attr_reader :klass, :arelastic
 
