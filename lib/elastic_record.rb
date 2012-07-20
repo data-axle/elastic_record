@@ -1,4 +1,5 @@
 module ElasticRecord
+  autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
   autoload :Scoping, 'elastic_record/scoping'
 

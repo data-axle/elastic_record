@@ -1,1 +1,1 @@
-Widget.elastic_connection = ElasticSearch.new('127.0.0.1:9200', index: 'widgets', type: 'widget')
+ElasticRecord::Config.servers = '127.0.0.1:9200'
