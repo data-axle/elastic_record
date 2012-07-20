@@ -5,7 +5,21 @@ module ElasticRecord
     end
 
     def first
-      limit(1).to_a.first
+      find_one order('_uid')
+    end
+
+    def last
+      find_one order('color' => 'reverse')
+    end
+
+    def all
+      to_a
+    end
+
+    private
+
+    def find_one(relation)
+      relation.limit(1).to_a.first
     end
   end
 end

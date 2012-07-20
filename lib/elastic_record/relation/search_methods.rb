@@ -69,12 +69,13 @@ module ElasticRecord
       clone.facet! *args
     end
 
-    def sort!(*args)
-      self.sort_values += args.flatten
+    def order!(*args)
+      self.order_values += args.flatten
+      self
     end
 
-    def sort(*args)
-      clone.sort! *args
+    def order(*args)
+      clone.order! *args
     end
 
     def as_elastic
@@ -88,7 +89,7 @@ module ElasticRecord
           build_limit(limit_value),
           build_offset(offset_value),
           build_facets(facet_values),
-          build_sorts(sort_values)
+          build_orders(order_values)
         ].compact
 
         Arelastic::Nodes::Grouping.new searches
@@ -166,8 +167,8 @@ module ElasticRecord
         Arelastic::Searches::Facets.new(nodes) unless nodes.empty?
       end
 
-      def build_sorts(sorts)
-        Arelastic::Searches::Sort.new(sorts) unless sorts.empty?
+      def build_orders(orders)
+        Arelastic::Searches::Sort.new(orders) unless orders.empty?
       end
   end
 end

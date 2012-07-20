@@ -83,9 +83,9 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['from']
   end
 
-  def test_sort
-    relation.sort! 'foo'
-    relation.sort! 'bar' => 'desc'
+  def test_order
+    relation.order! 'foo'
+    relation.order! 'bar' => 'desc'
 
     expected = [
       'foo',
