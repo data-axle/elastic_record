@@ -1,7 +1,7 @@
 module ElasticRecord
   module FinderMethods
     def find(id)
-      filter(arelastic.filter.ids(id))
+      filter(arelastic.filter.ids(id)).to_a.first
     end
 
     def first
