@@ -2,15 +2,15 @@ require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   def setup
-    TestModel.reset_index!
+    Widget.reset_index!
   end
 
   def test_delegate_to_array
-    TestModel.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
-    TestModel.elastic_connection.refresh
+    Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
+    Widget.elastic_connection.refresh
     
     records = []
-    TestModel.relation.each do |record|
+    Widget.relation.each do |record|
       records << record
     end
 
@@ -18,7 +18,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   end
 
   def test_delegate_to_klass
-    model = Class.new(TestModel) do
+    model = Class.new(Widget) do
       def self.do_it
         elastic_scoped.as_elastic
       end

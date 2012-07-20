@@ -2,9 +2,9 @@ require 'helper'
 
 class ElasticRecord::ModelTest < MiniTest::Spec
   def test_relation
-    relation = TestModel.relation
+    relation = Widget.relation
 
-    assert_equal TestModel, relation.klass
-    assert_equal TestModel.arelastic, relation.arelastic
+    assert_equal Widget, relation.klass
+    assert_equal Widget.arelastic, relation.arelastic
   end
 end

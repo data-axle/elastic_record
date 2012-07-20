@@ -4,7 +4,7 @@ Bundler.require
 require 'minitest/autorun'
 require 'rubberband'
 
-require 'support/test_model'
+require 'support/widget'
 require 'support/connect'
 
 module MiniTest

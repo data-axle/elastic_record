@@ -1,4 +1,4 @@
-class TestModel
+class Widget
   include ElasticRecord::Model
 
   class << self
