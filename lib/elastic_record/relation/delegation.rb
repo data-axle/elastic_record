@@ -1,5 +1,9 @@
 module ElasticRecord
   module Delegation
+    def to_ary
+      to_a.to_ary
+    end
+
     private
       def method_missing(method, *args, &block)
         if klass.respond_to?(method)
