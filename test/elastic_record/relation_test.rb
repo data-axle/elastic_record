@@ -32,12 +32,14 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_equal
-    assert_equal Widget.relation.filter(color: 'green'), Widget.relation(color: 'green')
-    assert false
+    assert(Widget.relation.filter(color: 'green') == Widget.relation.filter(color: 'green'))
+    assert(Widget.relation.filter(color: 'green') != Widget.relation.filter(color: 'blue'))
+
+    assert(Widget.relation.filter(color: 'magenta') == [])
   end
 
   def test_inspect
-    assert false
+    assert_equal [].inspect, Widget.relation.filter(color: 'magenta').inspect
   end
 
   private

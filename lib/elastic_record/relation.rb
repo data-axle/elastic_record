@@ -22,7 +22,7 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= klass.find_with_ids(to_ids)
+      @records ||= klass.find(to_ids)
     end
 
     def to_ids
@@ -36,11 +36,8 @@ module ElasticRecord
     def ==(other)
       case other
       when Relation
-        p "relation"
         other.as_elastic == as_elastic
       when Array
-        p "to_a = #{to_a.map(&:id)}"
-        p "other = #{other.map(&:id)}"
         to_a == other
       end
     end
