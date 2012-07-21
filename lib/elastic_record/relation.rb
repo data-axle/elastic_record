@@ -1,6 +1,6 @@
 module ElasticRecord
   class Relation
-    MULTI_VALUE_METHODS  = [:filter, :facet, :order]
+    MULTI_VALUE_METHODS  = [:extending, :filter, :facet, :order]
     SINGLE_VALUE_METHODS = [:query, :limit, :offset]
 
     include Delegation, FinderMethods, SearchMethods

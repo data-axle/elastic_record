@@ -1,0 +1,2 @@
+module ElasticRecord
+end

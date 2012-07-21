@@ -78,6 +78,19 @@ module ElasticRecord
       clone.order! *args
     end
 
+    def extending!(*modules, &block)
+      modules << Module.new(&block) if block_given?
+
+      self.extending_values += modules.flatten
+      extend(*extending_values)
+
+      self
+    end
+
+    def extending(*modules, &block)
+      clone.extending!(*modules, &block)
+    end
+
     def as_elastic
       build_search.as_elastic
     end

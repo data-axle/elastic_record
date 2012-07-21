@@ -95,6 +95,28 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['sort']
   end
 
+  def test_extending_with_block
+    relation.extending! do
+      def foo
+        'foo'
+      end
+    end
+
+    assert_equal 'foo', relation.foo
+  end
+
+  def test_extending_with_module
+    mod = Module.new do
+      def bar
+        'bar'
+      end
+    end
+
+    relation.extending! mod
+
+    assert_equal 'bar', relation.bar
+  end
+
   private
     def relation
       @relation ||= Widget.relation
