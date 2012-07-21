@@ -31,6 +31,15 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     assert_equal 2, facets['popular_colors']['total']
   end
 
+  def test_equal
+    assert_equal Widget.relation.filter(color: 'green'), Widget.relation(color: 'green')
+    assert false
+  end
+
+  def test_inspect
+    assert false
+  end
+
   private
     def create_widgets
       Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})

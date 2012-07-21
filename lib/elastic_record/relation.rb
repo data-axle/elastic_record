@@ -22,7 +22,7 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= klass.find(to_ids)
+      @records ||= klass.find_with_ids(to_ids)
     end
 
     def to_ids
@@ -31,6 +31,22 @@ module ElasticRecord
 
     def to_hits
       @hits ||= klass.elastic_connection.search(as_elastic)#, ids_only: true)
+    end
+
+    def ==(other)
+      case other
+      when Relation
+        p "relation"
+        other.as_elastic == as_elastic
+      when Array
+        p "to_a = #{to_a.map(&:id)}"
+        p "other = #{other.map(&:id)}"
+        to_a == other
+      end
+    end
+
+    def inspect
+      to_a.inspect
     end
 
     def scoping
