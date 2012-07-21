@@ -20,7 +20,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   def test_delegate_to_klass
     model = Class.new(Widget) do
       def self.do_it
-        elastic_scoped.as_elastic
+        elastic_search.as_elastic
       end
     end
 

@@ -3,7 +3,7 @@ module ElasticRecord
     def self.included(base)
       base.class_eval do
         extend Connection
-        extend Scoping
+        extend Searching
         extend ClassMethods
       end
     end
