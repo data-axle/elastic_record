@@ -72,12 +72,14 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
   end
 
   def test_facet_with_arelastic
-    relation.facet!(Widget.arelastic.facet['popular_tags'].terms('tags'))
+    relation.facet!(Widget.arelastic.facet['popular_tags'].histogram('field' => 'field_name', 'interval' => 100))
 
     expected = {
       "popular_tags" => {
-        "terms" => {
-          "field" => "tags"
+        "histogram" =>
+        {
+          "field" => "field_name",
+          "interval" => 100
         }
       }
     }
@@ -86,12 +88,13 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
   end
 
   def test_facet_with_string
-    relation.facet!('tags')
+    relation.facet!('tags', 'size' => 10)
 
     expected = {
       "tags" => {
         "terms" => {
-          "field" => "tags"
+          "field" => "tags",
+          "size"  => 10
         }
       }
     }

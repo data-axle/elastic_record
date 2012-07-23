@@ -60,13 +60,18 @@ module ElasticRecord
       clone.offset! value
     end
 
-    def facet!(*args)
-      self.facet_values += args.flatten
+    def facet!(name_or_facet, options = {})
+      if name_or_facet.is_a?(String)
+        self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]
+      else
+        self.facet_values += [name_or_facet]
+      end
+
       self
     end
 
-    def facet(*args)
-      clone.facet! *args
+    def facet(facet_or_name, options = {})
+      clone.facet! facet_or_name, options = {}
     end
 
     def order!(*args)
@@ -170,17 +175,7 @@ module ElasticRecord
       end
 
       def build_facets(facets)
-        nodes = []
-
-        facets.each do |facet|
-          if facet.is_a?(Arelastic::Facets::Facet)
-            nodes << facet
-          elsif facet.is_a?(String)
-            nodes << arelastic.facet[facet].terms(facet)
-          end
-        end
-
-        Arelastic::Searches::Facets.new(nodes) unless nodes.empty?
+        Arelastic::Searches::Facets.new(facets) unless facets.empty?
       end
 
       def build_orders(orders)
