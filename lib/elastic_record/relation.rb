@@ -8,7 +8,7 @@ module ElasticRecord
     MULTI_VALUE_METHODS  = [:extending, :filter, :facet, :order]
     SINGLE_VALUE_METHODS = [:query, :limit, :offset]
 
-    include Delegation, FinderMethods, Merging, SearchMethods
+    include Batches, Delegation, FinderMethods, Merging, SearchMethods
 
     attr_reader :klass, :arelastic, :values
 

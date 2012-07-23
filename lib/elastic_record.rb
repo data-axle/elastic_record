@@ -3,6 +3,7 @@ module ElasticRecord
   autoload :Connection, 'elastic_record/connection'
 
   autoload :Relation, 'elastic_record/relation'
+  autoload :Batches, 'elastic_record/relation/batches'
   autoload :Delegation, 'elastic_record/relation/delegation'
   autoload :FinderMethods, 'elastic_record/relation/finder_methods'
   autoload :Merging, 'elastic_record/relation/merging'
