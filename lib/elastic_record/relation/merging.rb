@@ -26,15 +26,8 @@ module ElasticRecord
             value = values[name]
             relation.send("#{name}!", value) unless value.blank?
           end
-          # 
-          # Relation::MULTI_VALUE_METHODS.each do |name|
-          #   value = values[name]
-          # 
-          #   unless value.blank?
-          #     relation.send("#{name}!", value)
-          #     relation.send("#{name}_values").uniq!
-          #   end
-          # end
+
+          relation
         end
       end
   end

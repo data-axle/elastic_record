@@ -170,10 +170,8 @@ module ElasticRecord
         facets.each do |facet|
           if facet.is_a?(Arelastic::Facets::Facet)
             nodes << facet
-          else
-            facet.each do |name, value|
-              nodes << {name => value}
-            end
+          elsif facet.is_a?(String)
+            nodes << arelastic.facet[facet].terms(facet)
           end
         end
 

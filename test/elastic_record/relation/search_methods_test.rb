@@ -55,13 +55,27 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
-  def test_facet
+  def test_facet_with_arelastic
     relation.facet!(Widget.arelastic.facet['popular_tags'].terms('tags'))
 
     expected = {
       "popular_tags" => {
         "terms" => {
-          "field"=>"tags"
+          "field" => "tags"
+        }
+      }
+    }
+
+    assert_equal expected, relation.as_elastic['facets']
+  end
+
+  def test_facet_with_string
+    relation.facet!('tags')
+
+    expected = {
+      "tags" => {
+        "terms" => {
+          "field" => "tags"
         }
       }
     }
