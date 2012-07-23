@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.rdoc']
   s.files = Dir['{lib,test}/**/*.rb']
 
-  # s.add_dependency 'arelastic'
+  s.add_dependency 'arelastic'
   s.add_dependency 'rubberband', '0.1.1'
   s.add_dependency 'activemodel'
 end

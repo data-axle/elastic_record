@@ -1,4 +1,4 @@
 source :rubygems
 
 gemspec
-gem 'arelastic', path: '~/code/arelastic'
+# gem 'arelastic', path: '~/code/arelastic'
