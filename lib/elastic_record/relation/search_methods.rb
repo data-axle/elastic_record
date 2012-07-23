@@ -105,7 +105,7 @@ module ElasticRecord
           build_orders(order_values)
         ].compact
 
-        Arelastic::Nodes::Grouping.new searches
+        Arelastic::Nodes::HashGroup.new searches
       end
 
       def build_query_and_filter(query, filters)
