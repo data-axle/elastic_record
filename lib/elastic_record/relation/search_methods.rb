@@ -140,7 +140,12 @@ module ElasticRecord
             nodes << filter
           else
             filter.each do |field, terms|
-              nodes << (terms.is_a?(Array) ? Arelastic::Filters::Terms : Arelastic::Filters::Term).new(field, terms)
+              case terms
+              when Array, Range
+                nodes << arelastic[field].in(terms)
+              else
+                nodes << arelastic[field].eq(terms)
+              end
             end
           end
         end

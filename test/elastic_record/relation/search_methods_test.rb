@@ -7,7 +7,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
-  def test_query_with_only_filters
+  def test_query_with_multiple_filters
     relation.filter!('foo' => 'bar')
     relation.filter!(Widget.arelastic['faz'].in ['baz', 'fum'])
     
@@ -18,6 +18,22 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
             {"term"   => {"foo" => "bar"}},
             {"terms"  => {"faz" => ["baz", "fum"]}}
           ]
+        }
+      }
+    }
+
+    assert_equal expected, relation.as_elastic['query']
+  end
+
+  def test_query_with_range_filter
+    relation.filter!(Widget.arelastic['faz'].in 3..5)
+    
+    expected = {
+      "constant_score" => {
+        "filter" => {
+          "range" => {
+            "faz" => {"gte"=>3, "lte"=>5}
+          }
         }
       }
     }
