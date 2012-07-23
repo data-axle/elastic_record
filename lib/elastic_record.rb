@@ -1,3 +1,5 @@
+require 'arelastic'
+
 module ElasticRecord
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
