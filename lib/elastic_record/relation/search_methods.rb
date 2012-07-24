@@ -162,6 +162,19 @@ module ElasticRecord
         end
       end
 
+      # def normalize_value(value)
+      #   case value
+      #   when true
+      #     "T"
+      #   when false
+      #     "F"
+      #   when Time
+      #     value.iso8601
+      #   else
+      #     value
+      #   end
+      # end
+
       def build_limit(limit)
         if limit
           Arelastic::Searches::Size.new(limit)
