@@ -2,7 +2,7 @@
  
 Gem::Specification.new do |s|
   s.name = 'elastic_record'
-  s.version = '0.0.3'
+  s.version = '0.1.0'
   s.summary = 'Use Elastic Search with your objects'
   s.description = 'Find your records with elastic search'
 
@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
   s.files = Dir['{lib,test}/**/*.rb']
 
   s.add_dependency 'arelastic'
-  s.add_dependency 'rubberband', '0.1.1'
+  s.add_dependency 'rubberband'#, '0.1.1'
   s.add_dependency 'activemodel'
 end
