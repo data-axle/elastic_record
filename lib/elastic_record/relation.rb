@@ -35,7 +35,7 @@ module ElasticRecord
     end
 
     def to_hits
-      @hits ||= klass.elastic_connection.search(as_elastic, limit: limit_value)#, ids_only: true)
+      @hits ||= klass.elastic_connection.search(as_elastic)#, ids_only: true)
     end
 
     def ==(other)
