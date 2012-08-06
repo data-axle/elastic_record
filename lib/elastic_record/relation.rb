@@ -26,6 +26,15 @@ module ElasticRecord
       to_hits.facets
     end
 
+    def reset
+      @hits = @records = nil
+    end
+
+    def initialize_copy(other)
+      @values = @values.dup
+      reset
+    end
+
     def to_a
       @records ||= klass.find(to_ids)
     end
