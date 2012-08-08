@@ -3,15 +3,8 @@ require 'arelastic'
 module ElasticRecord
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
-
-  autoload :Relation, 'elastic_record/relation'
-  autoload :Batches, 'elastic_record/relation/batches'
-  autoload :Delegation, 'elastic_record/relation/delegation'
-  autoload :FinderMethods, 'elastic_record/relation/finder_methods'
-  autoload :Merging, 'elastic_record/relation/merging'
-  autoload :SearchMethods, 'elastic_record/relation/search_methods'
-
-  autoload :Searching, 'elastic_record/searching'
-
+  autoload :Index, 'elastic_record/index'
   autoload :Model, 'elastic_record/model'
+  autoload :Relation, 'elastic_record/relation'
+  autoload :Searching, 'elastic_record/searching'
 end

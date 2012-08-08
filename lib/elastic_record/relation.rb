@@ -1,13 +1,12 @@
-# require 'elastic_record/relation/delegation'
-# require 'elastic_record/relation/finder_methods'
-# require 'elastic_record/relation/merging'
-# require 'elastic_record/relation/search_methods'
+require 'elastic_record/relation/value_methods'
+require 'elastic_record/relation/batches'
+require 'elastic_record/relation/delegation'
+require 'elastic_record/relation/finder_methods'
+require 'elastic_record/relation/merging'
+require 'elastic_record/relation/search_methods'
 
 module ElasticRecord
   class Relation
-    MULTI_VALUE_METHODS  = [:extending, :filter, :facet, :order]
-    SINGLE_VALUE_METHODS = [:query, :limit, :offset]
-
     include Batches, Delegation, FinderMethods, Merging, SearchMethods
 
     attr_reader :klass, :arelastic, :values
