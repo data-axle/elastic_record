@@ -9,12 +9,16 @@ module ElasticRecord
     end
 
     module ClassMethods
-      def relation
+      def elastic_relation
         ElasticRecord::Relation.new(self, arelastic)
       end
 
       def arelastic
         @arelastic ||= Arelastic::Builders::Search.new
+      end
+
+      def elastic_index
+        @elastic_index ||= ElasticRecord::Index.new(self)
       end
     end
   end

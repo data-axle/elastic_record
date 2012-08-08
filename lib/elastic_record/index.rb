@@ -11,5 +11,13 @@ module ElasticRecord
     def initialize(model)
       @model = model
     end
+
+    def name
+      model.model_name.collection
+    end
+
+    def type
+      model.model_name.element
+    end
   end
 end

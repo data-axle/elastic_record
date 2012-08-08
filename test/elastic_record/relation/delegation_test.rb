@@ -10,7 +10,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
     Widget.elastic_connection.refresh
     
     records = []
-    Widget.relation.each do |record|
+    Widget.elastic_relation.each do |record|
       records << record
     end
 
@@ -24,7 +24,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
       end
     end
 
-    result = model.relation.filter('foo' => 'bar').do_it
+    result = model.elastic_relation.filter('foo' => 'bar').do_it
 
     expected = {"query"=>{"constant_score"=>{"filter"=>{"term"=>{"foo"=>"bar"}}}}}
     assert_equal expected, result 

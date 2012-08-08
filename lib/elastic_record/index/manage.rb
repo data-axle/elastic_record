@@ -1,6 +1,6 @@
 module ElasticRecord
   class Index
-    module Creation
+    module Manage
       def create(index_name = search_index_name)
         # elastic_connection.create_index(index_name, index_creation_options)
         # 

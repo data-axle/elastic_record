@@ -4,7 +4,7 @@ module ElasticRecord
       if current_elastic_search
         current_elastic_search.clone
       else
-        relation
+        elastic_relation
       end
     end
 

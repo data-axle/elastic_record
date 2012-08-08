@@ -7,39 +7,39 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_to_hits
-    assert Widget.relation.to_hits.is_a?(ElasticSearch::Api::Hits)
+    assert Widget.elastic_relation.to_hits.is_a?(ElasticSearch::Api::Hits)
   end
 
   def test_to_ids
-    assert_equal ['5', '10'], Widget.relation.to_ids
+    assert_equal ['5', '10'], Widget.elastic_relation.to_ids
   end
 
   def test_to_a
-    array = Widget.relation.to_a
+    array = Widget.elastic_relation.to_a
 
     assert_equal 2, array.size
     assert array.first.is_a?(Widget)
   end
 
   def test_count
-    assert_equal 2, Widget.relation.count
+    assert_equal 2, Widget.elastic_relation.count
   end
 
   def test_facets
-    facets = Widget.relation.facet(Widget.arelastic.facet['popular_colors'].terms('color')).facets
+    facets = Widget.elastic_relation.facet(Widget.arelastic.facet['popular_colors'].terms('color')).facets
 
     assert_equal 2, facets['popular_colors']['total']
   end
 
   def test_equal
-    assert(Widget.relation.filter(color: 'green') == Widget.relation.filter(color: 'green'))
-    assert(Widget.relation.filter(color: 'green') != Widget.relation.filter(color: 'blue'))
+    assert(Widget.elastic_relation.filter(color: 'green') == Widget.elastic_relation.filter(color: 'green'))
+    assert(Widget.elastic_relation.filter(color: 'green') != Widget.elastic_relation.filter(color: 'blue'))
 
-    assert(Widget.relation.filter(color: 'magenta') == [])
+    assert(Widget.elastic_relation.filter(color: 'magenta') == [])
   end
 
   def test_inspect
-    assert_equal [].inspect, Widget.relation.filter(color: 'magenta').inspect
+    assert_equal [].inspect, Widget.elastic_relation.filter(color: 'magenta').inspect
   end
 
   private

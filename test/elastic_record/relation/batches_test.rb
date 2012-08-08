@@ -8,7 +8,7 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
 
   def test_find_each
     results = []
-    Widget.relation.find_each do |widget|
+    Widget.elastic_relation.find_each do |widget|
       results << widget.id
     end
     assert_equal ['5', '10', '15'].to_set, results.to_set
@@ -16,7 +16,7 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
 
   def test_find_each_with_scope
     results = []
-    Widget.relation.filter(color: %w(red blue)).find_each do |widget|
+    Widget.elastic_relation.filter(color: %w(red blue)).find_each do |widget|
       results << widget.id
     end
     assert_equal ['5', '10'].to_set, results.to_set

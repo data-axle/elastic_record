@@ -152,6 +152,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
   private
     def relation
-      @relation ||= Widget.relation
+      @relation ||= Widget.elastic_relation
     end
 end

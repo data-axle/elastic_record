@@ -6,7 +6,7 @@ class ElasticRecord::SearchingTest < MiniTest::Spec
   end
 
   def test_elastic_scope
-    model = Class.new(Widget) do
+    model = Widget.anon do
       elastic_scope :by_color, ->(color) { elastic_search.filter(color: color) } do
         def negative_offset
           -offset_value
@@ -16,7 +16,7 @@ class ElasticRecord::SearchingTest < MiniTest::Spec
 
     relation = model.by_color('blue')
 
-    assert_equal model.relation.filter(color: 'blue'), relation
+    assert_equal model.elastic_relation.filter(color: 'blue'), relation
     assert_equal -5, relation.offset(5).negative_offset
   end
 end

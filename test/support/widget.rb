@@ -7,6 +7,15 @@ class Widget
       ids.map { |id| new(id: id, color: 'red') }
     end
 
+    def anon(&block)
+      Class.new(self) do
+        def self.name
+          'Widget'
+        end
+
+        instance_eval(&block)
+      end
+    end
 
     def reset_index!
       elastic_connection.delete_index('widgets')
