@@ -18,8 +18,8 @@ class Widget
     end
 
     def reset_index!
-      elastic_connection.delete_index('widgets')
-      elastic_connection.create_index('widgets')
+      elastic_index.delete
+      elastic_index.create
       elastic_connection.update_mapping(
         {
           properties: {

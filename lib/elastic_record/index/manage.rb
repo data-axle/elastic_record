@@ -1,18 +1,16 @@
 module ElasticRecord
   class Index
     module Manage
-      def create(index_name = search_index_name)
-        # elastic_connection.create_index(index_name, index_creation_options)
+      def create(index_name = name)
+        model.elastic_connection.create_index(index_name)
         # 
         # unless index_mapping.empty?
         #   elastic_connection.update_mapping(index_mapping, index: index_name)
         # end
       end
 
-      def delete
-        # def delete_index!(index_name = search_index)
-        #   elastic_connection.delete_index(index_name)
-        # end
+      def delete(index_name = name)
+        model.elastic_connection.delete_index(index_name)
       end
 
       def alias
