@@ -3,10 +3,10 @@ module ElasticRecord
     module Manage
       def create(index_name = name)
         model.elastic_connection.create_index(index_name)
-        # 
-        # unless index_mapping.empty?
-        #   elastic_connection.update_mapping(index_mapping, index: index_name)
-        # end
+
+        unless mapping.empty?
+          model.elastic_connection.update_mapping(mapping, index: index_name)
+        end
       end
 
       def delete(index_name = name)

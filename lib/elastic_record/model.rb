@@ -21,5 +21,13 @@ module ElasticRecord
         @elastic_index ||= ElasticRecord::Index.new(self)
       end
     end
+
+    def arelastic
+      self.class.arelastic
+    end
+
+    def elastic_index
+      self.class.elastic_index
+    end
   end
 end
