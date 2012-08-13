@@ -60,6 +60,19 @@ module ElasticRecord
       clone.offset! value
     end
 
+    def select!(value)
+      self.select_values += Array.wrap(value)
+      self
+    end
+
+    def select(value, &block)
+      if block_given?
+        to_a.select(&block)
+      else
+        clone.select! value
+      end
+    end
+
     def facet!(name_or_facet, options = {})
       if name_or_facet.is_a?(String)
         self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]

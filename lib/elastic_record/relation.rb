@@ -35,7 +35,10 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= klass.find(to_ids)
+      @records ||= begin
+        scope = select_values.any? ? klass.select(select_values) : klass
+        scope.find(to_ids)
+      end
     end
 
     def to_ids

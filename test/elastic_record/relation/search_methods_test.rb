@@ -128,6 +128,20 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['sort']
   end
 
+  def test_select
+    selectable_klass = Widget.anon do
+      def self.select(values)
+        @latest_select = values
+        self
+      end
+    end
+
+    relation = selectable_klass.elastic_relation.select 'foo'
+    relation.to_a
+
+    assert_equal ['foo'], selectable_klass.instance_variable_get('@latest_select')
+  end
+
   def test_extending_with_block
     relation.extending! do
       def foo
