@@ -25,7 +25,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
-  def test_query_with_range_filter
+  def test_filter_with_arelastic
     relation.filter!(Widget.arelastic['faz'].in 3..5)
     
     expected = {
@@ -33,6 +33,22 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
         "filter" => {
           "range" => {
             "faz" => {"gte"=>3, "lte"=>5}
+          }
+        }
+      }
+    }
+
+    assert_equal expected, relation.as_elastic['query']
+  end
+
+  def test_filter_with_hash
+    relation.filter!("prefix" => {"name" => "Jo"})
+    
+    expected = {
+      "constant_score" => {
+        "filter" => {
+          "prefix" => {
+            "name" => "Jo"
           }
         }
       }

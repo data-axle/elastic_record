@@ -161,6 +161,8 @@ module ElasticRecord
               case terms
               when Array, Range
                 nodes << arelastic[field].in(terms)
+              when Hash
+                nodes << {field => terms}
               else
                 nodes << arelastic[field].eq(terms)
               end
