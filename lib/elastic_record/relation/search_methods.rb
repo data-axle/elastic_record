@@ -60,16 +60,16 @@ module ElasticRecord
       clone.offset! value
     end
 
-    def select!(value)
-      self.select_values += Array.wrap(value)
+    def select!(*args)
+      self.select_values += args.flatten
       self
     end
 
-    def select(value, &block)
+    def select(*args, &block)
       if block_given?
         to_a.select(&block)
       else
-        clone.select! value
+        clone.select! *args
       end
     end
 

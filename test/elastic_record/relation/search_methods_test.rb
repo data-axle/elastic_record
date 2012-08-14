@@ -158,6 +158,16 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal ['foo'], selectable_klass.instance_variable_get('@latest_select')
   end
 
+  def test_select_with_block
+    Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
+    Widget.elastic_connection.index({'widget' => {'color' => 'blue'}}, {index: 'widgets', type: 'widget', id: 10})
+
+    records = relation.select { |record| record.id == '5' }
+
+    assert_equal 1, records.size
+    assert_equal '5', records.first.id
+  end
+
   def test_extending_with_block
     relation.extending! do
       def foo
