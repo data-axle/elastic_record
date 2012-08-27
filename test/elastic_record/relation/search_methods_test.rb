@@ -162,10 +162,10 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
     Widget.elastic_connection.index({'widget' => {'color' => 'blue'}}, {index: 'widgets', type: 'widget', id: 10})
 
-    records = relation.select { |record| record.id == '5' }
+    records = relation.select { |record| record.id == '10' }
 
     assert_equal 1, records.size
-    assert_equal '5', records.first.id
+    assert_equal '10', records.first.id
   end
 
   def test_extending_with_block
