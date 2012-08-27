@@ -14,18 +14,18 @@ module ElasticRecord
         http.head(index_name).code == '200'
       end
 
-      def deploy
+      def deploy(index_name)
         json = {
           actions: [
             {
-              remove: {
-                "index" => "widgets",
-                "alias" => "alias1"
+              add: {
+                "index" => index_name,
+                "alias" => name
               }
             }
           ]
         }
-        
+
         http.post('_aliases', ActiveSupport::JSON.encode(json))
       end
 
