@@ -14,9 +14,19 @@ module ElasticRecord
         http.head(index_name).code == '200'
       end
 
-      def alias
-        # alias_actions = {add: {index_name => pending_index_alias}}
-        # elastic_connection.alias_index(alias_actions)
+      def deploy
+        json = {
+          actions: [
+            {
+              remove: {
+                "index" => "widgets",
+                "alias" => "alias1"
+              }
+            }
+          ]
+        }
+        
+        http.post('_aliases', ActiveSupport::JSON.encode(json))
       end
 
       def update_mapping(index_name = name)

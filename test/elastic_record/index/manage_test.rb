@@ -21,6 +21,10 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
     assert !index.exists?('bar')
   end
 
+  def test_alias_to
+    # p index.alias_to
+  end
+
   private
     def index
       @index ||= Widget.elastic_index
