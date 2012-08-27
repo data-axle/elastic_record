@@ -19,5 +19,15 @@ module ElasticRecord
     def type
       model.model_name.element
     end
+
+    private
+      def connection
+        @model.elastic_connection
+      end
+
+      def http
+        host, port = connection.current_server.split ':'
+        Net::HTTP.new(host, port)
+      end
   end
 end

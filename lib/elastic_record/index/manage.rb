@@ -2,12 +2,16 @@ module ElasticRecord
   class Index
     module Manage
       def create(index_name = name)
-        model.elastic_connection.create_index(index_name)
+        http.put(index_name, '')
         update_mapping
       end
 
       def delete(index_name = name)
-        model.elastic_connection.delete_index(index_name)
+        http.delete(index_name)
+      end
+
+      def exists?(index_name = name)
+        http.head(index_name).code == '200'
       end
 
       def alias
