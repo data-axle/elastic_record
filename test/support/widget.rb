@@ -18,8 +18,12 @@ class Widget
     end
 
     def reset_index!
-      elastic_index.delete
-      elastic_index.create
+      elastic_index.all_suffixes.each do |suffix|
+        elastic_index.delete suffix
+      end
+
+      elastic_index.create('staged')
+      elastic_index.deploy('staged')
       elastic_connection.update_mapping(
         {
           properties: {
@@ -31,7 +35,7 @@ class Widget
           _source: {
             enabled: false
           }
-        },  
+        },
         {
           index: 'widgets'
         }

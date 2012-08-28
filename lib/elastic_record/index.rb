@@ -12,7 +12,7 @@ module ElasticRecord
       @model = model
     end
 
-    def name
+    def alias_name
       model.model_name.collection
     end
 

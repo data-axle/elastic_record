@@ -3,7 +3,10 @@ require 'helper'
 class ElasticRecord::Index::ManageTest < MiniTest::Spec
   def setup
     super
-    index.delete('foo') if index.exists?('foo')    
+
+    index.all_suffixes.each do |suffix|
+      index.delete suffix
+    end
   end
   
   def test_create
@@ -21,8 +24,13 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
     assert !index.exists?('bar')
   end
 
-  def test_alias_to
-    # p index.alias_to
+  def test_deploy
+    index.create 'foo'
+    
+    assert_nil index.deployed_name
+    index.deploy 'foo'
+
+    assert_equal 'widgets_foo', index.deployed_name
   end
 
   private

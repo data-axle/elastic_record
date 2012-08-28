@@ -5,6 +5,6 @@ class ElasticRecord::ConnectionTest < MiniTest::Spec
     connection = Widget.elastic_connection
 
     assert_equal Widget.elastic_index.type, connection.default_type
-    assert_equal Widget.elastic_index.name, connection.default_index
+    assert_equal Widget.elastic_index.alias_name, connection.default_index
   end
 end

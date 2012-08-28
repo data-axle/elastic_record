@@ -3,7 +3,7 @@ module ElasticRecord
     def elastic_connection
       @elastic_connection ||= ElasticSearch.new(
         ElasticRecord::Config.servers,
-        ElasticRecord::Config.connection_options.merge(index: elastic_index.name, type: elastic_index.type)
+        ElasticRecord::Config.connection_options.merge(index: elastic_index.alias_name, type: elastic_index.type)
       )
     end
 
