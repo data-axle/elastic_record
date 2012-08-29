@@ -8,3 +8,5 @@ module ElasticRecord
   autoload :Relation, 'elastic_record/relation'
   autoload :Searching, 'elastic_record/searching'
 end
+
+require 'elastic_record/railtie' if defined?(Rails)

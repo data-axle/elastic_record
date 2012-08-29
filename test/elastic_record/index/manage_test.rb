@@ -4,9 +4,7 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
   def setup
     super
 
-    index.all_suffixes.each do |suffix|
-      index.delete suffix
-    end
+    index.delete_all
   end
   
   def test_create

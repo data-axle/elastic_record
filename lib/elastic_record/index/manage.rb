@@ -1,6 +1,11 @@
 module ElasticRecord
   class Index
     module Manage
+      def create_and_deploy(suffix = new_suffix)
+        create(suffix)
+        deploy(suffix)
+      end
+
       def create(suffix = new_suffix)
         index_name = alias_and_suffix(suffix)
 
@@ -12,6 +17,12 @@ module ElasticRecord
         index_name = alias_and_suffix(suffix)
 
         http.delete(index_name)
+      end
+
+      def delete_all
+        all_suffixes.each do |suffix|
+          delete suffix
+        end
       end
 
       def exists?(suffix)
