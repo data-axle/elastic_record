@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   def setup
-    Widget.reset_index!
+    Widget.elastic_index.reset
   end
 
   def test_delegate_to_array

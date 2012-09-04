@@ -4,7 +4,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
   def setup
     super
     
-    Widget.reset_index!
+    index.reset
   end
 
   def test_index_record

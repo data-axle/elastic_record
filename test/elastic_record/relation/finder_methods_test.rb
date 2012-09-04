@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   def setup
-    Widget.reset_index!
+    Widget.elastic_index.reset
     create_widgets
   end
 

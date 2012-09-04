@@ -58,6 +58,11 @@ module ElasticRecord
         connection.refresh
       end
 
+      def reset
+        delete_all
+        create_and_deploy
+      end
+
       def aliased_names
         json = json_get '/_cluster/state'
         json["metadata"]["indices"].select { |name, status| status["aliases"].include?(alias_name) }.map { |name, status| name }

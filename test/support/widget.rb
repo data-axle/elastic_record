@@ -21,11 +21,6 @@ class Widget
         instance_eval(&block)
       end
     end
-
-    def reset_index!
-      elastic_index.delete_all
-      elastic_index.create_and_deploy
-    end
   end
 
   attr_accessor :id, :color
