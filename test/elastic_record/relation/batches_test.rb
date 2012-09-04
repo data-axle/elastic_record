@@ -14,12 +14,20 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
     assert_equal ['5', '10', '15'].to_set, results.to_set
   end
 
-  def test_find_each_with_scope
+  def test_find_in_batches
     results = []
-    Widget.elastic_relation.filter(color: %w(red blue)).find_each do |widget|
-      results << widget.id
+    Widget.elastic_relation.find_in_batches do |widgets|
+      results << widgets.map(&:id)
     end
-    assert_equal ['5', '10'].to_set, results.to_set
+    assert_equal [['5', '10', '15'].to_set], results.map(&:to_set)
+  end
+
+  def test_find_in_batches_with_scope
+    results = []
+    Widget.elastic_relation.filter(color: %w(red blue)).find_in_batches do |widgets|
+      results << widgets.map(&:id)
+    end
+    assert_equal [['5', '10'].to_set], results.map(&:to_set)
   end
 
   private
