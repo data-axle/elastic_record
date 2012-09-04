@@ -4,11 +4,13 @@ module ElasticRecord
       def create_and_deploy(index_name = new_index_name)
         create(index_name)
         deploy(index_name)
+        index_name
       end
 
       def create(index_name = new_index_name)
         http.put(index_name, '')
         update_mapping(index_name)
+        index_name
       end
 
       def delete(index_name)

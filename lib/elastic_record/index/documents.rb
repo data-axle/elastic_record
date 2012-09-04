@@ -19,10 +19,10 @@ module ElasticRecord
         !connection.get(id).nil?
       end
 
-      def bulk(batch)
+      def bulk(batch, index_name)
         connection.bulk do
           batch.each do |record|
-            index_record(record)
+            index_record(record, index_name)
           end
         end
       end

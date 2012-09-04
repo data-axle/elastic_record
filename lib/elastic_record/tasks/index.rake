@@ -45,4 +45,23 @@ namespace :index do
 
   desc "Recreate index for CLASS or all models."
   task reset: ['index:drop', 'index:create']
+
+  task build: :environment do
+    ElasticRecord::Task.get_models.each do |model|
+      logger.info "Building #{model.name} index."
+
+      logger.info "  Creating pending index..."
+      index_name = model.elastic_index.create
+
+      logger.info "  Reindexing..."
+      model.find_in_batches do |records|
+        model.elastic_index.bulk(records, index_name)
+      end
+
+      logger.info "  Deploying index..."
+      model.elastic_index.deploy(index_name)
+
+      logger.info "  Done."
+    end
+  end
 end
