@@ -50,7 +50,8 @@ module ElasticRecord
       end
 
       def update_mapping(index_name)
-        json_put "/#{index_name}/#{type}/_mapping", type => mapping
+        connection.update_mapping(mapping, index: index_name)
+        # json_put "/#{index_name}/#{type}/_mapping", type => mapping
       end
 
       def aliased_indexes
