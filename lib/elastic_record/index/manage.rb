@@ -1,39 +1,31 @@
 module ElasticRecord
   class Index
     module Manage
-      def create_and_deploy(suffix = new_suffix)
-        create(suffix)
-        deploy(suffix)
+      def create_and_deploy(index_name = new_index_name)
+        create(index_name)
+        deploy(index_name)
       end
 
-      def create(suffix = new_suffix)
-        index_name = alias_and_suffix(suffix)
-
+      def create(index_name = new_index_name)
         http.put(index_name, '')
-        update_mapping(suffix)
+        update_mapping(index_name)
       end
 
-      def delete(suffix)
-        index_name = alias_and_suffix(suffix)
-
+      def delete(index_name)
         http.delete(index_name)
       end
 
       def delete_all
-        all_suffixes.each do |suffix|
-          delete suffix
+        all_names.each do |index_name|
+          delete index_name
         end
       end
 
-      def exists?(suffix)
-        index_name = alias_and_suffix(suffix)
-
+      def exists?(index_name)
         http.head(index_name).code == '200'
       end
 
-      def deploy(suffix)
-        index_name = alias_and_suffix(suffix)
-
+      def deploy(index_name)
         actions = [
           {
             add: {
@@ -52,37 +44,25 @@ module ElasticRecord
           }
         end
 
-        http.post('_aliases', ActiveSupport::JSON.encode(actions: actions))
+        json_post '_aliases', actions: actions
       end
 
-      def update_mapping(suffix)
-        index_name = alias_and_suffix(suffix)
-
-        unless mapping.empty?
-          connection.update_mapping(mapping, index: index_name)
-        end
+      def update_mapping(index_name)
+        json_put "#{index_name}/#{type}/_mapping", type => mapping
       end
 
       def deployed_name
-        deployed_index, _ = connection.cluster_state["metadata"]["indices"].detect { |name, status| status["aliases"].include?(alias_name) }
+        json = json_get '_cluster/state'
+        deployed_index, _ = json["metadata"]["indices"].detect { |name, status| status["aliases"].include?(alias_name) }
         deployed_index
       end
 
-      def all_suffixes
-        json = ActiveSupport::JSON.decode http.get('_status').body
+      def all_names
+        json = json_get '_status'
 
-        regex = %r{^#{alias_name}_}
-        json['indices'].keys.grep(regex).map { |index_name| index_name.gsub(regex, '') }
+        regex = %r{^#{alias_name}_?}
+        json['indices'].keys.grep(regex)
       end
-
-      private
-        def alias_and_suffix(suffix)
-          "#{alias_name}_#{suffix}"
-        end
-
-        def new_suffix
-          Time.now.to_i
-        end
     end
   end
 end

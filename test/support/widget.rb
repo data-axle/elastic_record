@@ -2,6 +2,11 @@ class Widget
   extend ActiveModel::Naming
   include ElasticRecord::Model
 
+  self.elastic_index.mapping[:properties].update(color: {
+    type: 'string',
+    index: 'not_analyzed'
+  })
+
   class << self
     def find(ids)
       ids.map { |id| new(id: id, color: 'red') }
@@ -20,23 +25,6 @@ class Widget
     def reset_index!
       elastic_index.delete_all
       elastic_index.create_and_deploy
-
-      elastic_connection.update_mapping(
-        {
-          properties: {
-            color: {
-              type: 'string',
-              index: 'not_analyzed'
-            }
-          },
-          _source: {
-            enabled: false
-          }
-        },
-        {
-          index: 'widgets'
-        }
-      )
     end
   end
 
@@ -45,5 +33,9 @@ class Widget
     attributes.each do |key, val|
       send("#{key}=", val)
     end
+  end
+
+  def as_search
+    {color: color}
   end
 end

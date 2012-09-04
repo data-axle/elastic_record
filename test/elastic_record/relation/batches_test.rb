@@ -32,9 +32,11 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
 
   private
     def create_widgets
-      Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
-      Widget.elastic_connection.index({'widget' => {'color' => 'blue'}}, {index: 'widgets', type: 'widget', id: 10})
-      Widget.elastic_connection.index({'widget' => {'color' => 'green'}}, {index: 'widgets', type: 'widget', id: 15})
+      Widget.elastic_index.bulk [
+        Widget.new(id: 5, color: 'red'),
+        Widget.new(id: 10, color: 'blue'),
+        Widget.new(id: 15, color: 'green'),
+      ]
       
       Widget.elastic_connection.refresh
     end

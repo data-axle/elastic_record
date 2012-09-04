@@ -17,5 +17,11 @@ module ElasticRecord
         yield klass.find(hits.to_a)
       end
     end
+
+    def reindex
+      relation.find_in_batches do |batch|
+        elastic_index.bulk(batch)
+      end
+    end
   end
 end

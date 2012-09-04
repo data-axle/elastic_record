@@ -8,25 +8,25 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
   end
   
   def test_create
-    assert !index.exists?('foo')
+    assert !index.exists?('widgets_foo')
 
-    index.create 'foo'
+    index.create 'widgets_foo'
 
-    assert index.exists?('foo')
+    assert index.exists?('widgets_foo')
   end
 
   def test_exists
-    index.create 'foo'
+    index.create 'widgets_foo'
 
-    assert index.exists?('foo')
-    assert !index.exists?('bar')
+    assert index.exists?('widgets_foo')
+    assert !index.exists?('widgets_bar')
   end
 
   def test_deploy
-    index.create 'foo'
+    index.create 'widgets_foo'
     
     assert_nil index.deployed_name
-    index.deploy 'foo'
+    index.deploy 'widgets_foo'
 
     assert_equal 'widgets_foo', index.deployed_name
   end
