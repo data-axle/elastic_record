@@ -12,7 +12,8 @@ module ElasticRecord
       def delete_record(record, index_name = nil)
         index_name ||= alias_name
 
-        json_delete "#{index_name}/#{type}/#{record.id}"
+        connection.delete(record.id, index: index_name)
+        # json_delete "#{index_name}/#{type}/#{record.id}"
       end
 
       def record_exists?(id)
