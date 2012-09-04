@@ -38,6 +38,6 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
         Widget.new(id: 15, color: 'green'),
       ]
       
-      Widget.elastic_connection.refresh
+      Widget.elastic_index.refresh
     end
 end

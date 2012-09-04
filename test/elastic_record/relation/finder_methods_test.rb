@@ -34,9 +34,11 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   private
 
     def create_widgets
-      Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: '05'})
-      Widget.elastic_connection.index({'widget' => {'color' => 'blue'}}, {index: 'widgets', type: 'widget', id: '10'})
+      Widget.elastic_index.bulk_add [
+        Widget.new(color: 'red', id: '05'),
+        Widget.new(color: 'blue', id: '10'),
+      ]
       
-      Widget.elastic_connection.refresh
+      Widget.elastic_index.refresh
     end
 end

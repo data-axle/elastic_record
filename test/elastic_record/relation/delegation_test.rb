@@ -6,8 +6,8 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   end
 
   def test_delegate_to_array
-    Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
-    Widget.elastic_connection.refresh
+    Widget.elastic_index.index_record(Widget.new(id: 5, color: 'red'))
+    Widget.elastic_index.refresh
     
     records = []
     Widget.elastic_relation.each do |record|
@@ -26,7 +26,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
 
     result = model.elastic_relation.filter('foo' => 'bar').do_it
 
-    expected = {"query"=>{"constant_score"=>{"filter"=>{"term"=>{"foo"=>"bar"}}}}}
+    expected = {"query" => {"constant_score" => {"filter" => {"term" => {"foo" => "bar"}}}}}
     assert_equal expected, result 
   end
 end

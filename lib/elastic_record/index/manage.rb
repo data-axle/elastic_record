@@ -37,7 +37,7 @@ module ElasticRecord
           }
         ]
 
-        aliased_indexes.each do |index_to_remove|
+        aliased_names.each do |index_to_remove|
           actions << {
             remove: {
               "index" => index_to_remove,
@@ -50,11 +50,15 @@ module ElasticRecord
       end
 
       def update_mapping(index_name)
-        connection.update_mapping(mapping, index: index_name)
-        # json_put "/#{index_name}/#{type}/_mapping", type => mapping
+        # connection.update_mapping(mapping, index: index_name)
+        json_put "/#{index_name}/#{type}/_mapping", type => mapping
       end
 
-      def aliased_indexes
+      def refresh
+        connection.refresh
+      end
+
+      def aliased_names
         json = json_get '/_cluster/state'
         json["metadata"]["indices"].select { |name, status| status["aliases"].include?(alias_name) }.map { |name, status| name }
       end
