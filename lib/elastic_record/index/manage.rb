@@ -8,7 +8,7 @@ module ElasticRecord
       end
 
       def create(index_name = new_index_name)
-        http.put(index_name, '')
+        http.put("/#{index_name}", '')
         update_mapping(index_name)
         index_name
       end
