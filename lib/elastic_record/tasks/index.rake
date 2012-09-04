@@ -15,8 +15,8 @@ namespace :index do
   task create: :environment do
     ElasticRecord::Task.get_models.each do |model|
       # begin
-        model.elastic_index.create_and_deploy
-        logger.info "Created #{model.name} index"
+        index_name = model.elastic_index.create_and_deploy
+        logger.info "Created #{model.name} index (#{index_name})"
       # rescue => e
       #   if e.message =~ /IndexAlreadyExistsException/
       #     logger.info "#{model.name} index already exists"
@@ -50,12 +50,16 @@ namespace :index do
     ElasticRecord::Task.get_models.each do |model|
       logger.info "Building #{model.name} index."
 
-      logger.info "  Creating pending index..."
-      index_name = model.elastic_index.create
+      if ENV['INDEX']
+        index_name = ENV['INDEX']
+      else
+        logger.info "  Creating index..."
+        index_name = model.elastic_index.create
+      end
 
-      logger.info "  Reindexing..."
+      logger.info "  Reindexing into #{index_name}"
       model.find_in_batches do |records|
-        model.elastic_index.bulk(records, index_name)
+        model.elastic_index.bulk_add(records, index_name)
       end
 
       logger.info "  Deploying index..."

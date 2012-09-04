@@ -20,7 +20,7 @@ module ElasticRecord
 
     def reindex
       relation.find_in_batches do |batch|
-        elastic_index.bulk(batch)
+        elastic_index.bulk_add(batch)
       end
     end
   end

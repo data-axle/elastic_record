@@ -37,7 +37,7 @@ module ElasticRecord
           }
         ]
 
-        if index_to_remove = deployed_name
+        aliased_indexes.each do |index_to_remove|
           actions << {
             remove: {
               "index" => index_to_remove,
@@ -53,10 +53,9 @@ module ElasticRecord
         json_put "#{index_name}/#{type}/_mapping", type => mapping
       end
 
-      def deployed_name
+      def aliased_indexes
         json = json_get '_cluster/state'
-        deployed_index, _ = json["metadata"]["indices"].detect { |name, status| status["aliases"].include?(alias_name) }
-        deployed_index
+        json["metadata"]["indices"].select { |name, status| status["aliases"].include?(alias_name) }.map { |name, status| name }
       end
 
       def all_names

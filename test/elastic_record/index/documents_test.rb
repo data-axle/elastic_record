@@ -29,7 +29,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
   def test_bulk
     record = Widget.new(id: 'abc', color: 'red')
     
-    index.bulk [record]
+    index.bulk_add [record]
 
     assert index.record_exists?('abc')
     refute index.record_exists?('xyz')

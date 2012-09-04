@@ -25,10 +25,10 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
   def test_deploy
     index.create 'widgets_foo'
     
-    assert_nil index.deployed_name
+    assert index.aliased_indexes.empty?
     index.deploy 'widgets_foo'
 
-    assert_equal 'widgets_foo', index.deployed_name
+    assert_equal ['widgets_foo'], index.aliased_indexes
   end
 
   private
