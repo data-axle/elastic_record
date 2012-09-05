@@ -26,7 +26,6 @@ Include ElasticRecord into your model:
   scope.order(:price)
   scope.count
   scope.first
-  scope.last
   scope.all
   scope.each do |product|
     ...
