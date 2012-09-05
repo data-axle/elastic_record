@@ -2,6 +2,8 @@ module ElasticRecord
   class Index
     module Documents
       def index_record(record, index_name = nil)
+        return if disabled
+
         index_name ||= alias_name
         document = record.respond_to?(:as_search) ? record.as_search : record.default_as_search
 
@@ -21,6 +23,8 @@ module ElasticRecord
       end
 
       def bulk_add(batch, index_name = nil)
+        return if disabled
+
         index_name ||= alias_name
 
         connection.bulk do

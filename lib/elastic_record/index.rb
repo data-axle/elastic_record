@@ -9,9 +9,11 @@ module ElasticRecord
     include Mapping
 
     attr_accessor :model
+    attr_accessor :disabled
 
     def initialize(model)
       @model = model
+      @disabled = false
     end
 
     def alias_name
@@ -20,6 +22,14 @@ module ElasticRecord
 
     def type
       model.model_name.element
+    end
+
+    def disable!
+      @disabled = true
+    end
+
+    def enable!
+      @disabled = false
     end
 
     private

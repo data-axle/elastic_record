@@ -26,7 +26,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
     refute index.record_exists?('abc')
   end
 
-  def test_bulk
+  def test_bulk_add
     record = Widget.new(id: 'abc', color: 'red')
     
     index.bulk_add [record]
