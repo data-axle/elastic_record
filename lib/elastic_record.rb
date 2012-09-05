@@ -1,4 +1,5 @@
 require 'arelastic'
+require 'rubberband'
 
 module ElasticRecord
   autoload :Config, 'elastic_record/config'
