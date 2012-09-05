@@ -4,6 +4,7 @@ class Widget
   define_model_callbacks :save, :destroy
 
   include ElasticRecord::Model
+  include ElasticRecord::Callbacks
 
   self.elastic_index.mapping[:properties].update(color: {
     type: 'string',
@@ -23,6 +24,10 @@ class Widget
 
         instance_eval(&block)
       end
+    end
+
+    def base_class
+      self
     end
   end
 

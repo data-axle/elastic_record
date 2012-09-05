@@ -17,11 +17,11 @@ module ElasticRecord
     end
 
     def alias_name
-      model.model_name.collection
+      @alias_name ||= model.base_class.model_name.collection
     end
 
     def type
-      model.model_name.element
+      @type ||= model.base_class.model_name.element
     end
 
     def disable!

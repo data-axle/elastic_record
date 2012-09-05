@@ -5,7 +5,7 @@ module ElasticRecord
         return if disabled
 
         index_name ||= alias_name
-        document = record.respond_to?(:as_search) ? record.as_search : record.default_as_search
+        document = record.respond_to?(:as_search) ? record.as_search : {}
 
         connection.index(document, id: record.id, index: index_name)
         # json_put "#{index_name}/#{type}/#{record.id}", document
