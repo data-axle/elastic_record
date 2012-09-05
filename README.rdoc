@@ -1,20 +1,40 @@
-Expects that your model implements find(*ids)
+= ElasticRecord
 
-  class Widgets
-    include ElasticRecord::Model
-  end
+ElasticRecord is an elasticsearch ORM.
 
-  scope = Widgets.filter(color: 'red').order(:price)
+== Setup
 
+The usual Gemfile addition:
+  
+  gem 'elastic_record'
+
+Creating the index:
+
+  rake index:create
+
+Include ElasticRecord into your model:
+
+ActiveSupport.on_load :active_record do
+  include ElasticRecord::Model
+end
+
+== Querying:
+
+  scope = Product.elastic_search
+  
+  scope.filter(color: 'red')
+  scope.order(:price)
   scope.count
   scope.first
   scope.last
   scope.all
-  scope.each
+  scope.each do |product|
+    ...
+  end
 
 Class methods are executed within scopes:
 
-  class Widgets
+  class Pirate
     def self.ouput_to_screen
       all.each do { |widget| puts widget }
     end
