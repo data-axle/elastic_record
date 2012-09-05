@@ -2,7 +2,7 @@
  
 Gem::Specification.new do |s|
   s.name = 'elastic_record'
-  s.version = '0.3.0'
+  s.version = '0.3.1'
   s.summary = 'Use Elastic Search with your objects'
   s.description = 'Find your records with elastic search'
 
@@ -15,7 +15,8 @@ Gem::Specification.new do |s|
   s.homepage          = 'http://github.com/matthuhiggins/elastic_record'
 
   s.extra_rdoc_files = ['README.rdoc']
-  s.files = Dir['{lib,test}/**/*.rb']
+  s.files       = `git ls-files`.split("\n")
+  s.test_files  = `git ls-files -- {test}/*`.split("\n")
 
   s.add_dependency 'arelastic'
   s.add_dependency 'rubberband', '>= 0.1.1'

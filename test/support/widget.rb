@@ -1,5 +1,8 @@
 class Widget
   extend ActiveModel::Naming
+  extend ActiveModel::Callbacks
+  define_model_callbacks :save, :destroy
+
   include ElasticRecord::Model
 
   self.elastic_index.mapping[:properties].update(color: {
