@@ -2,6 +2,7 @@ require 'arelastic'
 require 'rubberband'
 
 module ElasticRecord
+  autoload :Callbacks, 'elastic_record/callbacks'
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
   autoload :Index, 'elastic_record/index'

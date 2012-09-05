@@ -2,9 +2,9 @@ module ElasticRecord
   module Model
     def self.included(base)
       base.class_eval do
-        extend Connection
-        extend Searching
-        extend ClassMethods
+        include Callbacks
+
+        extend Connection, Searching, ClassMethods
       end
     end
 

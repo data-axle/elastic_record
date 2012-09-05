@@ -3,7 +3,6 @@ Bundler.require
 
 require 'minitest/autorun'
 
-require 'rubberband'
 require 'active_support/core_ext/object/blank'
 require 'active_model'
 
