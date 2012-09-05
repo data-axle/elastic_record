@@ -14,9 +14,9 @@ Creating the index:
 
 Include ElasticRecord into your model:
 
-ActiveSupport.on_load :active_record do
-  include ElasticRecord::Model
-end
+  ActiveSupport.on_load :active_record do
+    include ElasticRecord::Model
+  end
 
 == Querying:
 
