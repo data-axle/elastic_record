@@ -23,6 +23,10 @@ module ElasticRecord
       @alias_name ||= model.base_class.model_name.collection
     end
 
+    def percolator_name
+      @percolator_name ||= "percolate_#{alias_name}"
+    end
+
     def type
       @type ||= model.base_class.model_name.element
     end
