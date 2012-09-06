@@ -2,7 +2,11 @@ module ElasticRecord
   class Index
     module Percolator
       def create_percolator(name, relation)
-        create "#{percolator_name}" unless exists? "#{percolator_name}"
+        if not exists? "#{percolator_name}"
+          create "#{percolator_name}" 
+        else
+          update_mapping "#{percolator_name}" 
+        end
         json_put "/_percolator/#{percolator_name}/#{name}", relation.as_elastic
       end
 
