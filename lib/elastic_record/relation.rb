@@ -25,6 +25,10 @@ module ElasticRecord
       to_hits.facets
     end
 
+    def percolate!(name)
+      klass.elastic_index.create_percolator(name, self)
+    end
+
     def reset
       @hits = @records = nil
     end
