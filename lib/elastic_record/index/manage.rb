@@ -8,13 +8,13 @@ module ElasticRecord
       end
 
       def create(index_name = new_index_name)
-        http.put("/#{index_name}", '')
+        json_put "/#{index_name}"
         update_mapping(index_name)
         index_name
       end
 
       def delete(index_name)
-        http.delete("/#{index_name}")
+        json_delete "/#{index_name}"
       end
 
       def delete_all
@@ -24,7 +24,7 @@ module ElasticRecord
       end
 
       def exists?(index_name)
-        http.head("/#{index_name}").code == '200'
+        head("/#{index_name}") == '200'
       end
 
       def deploy(index_name)

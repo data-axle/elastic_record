@@ -40,6 +40,10 @@ module ElasticRecord
         "#{alias_name}_#{Time.now.to_i}"
       end
 
+      def head(path)
+        http_request(Net::HTTP::Delete, path).code
+      end
+
       def json_get(path, json = nil)
         json_request Net::HTTP::Get, path, json
       end
@@ -57,14 +61,16 @@ module ElasticRecord
       end
 
       def json_request(request_klass, path, json)
+        body = json ? ActiveSupport::JSON.encode(json) : nil
+        response = http_request(request_klass, path, body)
+        ActiveSupport::JSON.decode response.body
+      end
+
+      def http_request(request_klass, path, body = nil)
         request = request_klass.new(path)
-        if json
-          request.body = ActiveSupport::JSON.encode(json)
-        end
+        request.body = body
 
-        # p "#{request.class.name} #{path}: #{request.body}"
-
-        ActiveSupport::JSON.decode http.request(request).body
+        http.request(request)
       end
 
       def connection
