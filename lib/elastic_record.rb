@@ -1,5 +1,7 @@
 require 'arelastic'
 require 'rubberband'
+require 'active_support/core_ext/object/blank' # required because ActiveModel depends on this but does not require it
+require 'active_model'
 
 module ElasticRecord
   autoload :Callbacks, 'elastic_record/callbacks'
