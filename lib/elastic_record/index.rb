@@ -23,10 +23,6 @@ module ElasticRecord
       @alias_name ||= model.base_class.model_name.collection
     end
 
-    def percolator_name
-      @percolator_name ||= "percolate_#{alias_name}"
-    end
-
     def type
       @type ||= model.base_class.model_name.element
     end
@@ -39,13 +35,13 @@ module ElasticRecord
       @disabled = false
     end
 
-    private
+    # private
       def new_index_name
         "#{alias_name}_#{Time.now.to_i}"
       end
 
       def head(path)
-        http_request(Net::HTTP::Delete, path).code
+        http_request(Net::HTTP::Head, path).code
       end
 
       def json_get(path, json = nil)
@@ -67,7 +63,11 @@ module ElasticRecord
       def json_request(request_klass, path, json)
         body = json ? ActiveSupport::JSON.encode(json) : nil
         response = http_request(request_klass, path, body)
-        ActiveSupport::JSON.decode response.body
+        json = ActiveSupport::JSON.decode response.body
+
+        raise json['error'] if json['error']
+
+        json
       end
 
       def http_request(request_klass, path, body = nil)

@@ -1,22 +1,30 @@
 module ElasticRecord
   class Index
     module Percolator
-      def create_percolator(name, relation)
-        if not exists? "#{percolator_name}"
-          create "#{percolator_name}" 
+      def create_percolator(name, elastic_query)
+        unless exists? percolator_index_name
+          create percolator_index_name
         else
-          update_mapping "#{percolator_name}" 
+          update_mapping percolator_index_name
         end
-        json_put "/_percolator/#{percolator_name}/#{name}", relation.as_elastic
+
+        json_put "/_percolator/#{percolator_index_name}/#{name}", elastic_query
       end
 
       def delete_percolator(name)
-        json_delete "/_percolator/#{percolator_name}/#{name}"
+        json_delete "/_percolator/#{percolator_index_name}/#{name}"
       end
 
-      def percolate_matches(record)
-        # p json_get("/_percolator/#{alias_name}")
-        json_get "/#{percolator_name}/#{type}/_percolate", 'doc' => record.as_search
+      def percolator_exists?(name)
+        json_get("/_percolator/#{percolator_index_name}/#{name}")['exists']
+      end
+
+      def percolate(document)
+        json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
+      end
+
+      def percolator_index_name
+        @percolator_index_name ||= "percolate_#{alias_name}"
       end
     end
   end
