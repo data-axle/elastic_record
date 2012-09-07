@@ -25,7 +25,9 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     Widget.elastic_relation.filter(color: 'blue').percolate!('blue')
     widget = Widget.new(color: 'green')
 
-    Widget.elastic_index.percolate_matches(widget)
+    matches = Widget.elastic_index.percolate_matches(widget)
+    assert matches['ok']
+    assert matches['matches'].include? "green"
   end
 
   def test_to_hits
