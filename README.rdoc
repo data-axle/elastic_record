@@ -1,4 +1,5 @@
 = ElasticRecord
+{<img src="https://secure.travis-ci.org/matthuhiggins/elastic_record.png?rvm=1.9.3" />}[http://travis-ci.org/matthuhiggins/elastic_record]
 
 ElasticRecord is an elasticsearch ORM.
 
