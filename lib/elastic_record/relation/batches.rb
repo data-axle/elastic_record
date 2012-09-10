@@ -32,7 +32,6 @@ module ElasticRecord
       private
         def get_scroll_hit_ids(scroll_id, scroll_keep_alive)
           json = klass.elastic_index.scroll(scroll_id, scroll_keep_alive)
-          # p "json = #{json}"
           json['hits']['hits'].map { |hit| hit['_id'] }
         end
     end

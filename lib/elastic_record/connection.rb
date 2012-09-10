@@ -3,7 +3,7 @@ module ElasticRecord
     # :timeout: 10
     # :retries: 2
     # :auto_discovery: false
-    
+
     attr_accessor :servers, :options
     def initialize(servers, options = {})
       if servers.is_a?(Array)
