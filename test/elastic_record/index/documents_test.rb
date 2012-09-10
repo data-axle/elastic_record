@@ -7,22 +7,18 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
     index.reset
   end
 
-  def test_index_record
-    record = Widget.new(id: 'abc', color: 'red')
-
-    index.index_record(record)
+  def test_index_document
+    index.index_document('abc', color: 'red')
 
     assert index.record_exists?('abc')
     refute index.record_exists?('xyz')
   end
 
-  def test_delete_record
-    record = Widget.new(id: 'abc', color: 'red')
-
-    index.index_record(record)
+  def test_delete_document
+    index.index_document('abc', color: 'red')
     assert index.record_exists?('abc')
 
-    index.delete_record(record)
+    index.delete_document('abc')
     refute index.record_exists?('abc')
   end
 
@@ -33,6 +29,24 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
 
     assert index.record_exists?('abc')
     refute index.record_exists?('xyz')
+  end
+
+  def test_bulk
+    assert_nil index.instance_variable_get(:@batch)
+
+    index.bulk do
+      index.index_document '5', color: 'green'
+      index.delete_document '3'
+
+      expected = [
+        {index: {_index: "widgets", _type: "widget", _id: "5"}},
+        {color: "green"},
+        {delete: {_index: "widgets", _type: "widget", _id: "3"}}
+      ]
+      assert_equal expected, index.instance_variable_get(:@batch)
+    end
+
+    assert_nil index.instance_variable_get(:@batch)
   end
 
   private

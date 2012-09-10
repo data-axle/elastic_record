@@ -17,7 +17,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
 
   def test_deleted_from_index
     widget = Widget.new id: '10', color: 'green'
-    Widget.elastic_index.index_record(widget)
+    Widget.elastic_index.index_document(widget.id, widget.as_search)
 
     assert Widget.elastic_index.record_exists?(widget.id)
 

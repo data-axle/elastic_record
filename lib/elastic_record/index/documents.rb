@@ -3,19 +3,27 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     module Documents
-      def index_record(record, index_name = nil)
+      def index_document(id, document, index_name = nil)
         return if disabled
 
         index_name ||= alias_name
-        document = record.respond_to?(:as_search) ? record.as_search : {}
 
-        connection.json_put "/#{index_name}/#{type}/#{record.id}", document
+        if @batch
+          @batch << { index: { _index: index_name, _type: type, _id: id } }
+          @batch << document
+        else
+          connection.json_put "/#{index_name}/#{type}/#{id}", document
+        end
       end
       
-      def delete_record(record, index_name = nil)
+      def delete_document(id, index_name = nil)
         index_name ||= alias_name
 
-        connection.json_delete "/#{index_name}/#{type}/#{record.id}"
+        if @batch
+          @batch << { delete: { _index: index_name, _type: type, _id: id } }
+        else
+          connection.json_delete "/#{index_name}/#{type}/#{id}"
+        end
       end
 
       def record_exists?(id)
@@ -41,11 +49,22 @@ module ElasticRecord
 
         index_name ||= alias_name
 
-        # connection.bulk do
+        bulk do
           batch.each do |record|
-            index_record(record, index_name)
+            index_document(record.id, record.as_search, index_name)
           end
-        # end
+        end
+      end
+
+      def bulk
+        @batch = []
+        yield
+        if @batch.any?
+          body = @batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+          connection.json_post "/_bulk", body
+        end
+      ensure
+        @batch = nil
       end
     end
   end

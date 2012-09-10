@@ -6,7 +6,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
   end
 
   def test_delegate_to_array
-    Widget.elastic_index.index_record(Widget.new(id: 5, color: 'red'))
+    Widget.elastic_index.index_document('5', color: 'red')
     Widget.elastic_index.refresh
     
     records = []

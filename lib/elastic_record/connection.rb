@@ -35,35 +35,36 @@ module ElasticRecord
       json_request Net::HTTP::Delete, path, json
     end
 
+    def json_request(request_klass, path, json)
+      body = json.is_a?(Hash) ? ActiveSupport::JSON.encode(json) : json
+      response = http_request(request_klass, path, body)
+      json = ActiveSupport::JSON.decode response.body
+
+      raise json['error'] if json['error']
+
+      json
+    end
+
+    def http_request(request_klass, path, body = nil)
+      request = request_klass.new(path)
+      request.body = body
+
+      http.request(request)
+    end
+
     private
-      def current_server
-        servers.first
-      end
-
-      def json_request(request_klass, path, json)
-        body = json ? ActiveSupport::JSON.encode(json) : nil
-        response = http_request(request_klass, path, body)
-        json = ActiveSupport::JSON.decode response.body
-
-        raise json['error'] if json['error']
-
-        json
-      end
-
-      def http_request(request_klass, path, body = nil)
-        request = request_klass.new(path)
-        request.body = body
-
-        http.request(request)
-      end
-
-      def connection
-        @model.elastic_connection
+      def choose_server
+        servers.sample
       end
 
       def http
-        host, port = current_server.split ':'
-        Net::HTTP.new(host, port)
+        host, port = choose_server.split ':'
+
+        http = Net::HTTP.new(host, port)
+        if options[:timeout]
+          http.read_timeout = options[:timeout].to_i
+        end
+        http
       end
   end
 end
