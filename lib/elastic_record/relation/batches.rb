@@ -8,14 +8,18 @@ module ElasticRecord
       end
 
       def find_in_batches(options = {})
-        options[:size] ||= 100
-        options[:scroll]  ||= '20m'
-        options[:search_type] = 'scan'
+        scroll_keep_alive = '10m'
 
-        hits = klass.elastic_connection.search(as_elastic, options)
+        options = {
+          scroll: scroll_keep_alive,
+          size: 100,
+          search_type: 'scan'
+        }
 
-        klass.elastic_connection.scroll(hits.scroll_id, scroll: options[:scroll], ids_only: true) do |hits|
-          yield klass.find(hits.to_a)
+        scroll_id = klass.elastic_index.search(as_elastic, options)['_scroll_id']
+
+        while (hit_ids = get_scroll_hit_ids(scroll_id, scroll_keep_alive)).any?
+          yield klass.find(hit_ids)
         end
       end
 
@@ -24,6 +28,13 @@ module ElasticRecord
           elastic_index.bulk_add(batch)
         end
       end
+
+      private
+        def get_scroll_hit_ids(scroll_id, scroll_keep_alive)
+          json = klass.elastic_index.scroll(scroll_id, scroll_keep_alive)
+          # p "json = #{json}"
+          json['hits']['hits'].map { |hit| hit['_id'] }
+        end
     end
   end
 end

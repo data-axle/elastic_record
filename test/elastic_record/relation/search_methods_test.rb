@@ -159,8 +159,10 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
   end
 
   def test_select_with_block
-    Widget.elastic_connection.index({'widget' => {'color' => 'red'}}, {index: 'widgets', type: 'widget', id: 5})
-    Widget.elastic_connection.index({'widget' => {'color' => 'blue'}}, {index: 'widgets', type: 'widget', id: 10})
+    Widget.elastic_index.bulk_add [
+      Widget.new(id: 5, color: 'red'),
+      Widget.new(id: 10, color: 'blue')
+    ]
 
     records = relation.select { |record| record.id == '10' }
 

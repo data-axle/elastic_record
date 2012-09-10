@@ -8,19 +8,19 @@ module ElasticRecord
           update_mapping percolator_index_name
         end
 
-        json_put "/_percolator/#{percolator_index_name}/#{name}", elastic_query
+        connection.json_put "/_percolator/#{percolator_index_name}/#{name}", elastic_query
       end
 
       def delete_percolator(name)
-        json_delete "/_percolator/#{percolator_index_name}/#{name}"
+        connection.json_delete "/_percolator/#{percolator_index_name}/#{name}"
       end
 
       def percolator_exists?(name)
-        json_get("/_percolator/#{percolator_index_name}/#{name}")['exists']
+        connection.json_get("/_percolator/#{percolator_index_name}/#{name}")['exists']
       end
 
       def percolate(document)
-        json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
+        connection.json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
       end
 
       def percolator_index_name

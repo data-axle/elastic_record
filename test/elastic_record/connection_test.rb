@@ -1,10 +1,8 @@
 require 'helper'
 
 class ElasticRecord::ConnectionTest < MiniTest::Spec
-  def test_elastic_connection
-    connection = Widget.elastic_connection
-
-    assert_equal Widget.elastic_index.type, connection.default_type
-    assert_equal Widget.elastic_index.alias_name, connection.default_index
+  def test_servers
+    assert_equal ['foo', 'bar'], ElasticRecord::Connection.new('foo,bar').servers
+    assert_equal ['foo', 'bar'], ElasticRecord::Connection.new(['foo', 'bar']).servers
   end
 end

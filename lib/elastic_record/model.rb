@@ -2,11 +2,19 @@ module ElasticRecord
   module Model
     def self.included(base)
       base.class_eval do
-        extend Connection, Searching, ClassMethods
+        extend Searching, ClassMethods
       end
     end
 
     module ClassMethods
+      def elastic_connection
+        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers)
+      end
+
+      def elastic_connection=(connection)
+        @elastic_connection = connection
+      end
+
       def elastic_relation
         ElasticRecord::Relation.new(self, arelastic)
       end

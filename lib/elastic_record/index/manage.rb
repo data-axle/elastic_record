@@ -8,13 +8,13 @@ module ElasticRecord
       end
 
       def create(index_name = new_index_name)
-        json_put "/#{index_name}"
+        connection.json_put "/#{index_name}"
         update_mapping(index_name)
         index_name
       end
 
       def delete(index_name)
-        json_delete "/#{index_name}"
+        connection.json_delete "/#{index_name}"
       end
 
       def delete_all
@@ -24,7 +24,7 @@ module ElasticRecord
       end
 
       def exists?(index_name)
-        head("/#{index_name}") == '200'
+        connection.head("/#{index_name}") == '200'
       end
 
       def deploy(index_name)
@@ -46,15 +46,15 @@ module ElasticRecord
           }
         end
 
-        json_post '/_aliases', actions: actions
+        connection.json_post '/_aliases', actions: actions
       end
 
       def update_mapping(index_name)
-        json_put "/#{index_name}/#{type}/_mapping", type => mapping
+        connection.json_put "/#{index_name}/#{type}/_mapping", type => mapping
       end
 
       def refresh
-        connection.refresh
+        connection.json_post "/#{alias_name}/_refresh"
       end
 
       def reset
@@ -63,12 +63,12 @@ module ElasticRecord
       end
 
       def aliased_names
-        json = json_get '/_cluster/state'
+        json = connection.json_get '/_cluster/state'
         json["metadata"]["indices"].select { |name, status| status["aliases"].include?(alias_name) }.map { |name, status| name }
       end
 
       def all_names
-        json = json_get '/_status'
+        json = connection.json_get '/_status'
 
         regex = %r{^#{alias_name}_?}
         json['indices'].keys.grep(regex)

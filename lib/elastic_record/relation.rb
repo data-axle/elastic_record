@@ -18,11 +18,11 @@ module ElasticRecord
     end
 
     def count
-      to_hits.total_entries
+      search_results['hits']['total']
     end
 
     def facets
-      to_hits.facets
+      search_results['facets']
     end
 
     def create_percolator(name)
@@ -30,7 +30,7 @@ module ElasticRecord
     end
 
     def reset
-      @hits = @records = nil
+      @search_results = @records = nil
     end
 
     def initialize_copy(other)
@@ -46,11 +46,7 @@ module ElasticRecord
     end
 
     def to_ids
-      to_hits.to_a.map(&:id)
-    end
-
-    def to_hits
-      @hits ||= klass.elastic_connection.search(as_elastic)#, ids_only: true)
+      search_hits.map { |hit| hit['_id'] }
     end
 
     def ==(other)
@@ -72,5 +68,14 @@ module ElasticRecord
     ensure
       klass.current_elastic_search = previous
     end
+
+    private
+      def search_hits
+        search_results['hits']['hits']
+      end
+
+      def search_results
+        @search_results ||= klass.elastic_index.search(as_elastic)
+      end
   end
 end
