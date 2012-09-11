@@ -29,8 +29,8 @@ module ElasticRecord
       klass.elastic_index.create_percolator(name, as_elastic)
     end
 
-    def reset
-      @search_results = @records = nil
+    def explain(id)
+      klass.elastic_index.explain(id, as_elastic)
     end
 
     def initialize_copy(other)
@@ -70,6 +70,10 @@ module ElasticRecord
     end
 
     private
+      def reset
+        @search_results = @records = nil
+      end
+    
       def search_hits
         search_results['hits']['hits']
       end

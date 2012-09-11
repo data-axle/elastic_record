@@ -39,9 +39,24 @@ module ElasticRecord
         connection.json_get url, elastic_query
       end
 
+      def explain(id, elastic_query)
+        connection.json_get "/#{alias_name}/#{type}/#{id}/_explain", elastic_query
+      end
+
       def scroll(scroll_id, scroll_keep_alive)
         options = {scroll_id: scroll_id, scroll: scroll_keep_alive}
         connection.json_get("/_search/scroll?#{options.to_query}")
+      end
+
+      def bulk
+        @batch = []
+        yield
+        if @batch.any?
+          body = @batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+          connection.json_post "/_bulk", body
+        end
+      ensure
+        @batch = nil
       end
 
       def bulk_add(batch, index_name = nil)
@@ -54,17 +69,6 @@ module ElasticRecord
             index_document(record.id, record.as_search, index_name)
           end
         end
-      end
-
-      def bulk
-        @batch = []
-        yield
-        if @batch.any?
-          body = @batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-          connection.json_post "/_bulk", body
-        end
-      ensure
-        @batch = nil
       end
     end
   end
