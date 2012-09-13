@@ -2,7 +2,6 @@ module ElasticRecord
   class Index
     module Percolator
       def create_percolator(name, elastic_query)
-        p "creating #{elastic_query.inspect}"
         unless exists? percolator_index_name
           create percolator_index_name
         else
@@ -21,7 +20,6 @@ module ElasticRecord
       end
 
       def percolate(document)
-        # p "document = #{document}"
         connection.json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
       end
 
