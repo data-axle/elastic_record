@@ -1,3 +1,5 @@
+require 'net/http'
+
 module ElasticRecord
   class Connection
     # :timeout: 10
@@ -16,40 +18,52 @@ module ElasticRecord
     end
 
     def head(path)
-      http_request(Net::HTTP::Head, path).code
+      http_request(:head, path).code
     end
 
     def json_get(path, json = nil)
-      json_request Net::HTTP::Get, path, json
+      json_request :get, path, json
     end
 
     def json_post(path, json = nil)
-      json_request Net::HTTP::Post, path, json
+      json_request :post, path, json
     end
 
     def json_put(path, json = nil)
-      json_request Net::HTTP::Put, path, json
+      json_request :put, path, json
     end
 
     def json_delete(path, json = nil)
-      json_request Net::HTTP::Delete, path, json
+      json_request :delete, path, json
     end
 
-    def json_request(request_klass, path, json)
+    def json_request(method, path, json)
       body = json.is_a?(Hash) ? ActiveSupport::JSON.encode(json) : json
-      response = http_request(request_klass, path, body)
-      json = ActiveSupport::JSON.decode response.body
+      response = http_request(method, path, body)
 
+      json = ActiveSupport::JSON.decode response.body
       raise json['error'] if json['error']
 
       json
     end
 
-    def http_request(request_klass, path, body = nil)
-      request = request_klass.new(path)
+    METHODS = {
+      head: Net::HTTP::Head,
+      get: Net::HTTP::Get,
+      post: Net::HTTP::Post,
+      put: Net::HTTP::Put,
+      delete: Net::HTTP::Delete
+    }
+
+    def http_request(method, path, body = nil)
+      request = METHODS[method].new(path)
       request.body = body
 
-      http.request(request)
+      ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
+        payload[:method]      = method
+        payload[:request_uri] = path
+        payload[:response]    = http.request(request)
+      end
     end
 
     private
