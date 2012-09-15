@@ -13,7 +13,7 @@ module ElasticRecord
 
   class << self
     def configure
-      yield(ElasticRecord::Configuration)
+      yield(ElasticRecord::Config)
     end
   end
 end
