@@ -4,7 +4,7 @@ module ElasticRecord
       if class_name = ENV['CLASS']
         [class_name.camelize.constantize]
       else
-        IndexedModels.all
+        ElasticRecord::Config.models
       end
     end
   end
