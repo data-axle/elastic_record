@@ -7,6 +7,7 @@ module ElasticRecord
     # :auto_discovery: false
 
     attr_accessor :servers, :options
+    attr_accessor :request_count, :current_server
     def initialize(servers, options = {})
       if servers.is_a?(Array)
         self.servers = servers
@@ -14,6 +15,8 @@ module ElasticRecord
         self.servers = servers.split(',')
       end
 
+      self.current_server = choose_server
+      self.request_count = 0
       self.options = options
     end
 
@@ -72,7 +75,14 @@ module ElasticRecord
       end
 
       def http
-        host, port = choose_server.split ':'
+        self.request_count += 1
+
+        if request_count > 100
+          self.current_server = choose_server
+          self.request_count = 0
+        end
+
+        host, port = current_server.split ':'
 
         http = Net::HTTP.new(host, port)
         if options[:timeout]
