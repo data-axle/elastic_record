@@ -20,8 +20,7 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
 
     wait
 
-    assert_equal 1, @logger.logged(:info).size
-    assert_match "HEAD /widgets", @logger.logged(:info)[0]
-    # assert_match(/\-\-\> 200 200 33/, @logger.logged(:info)[1])
+    assert_equal 1, @logger.logged(:debug).size
+    assert_match "HEAD /widgets", @logger.logged(:debug)[0]
   end
 end
