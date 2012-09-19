@@ -1,9 +1,14 @@
 module ElasticRecord
   class LogSubscriber < ActiveSupport::LogSubscriber
     def request(event)
-      # response = event.payload[:response]
-      debug "#{event.payload[:method].to_s.upcase} #{event.payload[:request_uri]} (%.1fms)" % [event.duration] 
-      # info "--> %d %s %d (%.1fms)" % [response.code, response.message, response.body.to_s.length, event.duration]
+      payload = event.payload
+      request_log = "#{payload[:request].method} #{payload[:http].address}:#{payload[:http].port}#{payload[:request].path}"
+
+      if payload[:request].body
+        request_log << " '#{payload[:request].body}'"
+      end
+
+      debug "(%.1fms) #{request_log}" % [event.duration]
     end
 
     # def logger

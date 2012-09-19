@@ -62,11 +62,12 @@ module ElasticRecord
     def http_request(method, path, body = nil)
       request = METHODS[method].new(path)
       request.body = body
+      http = new_http
 
       ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
-        payload[:method]      = method
-        payload[:request_uri] = path
-        payload[:response]    = http.request(request)
+        payload[:http]      = http
+        payload[:request]   = request
+        payload[:response]  = http.request(request)
       end
     end
 
@@ -75,7 +76,7 @@ module ElasticRecord
         servers.sample
       end
 
-      def http
+      def new_http
         self.request_count += 1
 
         if request_count > max_request_count{}
