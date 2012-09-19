@@ -1,13 +1,13 @@
 require 'net/http'
 
 module ElasticRecord
-  class Connection
-    # :timeout: 10
-    # :retries: 2
-    # :auto_discovery: false
+  class ConnectionError < StandardError
+  end
 
+  class Connection
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
+    attr_accessor :max_request_count
     def initialize(servers, options = {})
       if servers.is_a?(Array)
         self.servers = servers
@@ -17,6 +17,7 @@ module ElasticRecord
 
       self.current_server = choose_server
       self.request_count = 0
+      self.max_request_count = 100
       self.options = options
     end
 
@@ -45,7 +46,7 @@ module ElasticRecord
       response = http_request(method, path, body)
 
       json = ActiveSupport::JSON.decode response.body
-      raise json['error'] if json['error']
+      raise ConnectionError.new(json['error']) if json['error']
 
       json
     end
@@ -77,7 +78,7 @@ module ElasticRecord
       def http
         self.request_count += 1
 
-        if request_count > 100
+        if request_count > max_request_count{}
           self.current_server = choose_server
           self.request_count = 0
         end
