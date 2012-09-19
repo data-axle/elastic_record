@@ -60,8 +60,6 @@ module ElasticRecord
       end
 
       def bulk_add(batch, index_name = nil)
-        return if disabled
-
         index_name ||= alias_name
 
         bulk do
