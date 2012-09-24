@@ -21,7 +21,7 @@ Include ElasticRecord into your model:
 
 == Searching:
 
-  ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
+ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
 
   search = Product.elastic_search
 
@@ -38,9 +38,20 @@ If a hash containing hashes is passed into filter, it is used directly as a filt
 
 An Arelastic object can also be passed in, working similarily to Arel:
 
-  scope.filter(Product.arelastic[:size].gt(5))
+  search.filter(Product.arelastic[:name].prefix("Sca"))
+  search.filter(Product.arelastic[:size].gt(5))
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
+
+=== Querying
+
+To create a query string, pass a string to search.query:
+
+  search.query("red AND fun*") # Creates query_string: {"red AND fun*"}
+
+Complex queries are done using either a hash or an arelastic object:
+
+  search.query(match: {description: "amazing"})
 
 === Ordering
 
@@ -48,7 +59,15 @@ Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic
   search.order(:color, :price)  # sort by color, then price
   search.order(price: :desc)    # sort by price in descending order
 
-=== 
+=== Offsets and Limits
+
+To change the 'size' and 'from' values of a query, use offset and limit:
+
+  search.limit(10).offset(20)   # Creates a query with {size: 10, from: 20}
+
+=== Getting results
+
+Once a search is constructed
 
   scope.count
   scope.first
