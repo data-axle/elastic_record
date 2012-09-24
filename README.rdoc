@@ -40,6 +40,7 @@ An Arelastic object can also be passed in, working similarily to Arel:
 
   search.filter(Product.arelastic[:name].prefix("Sca"))
   search.filter(Product.arelastic[:size].gt(5))
+  search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].blank))
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
 
@@ -72,7 +73,7 @@ Since term facets are the most common, they are the easiest to add to a query:
 
   search.facet('colors')
 
-It is import to note that adding facets to a query is different than retrieving the results of the query:
+It is important to note that adding facets to a query is different than retrieving the results of the query:
 
   search = search.facet('colors').facet('size')
   search.facets
@@ -80,21 +81,26 @@ It is import to note that adding facets to a query is different than retrieving 
 
 === Getting Results
 
-Once a search is constructed
+A search object behaves similar to an active_record scope, implementing a few methods of its own and delegating the rest to Array, and your class.
 
-  scope.count
-  scope.first
-  scope.all
-  scope.each do |product|
+  search.count        # Return the number of search results
+  search.first        # Limit results to 1 and return the first result or nil
+  search.find(id)     # Add an ids filter to the existing query
+  search.as_elastic   # Return the json hash that will be sent to elastic search.
+
+The search object behaves like an array when necessary:
+
+  search.each do |product|
     ...
   end
 
-Class methods are executed within scopes:
+Class methods can be executed within scopes:
 
-  class Pirate
-    def self.ouput_to_screen
-      all.each do { |widget| puts widget }
+  class Product
+    def self.increase_prices
+      all.each do { |product| product.increment(:price, 10) }
     end
   end
 
-  scope.output_to_screen
+  # Increase the price of all red products by $10.
+  Product.filter(color: 'red').increase_prices
