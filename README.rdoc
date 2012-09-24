@@ -19,7 +19,7 @@ Include ElasticRecord into your model:
     include ElasticRecord::Model
   end
 
-== Searching:
+== Searching
 
 ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
 
@@ -47,7 +47,7 @@ Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic
 
 To create a query string, pass a string to search.query:
 
-  search.query("red AND fun*") # Creates query_string: {"red AND fun*"}
+  search.query("red AND fun*") # Creates {query_string: {"red AND fun*"}}
 
 Complex queries are done using either a hash or an arelastic object:
 
@@ -65,7 +65,20 @@ To change the 'size' and 'from' values of a query, use offset and limit:
 
   search.limit(10).offset(20)   # Creates a query with {size: 10, from: 20}
 
-=== Getting results
+
+=== Facets
+
+Since term facets are the most common, they are the easiest to add to a query:
+
+  search.facet('colors')
+
+It is import to note that adding facets to a query is different than retrieving the results of the query:
+
+  search = search.facet('colors').facet('size')
+  search.facets
+  #=> {"colors" => ..., "size" => ...}
+
+=== Getting Results
 
 Once a search is constructed
 
