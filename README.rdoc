@@ -19,12 +19,37 @@ Include ElasticRecord into your model:
     include ElasticRecord::Model
   end
 
-== Querying:
+== Searching:
 
-  scope = Product.elastic_search
-  
-  scope.filter(color: 'red')
-  scope.order(:price)
+  ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
+
+  search = Product.elastic_search
+
+=== Filtering
+
+If a simple hash is passed into filter, a term or terms query is created:
+
+  search.filter(color: 'red')         # Creates a term filter
+  search.filter(color: %w(red blue))  # Creates a terms filter
+
+If a hash containing hashes is passed into filter, it is used directly as a filter expression:
+
+  search.filter(prefix: { name: "Sca" }) # Creates a prefix filter
+
+An Arelastic object can also be passed in, working similarily to Arel:
+
+  scope.filter(Product.arelastic[:size].gt(5))
+
+Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
+
+=== Ordering
+
+  search.order(:price)          # sort by price
+  search.order(:color, :price)  # sort by color, then price
+  search.order(price: :desc)    # sort by price in descending order
+
+=== 
+
   scope.count
   scope.first
   scope.all
