@@ -38,8 +38,22 @@ If a hash containing hashes is passed into filter, it is used directly as a filt
 
 An Arelastic object can also be passed in, working similarily to Arel:
 
+  # Name starts with 'Sca'
   search.filter(Product.arelastic[:name].prefix("Sca"))
+
+  # Name does not start with 'Sca'
+  search.filter(Product.arelastic[:name].prefix("Sca").negated)
+
+  # Size is greater than 5
   search.filter(Product.arelastic[:size].gt(5))
+
+  # Product has no name
+  search.filter(Product.arelastic[:name].blank)
+
+  # Product has name
+  search.filter(Product.arelastic[:name].present)
+
+  # Name is 'hola' or name is blank
   search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].blank))
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
