@@ -46,6 +46,13 @@ namespace :index do
   desc "Recreate index for CLASS or all models."
   task reset: ['index:drop', 'index:create']
 
+  task update_mapping: :environment do
+    ElasticRecord::Task.get_models.each do |model|
+      model.elastic_index.create_and_deploy
+      logger.info "Updated mapping for #{model.name}"
+    end
+  end
+
   desc "Add records to index. Deploys a new index by default, or specify INDEX"
   task build: :environment do
     ElasticRecord::Task.get_models.each do |model|
