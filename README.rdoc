@@ -58,6 +58,11 @@ An Arelastic object can also be passed in, working similarily to Arel:
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
 
+Lastly, negation is made easy with negate:
+
+  # Status is not active
+  search.negate(status: 'active')
+
 === Querying
 
 To create a query string, pass a string to search.query:
