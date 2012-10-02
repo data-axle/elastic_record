@@ -31,6 +31,15 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
     assert_equal ['widgets_foo'], index.aliased_names
   end
 
+  def test_deploy_when_already_deployed
+    index.create 'widgets_foo'
+    index.deploy 'widgets_foo'
+    
+    index.deploy 'widgets_foo'
+
+    assert_equal ['widgets_foo'], index.aliased_names
+  end
+
   private
     def index
       @index ||= Widget.elastic_index

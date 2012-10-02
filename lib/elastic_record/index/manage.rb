@@ -37,7 +37,7 @@ module ElasticRecord
           }
         ]
 
-        (aliased_names - index_name).each do |index_to_remove|
+        (aliased_names - [index_name]).each do |index_to_remove|
           actions << {
             remove: {
               "index" => index_to_remove,
