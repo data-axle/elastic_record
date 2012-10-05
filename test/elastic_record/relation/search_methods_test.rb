@@ -57,6 +57,24 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_negate
+    search = relation.negate("prefix" => {"name" => "Jo"})
+
+    expected = {
+      "constant_score" => {
+        "filter" => {
+          "not" => {
+            "prefix" => {
+              "name" => "Jo"
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected, search.as_elastic['query']
+  end
+
   def test_query_with_only_query
     relation.query!('foo')
 

@@ -19,25 +19,107 @@ Include ElasticRecord into your model:
     include ElasticRecord::Model
   end
 
-== Querying:
+== Searching
 
-  scope = Product.elastic_search
-  
-  scope.filter(color: 'red')
-  scope.order(:price)
-  scope.count
-  scope.first
-  scope.all
-  scope.each do |product|
+ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
+
+  search = Product.elastic_search
+
+=== Filtering
+
+If a simple hash is passed into filter, a term or terms query is created:
+
+  search.filter(color: 'red')         # Creates a term filter
+  search.filter(color: %w(red blue))  # Creates a terms filter
+
+If a hash containing hashes is passed into filter, it is used directly as a filter DSL expression:
+
+  search.filter(prefix: { name: "Sca" }) # Creates a prefix filter
+
+An Arelastic object can also be passed in, working similarily to Arel:
+
+  # Name starts with 'Sca'
+  search.filter(Product.arelastic[:name].prefix("Sca"))
+
+  # Name does not start with 'Sca'
+  search.filter(Product.arelastic[:name].prefix("Sca").negated)
+
+  # Size is greater than 5
+  search.filter(Product.arelastic[:size].gt(5))
+
+  # Product has no name
+  search.filter(Product.arelastic[:name].blank)
+
+  # Product has name
+  search.filter(Product.arelastic[:name].present)
+
+  # Name is 'hola' or name is blank
+  search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].blank))
+
+Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
+
+Lastly, negation is made easy with negate:
+
+  # Status is not active
+  search.negate(status: 'active')
+
+=== Querying
+
+To create a query string, pass a string to search.query:
+
+  search.query("red AND fun*") # Creates {query_string: {"red AND fun*"}}
+
+Complex queries are done using either a hash or an arelastic object:
+
+  search.query(match: {description: "amazing"})
+
+=== Ordering
+
+  search.order(:price)          # sort by price
+  search.order(:color, :price)  # sort by color, then price
+  search.order(price: :desc)    # sort by price in descending order
+
+=== Offsets and Limits
+
+To change the 'size' and 'from' values of a query, use offset and limit:
+
+  search.limit(10).offset(20)   # Creates a query with {size: 10, from: 20}
+
+
+=== Facets
+
+Since term facets are the most common, they are the easiest to add to a query:
+
+  search.facet('colors')
+
+It is important to note that adding facets to a query is different than retrieving the results of the query:
+
+  search = search.facet('colors').facet('size')
+  search.facets
+  #=> {"colors" => ..., "size" => ...}
+
+=== Getting Results
+
+A search object behaves similar to an active_record scope, implementing a few methods of its own and delegating the rest to Array, and your class.
+
+  search.count        # Return the number of search results
+  search.first        # Limit results to 1 and return the first result or nil
+  search.find(id)     # Add an ids filter to the existing query
+  search.as_elastic   # Return the json hash that will be sent to elastic search.
+
+The search object behaves like an array when necessary:
+
+  search.each do |product|
     ...
   end
 
-Class methods are executed within scopes:
+Class methods can be executed within scopes:
 
-  class Pirate
-    def self.ouput_to_screen
-      all.each do { |widget| puts widget }
+  class Product
+    def self.increase_prices
+      all.each do { |product| product.increment(:price, 10) }
     end
   end
 
-  scope.output_to_screen
+  # Increase the price of all red products by $10.
+  Product.filter(color: 'red').increase_prices

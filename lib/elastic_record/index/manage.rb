@@ -37,7 +37,7 @@ module ElasticRecord
           }
         ]
 
-        aliased_names.each do |index_to_remove|
+        (aliased_names - [index_name]).each do |index_to_remove|
           actions << {
             remove: {
               "index" => index_to_remove,
@@ -49,12 +49,12 @@ module ElasticRecord
         connection.json_post '/_aliases', actions: actions
       end
 
-      def update_mapping(index_name)
+      def update_mapping(index_name = alias_name)
         connection.json_put "/#{index_name}/#{type}/_mapping", type => mapping
       end
 
-      def refresh
-        connection.json_post "/#{alias_name}/_refresh"
+      def refresh(index_name = alias_name)
+        connection.json_post "/#{index_name}/_refresh"
       end
 
       def reset

@@ -23,6 +23,10 @@ module ElasticRecord
         connection.json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
       end
 
+      def reset_percolator
+        delete(percolator_index_name) if exists?(percolator_index_name)
+      end
+
       def percolator_index_name
         @percolator_index_name ||= "percolate_#{alias_name}"
       end

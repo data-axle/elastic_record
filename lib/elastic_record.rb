@@ -11,6 +11,12 @@ module ElasticRecord
   autoload :Model, 'elastic_record/model'
   autoload :Relation, 'elastic_record/relation'
   autoload :Searching, 'elastic_record/searching'
+
+  class << self
+    def configure
+      yield(ElasticRecord::Config)
+    end
+  end
 end
 
 require 'elastic_record/railtie' if defined?(Rails)

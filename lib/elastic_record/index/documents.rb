@@ -39,21 +39,13 @@ module ElasticRecord
         connection.json_get url, elastic_query
       end
 
+      def explain(id, elastic_query)
+        connection.json_get "/#{alias_name}/#{type}/#{id}/_explain", elastic_query
+      end
+
       def scroll(scroll_id, scroll_keep_alive)
         options = {scroll_id: scroll_id, scroll: scroll_keep_alive}
         connection.json_get("/_search/scroll?#{options.to_query}")
-      end
-
-      def bulk_add(batch, index_name = nil)
-        return if disabled
-
-        index_name ||= alias_name
-
-        bulk do
-          batch.each do |record|
-            index_document(record.id, record.as_search, index_name)
-          end
-        end
       end
 
       def bulk
@@ -65,6 +57,16 @@ module ElasticRecord
         end
       ensure
         @batch = nil
+      end
+
+      def bulk_add(batch, index_name = nil)
+        index_name ||= alias_name
+
+        bulk do
+          batch.each do |record|
+            index_document(record.id, record.as_search, index_name)
+          end
+        end
       end
     end
   end
