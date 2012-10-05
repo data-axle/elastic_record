@@ -6,10 +6,10 @@ class Widget
   include ElasticRecord::Model
   include ElasticRecord::Callbacks
 
-  self.elastic_index.mapping[:properties].update(color: {
-    type: 'string',
-    index: 'not_analyzed'
-  })
+  self.elastic_index.mapping[:properties].update(
+    name: {type: 'string', index: 'analyzed'},
+    color: {type: 'string', index: 'not_analyzed'}
+  )
 
   class << self
     def find(ids)
@@ -31,7 +31,7 @@ class Widget
     end
   end
 
-  attr_accessor :id, :color
+  attr_accessor :id, :name, :color
   def initialize(attributes = {})
     attributes.each do |key, val|
       send("#{key}=", val)
@@ -39,6 +39,6 @@ class Widget
   end
 
   def as_search
-    {color: color}
+    {name: name, color: color}
   end
 end

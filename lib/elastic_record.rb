@@ -7,6 +7,7 @@ module ElasticRecord
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
   autoload :Index, 'elastic_record/index'
+  autoload :Lucene, 'elastic_record/lucene'
   autoload :Model, 'elastic_record/model'
   autoload :Relation, 'elastic_record/relation'
   autoload :Searching, 'elastic_record/searching'
