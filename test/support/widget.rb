@@ -7,10 +7,18 @@ class Widget
   include ElasticRecord::Callbacks
 
   self.elastic_index.mapping[:properties].update(
-    name: {type: 'string', index: 'analyzed'},
-    color: {type: 'string', index: 'not_analyzed'}
+    name: {
+      type: 'multi_field', 
+      fields: {
+        name: {type: 'string', index: 'not_analyzed'},
+        analyzed: {type: 'string', index: 'analyzed'}
+      }
+    },
+    color: {
+      type: 'string', index: 'not_analyzed'
+    }
   )
-
+  
   class << self
     def find(ids)
       ids.map { |id| new(id: id, color: 'red') }
