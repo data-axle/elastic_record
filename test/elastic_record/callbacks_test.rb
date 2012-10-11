@@ -25,4 +25,14 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
 
     refute Widget.elastic_index.record_exists?(widget.id)
   end
+
+  def test_as_search
+    Widget.new(id: '10', color: 'green').tap do |widget|
+      assert_equal({color: "green"}, widget.as_search)
+    end
+
+    Widget.new(id: '10', color: '').tap do |widget|
+      assert_equal({}, widget.as_search)
+    end
+  end
 end

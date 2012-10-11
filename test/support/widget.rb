@@ -45,8 +45,4 @@ class Widget
       send("#{key}=", val)
     end
   end
-
-  def as_search
-    {name: name, color: color}
-  end
 end
