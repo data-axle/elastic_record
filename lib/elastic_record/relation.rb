@@ -3,6 +3,7 @@ require 'elastic_record/relation/batches'
 require 'elastic_record/relation/delegation'
 require 'elastic_record/relation/finder_methods'
 require 'elastic_record/relation/merging'
+require 'elastic_record/relation/none'
 require 'elastic_record/relation/search_methods'
 
 module ElasticRecord

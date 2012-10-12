@@ -43,10 +43,6 @@ module ElasticRecord
         clone.filter!(*args)
       end
 
-      def negate(*args)
-        filter args.map { |arg| arelastic.filter.not arg }
-      end
-
       def limit!(value)
         self.limit_value = value
         self
@@ -112,6 +108,10 @@ module ElasticRecord
 
       def extending(*modules, &block)
         clone.extending!(*modules, &block)
+      end
+
+      def none
+        extending(None)
       end
 
       def as_elastic

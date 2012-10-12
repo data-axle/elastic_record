@@ -2,6 +2,7 @@ require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Spec
   def setup
+    super
     Widget.elastic_index.reset
   end
 
