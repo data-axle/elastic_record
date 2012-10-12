@@ -34,5 +34,9 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
     Widget.new(id: '10', color: '').tap do |widget|
       assert_equal({}, widget.as_search)
     end
+
+    Widget.new(id: '10', color: false).tap do |widget|
+      assert_equal({color: false}, widget.as_search)
+    end
   end
 end

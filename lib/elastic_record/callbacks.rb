@@ -15,7 +15,10 @@ module ElasticRecord
     def as_search
       json = {}
       elastic_index.mapping[:properties].each_key do |key|
-        if respond_to?(key) && (value = send(key)).present?
+        next unless respond_to?(key)
+        value = value = send(key)
+
+        if value.present? || value == false
           json[key] = value
         end
       end
