@@ -35,7 +35,7 @@ module ElasticRecord
       end
 
       def filter!(*args)
-        self.filter_values += args.flatten
+        self.filter_values += args
         self
       end
 
@@ -159,6 +159,8 @@ module ElasticRecord
           filters.map do |filter|
             if filter.is_a?(Arelastic::Filters::Filter)
               nodes << filter
+            elsif filter.is_a?(ElasticRecord::Relation)
+              nodes << Arelastic::Filters::HasChild.new(filter.elastic_index.type, filter.as_elastic['query'])
             else
               filter.each do |field, terms|
                 case terms

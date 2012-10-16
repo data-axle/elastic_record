@@ -57,6 +57,25 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_filter_with_another_relation
+    relation.filter! Widget.elastic_search.query('red')
+
+    expected = {
+      "constant_score" => {
+        "filter" => {
+          "has_child" => {
+            "type" => "widget",
+            "query" => {
+              "query_string" => {"query"=>"red"}
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected, relation.as_elastic['query']
+  end
+
   def test_query_with_only_query
     relation.query!('foo')
 
@@ -163,6 +182,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
       Widget.new(id: 5, color: 'red'),
       Widget.new(id: 10, color: 'blue')
     ]
+    Widget.elastic_index.refresh
 
     records = relation.select { |record| record.id == '10' }
 

@@ -18,14 +18,15 @@ module ElasticRecord
             @values = other.values
           end
 
-          def normal_values
-            Relation::MULTI_VALUE_METHODS + Relation::SINGLE_VALUE_METHODS
-          end
-
           def merge
-            normal_values.each do |name|
+            Relation::SINGLE_VALUE_METHODS.each do |name|
               value = values[name]
               relation.send("#{name}!", value) unless value.blank?
+            end
+
+            Relation::MULTI_VALUE_METHODS.each do |name|
+              value = values[name]
+              relation.send("#{name}!", *value) unless value.blank?
             end
 
             relation
