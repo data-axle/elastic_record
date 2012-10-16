@@ -137,9 +137,9 @@ module ElasticRecord
           if query && filter
             arelastic.query.filtered(query, filter)
           elsif query
-            query
+            Arelastic::Searches::Query.new(query)
           elsif filter
-            arelastic.query.constant_score(filter)
+            arelastic.query.constant_score(Arelastic::Searches::Filter.new(filter))
           else
             arelastic.query.match_all
           end
@@ -150,9 +150,7 @@ module ElasticRecord
             query = Arelastic::Queries::QueryString.new query
           end
 
-          if query
-            Arelastic::Searches::Query.new query
-          end
+          query
         end
 
         def build_filter(filters)
@@ -176,9 +174,9 @@ module ElasticRecord
           end
 
           if nodes.size == 1
-            Arelastic::Searches::Filter.new nodes.first
+            nodes.first
           elsif nodes.size > 1
-            Arelastic::Searches::Filter.new Arelastic::Filters::And.new(nodes)
+            Arelastic::Filters::And.new(nodes)
           end
         end
 
