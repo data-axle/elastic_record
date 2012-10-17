@@ -27,17 +27,35 @@ module TestModel
     end
   end
 
+  attr_writer :id
   def initialize(attributes = {})
     attributes.each do |key, val|
       send("#{key}=", val)
     end
   end
 
+  def id
+    @id ||= rand(10000).to_s
+  end
+
   def save
+    @persisted = true
     run_callbacks :save
   end
 
   def destroy
     run_callbacks :destroy
+  end
+
+  def changed?
+    true
+  end
+
+  def new_record?
+    true
+  end
+
+  def persisted?
+    @persisted
   end
 end

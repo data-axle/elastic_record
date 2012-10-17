@@ -55,7 +55,7 @@ module ElasticRecord
       end
 
       def delete(records)
-        if options[:autosave] || new_record?
+        if options[:autosave] || owner.new_record?
           records.each(&:mark_for_destruction)
         else
           record.destroy
@@ -63,8 +63,7 @@ module ElasticRecord
       end
 
       def scope
-        search = klass.filter "#{reflection.belongs_to}_id" => owner.id
-        search = search.filter! klass.arelastic[:status].not_eq('destroyed')
+        search = klass.elastic_search.filter "#{reflection.belongs_to}_id" => 5#owner.id
         if options[:as]
           search.filter! "#{reflection.belongs_to}_type" => owner.class.name
         end

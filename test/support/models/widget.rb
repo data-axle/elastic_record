@@ -1,7 +1,9 @@
 class Widget
   include TestModel
 
-  attr_accessor :id, :name, :color
+  validates :color, format: {with: /[a-z]/}
+
+  attr_accessor :name, :color, :warehouse_id
 
   self.elastic_index.mapping[:properties].update(
     name: {
@@ -29,5 +31,9 @@ class Widget
         instance_eval(&block)
       end
     end
+  end
+
+  def warehouse=(other)
+    self.warehouse_id = other.id
   end
 end

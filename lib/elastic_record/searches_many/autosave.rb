@@ -25,11 +25,7 @@ module ElasticRecord
           if record.marked_for_destruction?
             record.destroy
           elsif record.changed?
-            if record.respond_to?(:new_commit) && respond_to?(:new_commit) && new_commit
-              record.commit new_commit.options
-            else
-              record.save
-            end
+            record.save
           end
         end
       end      
