@@ -182,7 +182,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
       Widget.new(id: 5, color: 'red'),
       Widget.new(id: 10, color: 'blue')
     ]
-    Widget.elastic_index.refresh
 
     records = relation.select { |record| record.id == '10' }
 

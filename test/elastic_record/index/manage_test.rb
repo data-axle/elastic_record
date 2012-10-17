@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Index::ManageTest < MiniTest::Spec
   def setup
-    super
+    # super
 
     index.delete_all
   end

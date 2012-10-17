@@ -1,13 +1,8 @@
 require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Spec
-  def setup
-    Widget.elastic_index.reset
-  end
-
   def test_delegate_to_array
     Widget.elastic_index.index_document('5', color: 'red')
-    Widget.elastic_index.refresh
     
     records = []
     Widget.elastic_relation.each do |record|

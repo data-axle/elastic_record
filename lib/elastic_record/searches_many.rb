@@ -6,8 +6,6 @@ require 'elastic_record/searches_many/reflection'
 
 module ElasticRecord
   module SearchesMany
-    extend ActiveSupport::Concern
-
     def self.included(base)
       base.class_eval do
         extend ClassMethods

@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
   def setup
-    Widget.elastic_index.reset
+    super
     create_widgets
   end
 
@@ -37,7 +37,5 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Spec
         Widget.new(id: 10, color: 'blue'),
         Widget.new(id: 15, color: 'green'),
       ]
-      
-      Widget.elastic_index.refresh
     end
 end

@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   def setup
-    Widget.elastic_index.reset
+    super
     create_widgets
   end
 
@@ -37,8 +37,6 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
       Widget.elastic_index.bulk_add [
         Widget.new(color: 'red', id: '05'),
         Widget.new(color: 'blue', id: '10'),
-      ]
-      
-      Widget.elastic_index.refresh
+      ]      
     end
 end

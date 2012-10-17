@@ -1,11 +1,6 @@
 require 'helper'
 
 class ElasticRecord::Relation::NoneTest < MiniTest::Spec
-  def setup
-    super
-    Widget.elastic_index.reset
-  end
-
   def test_none
     none = Widget.elastic_relation.none
 

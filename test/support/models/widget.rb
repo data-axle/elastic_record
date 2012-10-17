@@ -1,10 +1,7 @@
 class Widget
-  extend ActiveModel::Naming
-  extend ActiveModel::Callbacks
-  define_model_callbacks :save, :destroy
+  include TestModel
 
-  include ElasticRecord::Model
-  include ElasticRecord::Callbacks
+  attr_accessor :id, :name, :color
 
   self.elastic_index.mapping[:properties].update(
     name: {
@@ -16,14 +13,13 @@ class Widget
     },
     color: {
       type: 'string', index: 'not_analyzed'
+    },
+    warehouse_id: {
+      type: 'string', index: 'not_analyzed'
     }
   )
-  
-  class << self
-    def find(ids)
-      ids.map { |id| new(id: id, color: 'red') }
-    end
 
+  class << self
     def anon(&block)
       Class.new(self) do
         def self.name
@@ -32,17 +28,6 @@ class Widget
 
         instance_eval(&block)
       end
-    end
-
-    def base_class
-      self
-    end
-  end
-
-  attr_accessor :id, :name, :color
-  def initialize(attributes = {})
-    attributes.each do |key, val|
-      send("#{key}=", val)
     end
   end
 end

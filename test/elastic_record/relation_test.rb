@@ -1,11 +1,6 @@
 require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Spec
-  def setup
-    super
-    Widget.elastic_index.reset
-  end
-
   def test_count
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
@@ -70,6 +65,5 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   private
     def create_widgets(widgets)
       Widget.elastic_index.bulk_add(widgets)
-      Widget.elastic_index.refresh
     end
 end
