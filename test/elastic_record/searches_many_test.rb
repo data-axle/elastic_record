@@ -33,8 +33,8 @@ class ElasticRecord::SearchesManyTest < MiniTest::Spec
   end
 
   def test_collection_attributes_update
-    warehouse = Warehouse.new
-    widget = Widget.create warehouse: warehouse, name: 'Toy', color: 'green'
+    widget = Widget.create name: 'Toy', color: 'green'
+    warehouse = Warehouse.new widgets: [widget]
   
     warehouse.widgets = [
       {

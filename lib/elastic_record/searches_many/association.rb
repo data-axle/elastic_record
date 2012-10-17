@@ -90,6 +90,7 @@ module ElasticRecord
         end
 
         def merge_collections(existing, additions)
+          p "merging #{existing.inspect} with #{additions.inspect}"
           return existing   if additions.empty?
           return additions  if existing.empty?
 
