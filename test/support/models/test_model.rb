@@ -5,6 +5,8 @@ module TestModel
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
     define_model_callbacks :save, :destroy
+
+    include ActiveModel::Dirty
     include ActiveModel::Validations
 
     include ElasticRecord::Model
@@ -25,13 +27,39 @@ module TestModel
       record.save
       record
     end
+
+    def define_attributes(attributes)
+      define_attribute_methods attributes
+
+      attributes.each do |attribute|
+        define_method attribute do
+          instance_variable_get("@#{attribute}")
+        end
+
+        define_method "#{attribute}=" do |value|
+          send("#{attribute}_will_change!")
+          instance_variable_set("@#{attribute}", value)
+        end
+      end
+
+      define_method 'attributes' do
+        Hash[attributes.map { |attr| [attr, send(attr)] }]
+      end
+    end
   end
 
-  attr_writer :id
-  def initialize(attributes = {})
-    attributes.each do |key, val|
+  def initialize(attrs = {})
+    self.attributes = attrs
+  end
+
+  def attributes=(attrs)
+    attrs.each do |key, val|
       send("#{key}=", val)
     end
+  end
+
+  def id=(value)
+    @id = value
   end
 
   def id
@@ -46,6 +74,10 @@ module TestModel
   def destroy
     @destroyed = true
     run_callbacks :destroy
+  end
+
+  def ==(other)
+    id == other.id
   end
 
   def changed?

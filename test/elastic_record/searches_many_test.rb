@@ -1,13 +1,13 @@
 require 'helper'
 
-class ElasticRecord::SearchesManyTest < ActiveSupport::TestCase
-  # def test_collection_reader
-  #   warehouse = create :warehouse
-  #   related_widget = create :widget, warehouse: warehouse
-  #   unrelated_widget = create :widget
-  # 
-  #   assert_equal [related_widget], warehouse.widgets
-  # end
+class ElasticRecord::SearchesManyTest < MiniTest::Spec
+  def test_collection_reader
+    warehouse = Warehouse.create
+    related_widget = Widget.create warehouse: warehouse
+    unrelated_widget = Widget.create
+  
+    assert_equal [related_widget], warehouse.widgets
+  end
   # 
   # def test_collection_writer
   #   warehouse = build :warehouse

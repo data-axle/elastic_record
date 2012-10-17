@@ -27,7 +27,6 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     create_widgets [Widget.new(id: 10, color: 'blue')]
 
     # explain = Widget.elastic_relation.filter(color: 'blue').explain('10')
-    # p "explain = #{explain}"
   end
 
   def test_to_hits

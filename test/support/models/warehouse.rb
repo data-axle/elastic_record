@@ -1,6 +1,6 @@
 class Warehouse
   include TestModel
 
-  attr_accessor :name
+  define_attributes [:name]
   searches_many :widgets
 end

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchesMany::AutosaveTest < ActiveSupport::TestCase
+class ElasticRecord::SearchesMany::AutosaveTest < MiniTest::Spec
   def test_save_associations_callback
     warehouse = Warehouse.new
     widget = Widget.new

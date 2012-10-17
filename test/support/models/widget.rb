@@ -3,7 +3,7 @@ class Widget
 
   validates :color, format: {with: /[a-z]/}
 
-  attr_accessor :name, :color, :warehouse_id
+  define_attributes [:name, :color, :warehouse_id]
 
   self.elastic_index.mapping[:properties].update(
     name: {

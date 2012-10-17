@@ -1,7 +1,7 @@
 require 'helper'
 
-class ElasticRecord::SearchesMany::CollectionProxyTest < ActiveSupport::TestCase
-  test "add to new_record" do
+class ElasticRecord::SearchesMany::CollectionProxyTest < MiniTest::Spec
+  def test_add_to_new_record
     warehouse = Warehouse.new
     widget = Widget.new
   
@@ -11,7 +11,7 @@ class ElasticRecord::SearchesMany::CollectionProxyTest < ActiveSupport::TestCase
     assert_equal [widget], warehouse.widgets
   end
   
-  test "add to persisted record" do
+  def test_add_to_persisted_record
     warehouse = Warehouse.create
     widget = Widget.new
   
