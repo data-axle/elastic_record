@@ -10,6 +10,7 @@ module ElasticRecord
   autoload :Lucene, 'elastic_record/lucene'
   autoload :Model, 'elastic_record/model'
   autoload :Relation, 'elastic_record/relation'
+  autoload :SearchesMany, 'elastic_record/searches_many'
   autoload :Searching, 'elastic_record/searching'
 
   class << self
