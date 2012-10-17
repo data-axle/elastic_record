@@ -1,9 +1,13 @@
 require 'helper'
 
+# class Cat
+#   include TestModel
+# end
+
 class ElasticRecord::Index::ManageTest < MiniTest::Spec
   def setup
-    # super
-
+    super
+    index.disable_deferring!
     index.delete_all
   end
   

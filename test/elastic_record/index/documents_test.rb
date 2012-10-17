@@ -3,7 +3,7 @@ require 'helper'
 class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
   def setup
     super
-    
+    index.disable_deferring!
     index.reset
   end
 

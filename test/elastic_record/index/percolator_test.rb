@@ -1,6 +1,11 @@
 require 'helper'
 
 class ElasticRecord::Index::PercolatorTest < MiniTest::Spec
+  def setup
+    super
+    index.disable_deferring!
+  end
+
   def test_create_percolator
     index.delete(index.percolator_index_name) if index.exists?(index.percolator_index_name)
 
