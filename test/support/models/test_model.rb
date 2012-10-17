@@ -44,6 +44,7 @@ module TestModel
   end
 
   def destroy
+    @destroyed = true
     run_callbacks :destroy
   end
 
@@ -52,10 +53,14 @@ module TestModel
   end
 
   def new_record?
-    true
+    !@persisted
   end
 
   def persisted?
     @persisted
+  end
+
+  def destroyed?
+    @destroyed
   end
 end
