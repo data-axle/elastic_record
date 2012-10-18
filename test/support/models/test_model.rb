@@ -43,7 +43,7 @@ module TestModel
       end
 
       define_method 'attributes' do
-        Hash[attributes.map { |attr| [attr, send(attr)] }]
+        Hash[attributes.map { |attr| [attr.to_s, send(attr)] }]
       end
     end
   end

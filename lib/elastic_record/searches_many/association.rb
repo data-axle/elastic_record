@@ -89,25 +89,23 @@ module ElasticRecord
           scope.to_a
         end
 
-        def merge_collections(existing, additions)
-          p "merging #{existing.inspect} with #{additions.inspect}"
-          return existing   if additions.empty?
-          return additions  if existing.empty?
+        def merge_collections(existing_records, new_records)
+          return existing_records   if new_records.empty?
+          return new_records  if existing_records.empty?
 
-          existing.map! do |record|
-            if mem_record = additions.delete(record)
-
-              (record.attributes.keys - mem_record.changes.keys).each do |name|
-                mem_record.send("#{name}=", record.send(name))
+          existing_records.map! do |existing_record|
+            if new_record = new_records.delete(existing_record)
+              (existing_record.attributes.keys - new_record.changes.keys).each do |name|
+                new_record.send("#{name}=", existing_record.send(name))
               end
 
-              mem_record
+              new_record
             else
-              record
+              existing_record
             end
           end
 
-          existing + additions
+          existing_records + new_records
         end
 
         def add_to_collection(record)
