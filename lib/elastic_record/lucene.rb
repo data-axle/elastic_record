@@ -11,11 +11,15 @@ module ElasticRecord
         query.gsub(ESCAPE_REGEX, "\\\\\\1")
       end
 
+      def query_words(query)
+        Shellwords::shellwords query.gsub("'", "\"'\"")
+      end
+
       # Returns a lucene query that works like G
       def smart_query(query, fields, &block)
         return if query.blank?
 
-        words = Shellwords::shellwords(query)
+        words = query_words(query)
 
         words.map do |word|
           if word =~ /^(\w+):(.+)$/ && fields.include?($1)
