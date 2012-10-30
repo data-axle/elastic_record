@@ -75,6 +75,11 @@ module ElasticRecord
       association
     end
 
+    def reload
+      super
+      searches_many_cache.clear
+    end
+
     private
       def searches_many_cache
         @searches_many_cache ||= {}

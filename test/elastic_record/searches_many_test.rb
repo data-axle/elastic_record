@@ -62,4 +62,15 @@ class ElasticRecord::SearchesManyTest < MiniTest::Spec
     assert_equal "blue", widgets.first.color
     assert_equal "Toy", widgets.first.name
   end
+
+  def test_reload
+    warehouse = Warehouse.create
+    widget = Widget.create name: 'Toy', color: 'green', warehouse: warehouse
+    assert_equal [widget], warehouse.widgets
+    widget.destroy
+
+    warehouse.reload
+
+    assert_equal [], warehouse.widgets
+  end
 end

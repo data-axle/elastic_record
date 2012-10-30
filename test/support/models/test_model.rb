@@ -95,4 +95,7 @@ module TestModel
   def destroyed?
     @destroyed
   end
+
+  def reload
+  end
 end
