@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.author            = 'Matthew Higgins'
   s.email             = 'developer@matthewhiggins.com'
-  s.homepage          = 'http://github.com/matthuhiggins/elastic_record'
+  s.homepage          = 'http://github.com/infogroup/elastic_record'
 
   s.extra_rdoc_files = ['README.rdoc']
   s.files       = `git ls-files`.split("\n")
