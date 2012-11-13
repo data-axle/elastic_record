@@ -11,6 +11,7 @@ class ElasticRecord::LuceneTest < MiniTest::Spec
     assert_smart_escape nil, nil, ['name']
 
     assert_smart_escape '(name:foo*)', 'foo', ['name']
+    assert_smart_escape '(name:"foo-bar")', 'foo-bar', ['name']
     assert_smart_escape "(name:bob's*)", "bob's", ['name']
     assert_smart_escape '(name.analyzed:foo*)', 'foo', ['name'] { |f| "#{f}.analyzed" }
     assert_smart_escape '(name:foo* OR street:foo*)', 'foo', ['name', 'street']

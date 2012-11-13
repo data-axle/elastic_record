@@ -30,21 +30,22 @@ module ElasticRecord
         end.join(' AND ')
       end
 
-      def match_word(word, fields, &block)
-        word = escape(word)
-        if word =~ / /
-          word = "\"#{word}\""
-        else
-          word = "#{word}*"
+      private
+
+        def match_word(word, fields, &block)
+          if word =~ / / || word =~ ESCAPE_REGEX
+            word = "\"#{word}\""
+          else
+            word = "#{word}*"
+          end
+
+          or_query = fields.map do |field|
+            field = yield(field) if block_given?
+            "#{field}:#{word}"
+          end.join(' OR ')
+
+          "(#{or_query})"
         end
-
-        or_query = fields.map do |field|
-          field = yield(field) if block_given?
-          "#{field}:#{word}"
-        end.join(' OR ')
-
-        "(#{or_query})"
-      end
     end
   end
 end
