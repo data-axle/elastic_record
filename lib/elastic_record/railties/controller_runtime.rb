@@ -34,7 +34,9 @@ module ElasticRecord
       module ClassMethods # :nodoc:
         def log_process_action(payload)
           messages, elastic_record_runtime = super, payload[:elastic_record_runtime]
-          messages << ("ElasticRecord: %.1fms" % elastic_record_runtime.to_f) if elastic_record_runtime
+          if elastic_record_runtime.to_i > 0
+            messages << ("ElasticRecord: %.1fms" % elastic_record_runtime.to_f) 
+          end
           messages
         end
       end
