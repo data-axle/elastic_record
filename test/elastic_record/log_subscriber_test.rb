@@ -25,4 +25,8 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
     assert_match /GET (.*)test/, @logger.logged(:debug)[0]
     assert_match %r['#{ActiveSupport::JSON.encode('foo' => 'bar')}'], @logger.logged(:debug)[0]
   end
+
+  def test_initializes_runtime
+    Thread.new { assert_equal 0, ElasticRecord::LogSubscriber.runtime }.join
+  end
 end

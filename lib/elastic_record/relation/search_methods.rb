@@ -168,6 +168,8 @@ module ElasticRecord
                   nodes << arelastic[field].in(terms)
                 when Hash
                   nodes << {field => terms}
+                when nil
+                  nodes << arelastic[field].missing
                 else
                   nodes << arelastic[field].eq(terms)
                 end

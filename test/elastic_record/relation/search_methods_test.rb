@@ -76,6 +76,22 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_filter_with_nil
+    relation.filter! 'name' => nil
+
+    expected = {
+      "constant_score" => {
+        "filter" => {
+          "missing" => {
+            "field" => "name"
+          }
+        }
+      }
+    }
+
+    assert_equal expected, relation.as_elastic['query']
+  end
+
   def test_query_with_only_query
     relation.query!('foo')
 
