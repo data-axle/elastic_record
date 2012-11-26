@@ -51,10 +51,10 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   def test_equal
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
-    assert(Widget.elastic_relation.filter(color: 'green') == Widget.elastic_relation.filter(color: 'green'))
-    assert(Widget.elastic_relation.filter(color: 'green') != Widget.elastic_relation.filter(color: 'blue'))
-
-    assert(Widget.elastic_relation.filter(color: 'magenta') == [])
+    assert_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'red')
+    refute_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'blue')
+    assert_equal [], Widget.elastic_relation.filter(color: 'magenta')
+    assert_equal Widget.elastic_relation.filter(color: 'magenta'), []
   end
 
   def test_inspect

@@ -51,12 +51,7 @@ module ElasticRecord
     end
 
     def ==(other)
-      case other
-      when Relation
-        other.as_elastic == as_elastic
-      when Array
-        to_a == other
-      end
+      to_a == other
     end
 
     def inspect
