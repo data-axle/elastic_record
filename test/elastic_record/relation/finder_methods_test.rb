@@ -1,5 +1,10 @@
 require 'helper'
 
+module ActiveRecord
+  class RecordNotFound < StandardError
+  end
+end
+
 class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   def setup
     super
@@ -9,7 +14,10 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   def test_find
     refute_nil Widget.elastic_relation.find('05')
     refute_nil Widget.elastic_relation.filter('color' => 'red').find('05')
-    assert_nil Widget.elastic_relation.filter('color' => 'blue').find('05')
+
+    assert_raises ActiveRecord::RecordNotFound do
+      Widget.elastic_relation.filter('color' => 'blue').find('05')
+    end
   end
 
   def test_first
