@@ -23,6 +23,9 @@ module ElasticRecord
       @disabled = false
     end
 
+    # def initialize_copy(other)
+    # end
+
     def alias_name
       @alias_name ||= model.base_class.model_name.collection
     end
