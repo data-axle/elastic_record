@@ -9,10 +9,10 @@ module ElasticRecord
     end
 
     module ClassMethods
-      def inherited(child)
-        super
-        child.elastic_index = elastic_index.dup
-      end
+      # def inherited(child)
+      #   super
+      #   child.elastic_index = elastic_index.dup
+      # end
 
       def elastic_connection
         @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers)
