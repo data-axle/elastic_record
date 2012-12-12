@@ -10,7 +10,7 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
     index.disable_deferring!
     index.delete_all
   end
-  
+
   def test_create
     assert !index.exists?('widgets_foo')
 
@@ -45,6 +45,7 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
   end
 
   private
+
     def index
       @index ||= Widget.elastic_index
     end

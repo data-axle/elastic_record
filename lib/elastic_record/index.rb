@@ -3,6 +3,7 @@ require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/percolator'
+require 'elastic_record/index/settings'
 require 'net/http'
 
 module ElasticRecord
@@ -11,6 +12,7 @@ module ElasticRecord
     include Manage
     include Mapping
     include Percolator
+    include Settings
     include Deferred
 
     attr_accessor :model
