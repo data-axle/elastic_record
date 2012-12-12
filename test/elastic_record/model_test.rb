@@ -1,6 +1,9 @@
 require 'helper'
 
 class ElasticRecord::ModelTest < MiniTest::Spec
+  class InheritedModel < Widget
+  end
+
   # def test_elastic_connection
   #   connection = Widget.elastic_connection
   # 
@@ -19,5 +22,9 @@ class ElasticRecord::ModelTest < MiniTest::Spec
     index = Widget.elastic_index
 
     assert_equal Widget, index.model
+  end
+
+  def test_elastic_index_inheritence
+    refute_equal Widget.elastic_index.object_id, InheritedModel.elastic_index.object_id
   end
 end

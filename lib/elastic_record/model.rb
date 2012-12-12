@@ -9,6 +9,11 @@ module ElasticRecord
     end
 
     module ClassMethods
+      def inherited(child)
+        super
+        child.elastic_index = elastic_index.dup
+      end
+
       def elastic_connection
         @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers)
       end
@@ -27,6 +32,10 @@ module ElasticRecord
 
       def elastic_index
         @elastic_index ||= ElasticRecord::Index.new(self)
+      end
+
+      def elastic_index=(index)
+        @elastic_index = index
       end
     end
 
