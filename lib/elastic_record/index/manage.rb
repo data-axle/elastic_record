@@ -8,9 +8,9 @@ module ElasticRecord
       end
 
       def create(index_name = new_index_name)
-        connection.json_put "/#{index_name}"
+        connection.json_put "/#{index_name}", "settings" => settings
+        # update_settings(index_name)
         update_mapping(index_name)
-        update_settings(index_name)
         index_name
       end
 
