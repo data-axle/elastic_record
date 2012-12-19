@@ -47,11 +47,8 @@ An Arelastic object can also be passed in, working similarily to Arel:
   # Size is greater than 5
   search.filter(Product.arelastic[:size].gt(5))
 
-  # Product has no name
-  search.filter(Product.arelastic[:name].blank)
-
-  # Product has name
-  search.filter(Product.arelastic[:name].exists)
+  # Product has a nil name
+  search.filter(Product.arelastic[:name].missing)
 
   # Name is 'hola' or name is missing
   search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].missing))
