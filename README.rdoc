@@ -51,17 +51,12 @@ An Arelastic object can also be passed in, working similarily to Arel:
   search.filter(Product.arelastic[:name].blank)
 
   # Product has name
-  search.filter(Product.arelastic[:name].present)
+  search.filter(Product.arelastic[:name].exists)
 
-  # Name is 'hola' or name is blank
-  search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].blank))
+  # Name is 'hola' or name is missing
+  search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].missing))
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
-
-Lastly, negation is made easy with negate:
-
-  # Status is not active
-  search.negate(status: 'active')
 
 === Querying
 
@@ -83,7 +78,7 @@ Complex queries are done using either a hash or an arelastic object:
 
 To change the 'size' and 'from' values of a query, use offset and limit:
 
-  search.limit(10).offset(20)   # Creates a query with {size: 10, from: 20}
+  search.limit(40).offset(80)   # Creates a query with {size: 40, from: 80}
 
 
 === Facets
