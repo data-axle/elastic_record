@@ -2,7 +2,7 @@
  
 Gem::Specification.new do |s|
   s.name = 'elastic_record'
-  s.version = '0.11.0'
+  s.version = '0.11.1'
   s.summary = 'Use Elastic Search with your objects'
   s.description = 'Find your records with elastic search'
 
@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.8.11"
   s.license     = 'MIT'
 
-  s.author            = 'Matthew Higgins'
+  s.authors           = ['Infogroup', 'Matthew Higgins']
   s.email             = 'developer@matthewhiggins.com'
-  s.homepage          = 'http://github.com/infogroup/elastic_record'
+  s.homepage          = 'http://github.com/data-axle/elastic_record'
 
   s.extra_rdoc_files = ['README.rdoc']
   s.files       = `git ls-files`.split("\n")
