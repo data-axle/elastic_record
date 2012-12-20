@@ -47,6 +47,10 @@ module ElasticRecord
       model.elastic_connection
     end
 
+    def configure(&block)
+      Configurator.new(self).instance_eval(&block)
+    end
+
     private
       def new_index_name
         "#{alias_name}_#{Time.now.to_i}"
