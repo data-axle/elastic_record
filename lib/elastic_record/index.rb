@@ -1,3 +1,4 @@
+require 'elastic_record/index/configurator'
 require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
