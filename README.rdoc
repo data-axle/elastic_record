@@ -15,9 +15,22 @@ Creating the index:
 
 Include ElasticRecord into your model:
 
-  ActiveSupport.on_load :active_record do
+  class Product < YourFavoriteOrm::Base
     include ElasticRecord::Model
   end
+
+== Configuration
+
+While elastic search automatically maps fields, you may wish to override the defaults:
+
+  class Product < YourFavoriteOrm::Base
+    elastic_index.configure do
+      property :status, type: "date", index: "not_analyzed"
+    end
+  end
+
+You can also directly access Product.elastic_index.mapping and Product.elastic_index.settings. These are
+used upon index creation.
 
 == Searching
 
@@ -29,8 +42,9 @@ ElasticRecord adds the method 'elastic_search' to your models. It works similar 
 
 If a simple hash is passed into filter, a term or terms query is created:
 
-  search.filter(color: 'red')         # Creates a term filter
-  search.filter(color: %w(red blue))  # Creates a terms filter
+  search.filter(color: 'red')         # Creates a 'term' filter
+  search.filter(color: %w(red blue))  # Creates a 'terms' filter
+  search.filter(color: nil)           # Creates a 'missing' filter
 
 If a hash containing hashes is passed into filter, it is used directly as a filter DSL expression:
 
@@ -46,9 +60,6 @@ An Arelastic object can also be passed in, working similarily to Arel:
 
   # Size is greater than 5
   search.filter(Product.arelastic[:size].gt(5))
-
-  # Product has a nil name
-  search.filter(Product.arelastic[:name].missing)
 
   # Name is 'hola' or name is missing
   search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].missing))
