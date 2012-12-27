@@ -25,8 +25,8 @@ module ElasticRecord
     end
 
     def initialize_copy(other)
-      @settings = settings.dup
-      @mapping = mapping.dup
+      @settings = settings.deep_dup
+      @mapping = mapping.deep_dup
     end
 
     def alias_name
