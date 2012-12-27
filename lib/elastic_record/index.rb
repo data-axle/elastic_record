@@ -24,8 +24,10 @@ module ElasticRecord
       @disabled = false
     end
 
-    # def initialize_copy(other)
-    # end
+    def initialize_copy(other)
+      @settings = settings.dup
+      @mapping = mapping.dup
+    end
 
     def alias_name
       @alias_name ||= model.base_class.model_name.collection

@@ -1,6 +1,13 @@
 require 'helper'
 
 class ElasticRecord::IndexTest < MiniTest::Spec
+  def test_copy
+    copied = index.dup
+
+    refute_equal copied.settings.object_id, index.settings.object_id
+    refute_equal copied.mapping.object_id, index.mapping.object_id
+  end
+
   def test_model_name
     assert_equal 'widgets', index.alias_name
     assert_equal 'widget', index.type
