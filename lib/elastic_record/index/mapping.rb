@@ -5,6 +5,14 @@ module ElasticRecord
         mapping.deep_merge!(mapping)
       end
 
+      def update_mapping(index_name = alias_name)
+        connection.json_put "/#{index_name}/#{type}/_mapping", type => mapping
+      end
+      
+      def get_mapping
+        get "_mapping"
+      end
+
       def mapping
         @mapping ||= {
           _source: {

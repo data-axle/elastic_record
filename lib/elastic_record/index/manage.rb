@@ -9,7 +9,6 @@ module ElasticRecord
 
       def create(index_name = new_index_name)
         connection.json_put "/#{index_name}", "settings" => settings
-        # update_settings(index_name)
         update_mapping(index_name)
         index_name
       end
@@ -48,14 +47,6 @@ module ElasticRecord
         end
 
         connection.json_post '/_aliases', actions: actions
-      end
-
-      def update_mapping(index_name = alias_name)
-        connection.json_put "/#{index_name}/#{type}/_mapping", type => mapping
-      end
-
-      def update_settings(index_name = alias_name)
-        connection.json_put "/#{index_name}/_settings", settings
       end
 
       def refresh(index_name = alias_name)

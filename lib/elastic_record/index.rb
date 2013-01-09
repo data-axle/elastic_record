@@ -9,6 +9,23 @@ require 'elastic_record/index/settings'
 require 'active_support/core_ext/hash/deep_dup'
 
 module ElasticRecord
+  # ElasticRecord::Index provides access to elastic search's API. It is accessed with
+  # <tt>Widget.elastic_index</tt>. The methods provided are:
+  # 
+  # [create]
+  #   Create a new index that is not aliased
+  # [create_and_deploy]
+  #   Create a new index and alias it
+  # [reset]
+  #   Delete all aliased indexes and deploy a new one
+  # [refresh]
+  #   Call the refresh API
+  # [exists?(index_name)]
+  #   Returns if the index exists
+  # [get_mapping]
+  #   Returns the mapping currently stored by elastic search.
+  # [put_mapping]
+  #   Update elastic search's mapping
   class Index
     include Documents
     include Manage
@@ -52,6 +69,10 @@ module ElasticRecord
 
     def configure(&block)
       Configurator.new(self).instance_eval(&block)
+    end
+
+    def get(end_path, json = nil)
+      connection.json_get "/#{alias_name}/#{type}/#{end_path}", json
     end
 
     private

@@ -27,20 +27,20 @@ module ElasticRecord
       end
 
       def record_exists?(id)
-        connection.json_get("/#{alias_name}/#{type}/#{id}")['exists']
+        get(id)['exists']
       end
 
       def search(elastic_query, options = {})
-        url = "/#{alias_name}/#{type}/_search"
+        url = "_search"
         if options.any?
           url += "?#{options.to_query}"
         end
 
-        connection.json_get url, elastic_query
+        get url, elastic_query
       end
 
       def explain(id, elastic_query)
-        connection.json_get "/#{alias_name}/#{type}/#{id}/_explain", elastic_query
+        get "_explain", elastic_query
       end
 
       def scroll(scroll_id, scroll_keep_alive)
