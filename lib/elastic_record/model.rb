@@ -12,7 +12,7 @@ module ElasticRecord
       def inherited(child)
         super
 
-        unless self == base_class
+        if child < base_class
           child.elastic_index = elastic_index.dup
         end
       end
