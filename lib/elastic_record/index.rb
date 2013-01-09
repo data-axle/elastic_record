@@ -5,7 +5,8 @@ require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
-require 'net/http'
+
+require 'active_support/core_ext/hash/deep_dup'
 
 module ElasticRecord
   class Index
