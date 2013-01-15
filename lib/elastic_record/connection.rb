@@ -79,7 +79,7 @@ module ElasticRecord
       def new_http
         self.request_count += 1
 
-        if request_count > max_request_count{}
+        if request_count > max_request_count
           self.current_server = choose_server
           self.request_count = 0
         end
