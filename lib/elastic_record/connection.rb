@@ -4,23 +4,6 @@ module ElasticRecord
   class ConnectionError < StandardError
   end
 
-  module RetryingConnection
-    RETRYABLE_ERRORS = []
-
-    def http_request(*args)
-      retry_count = 0
-      super
-    rescue *RETRYABLE_ERRORS
-      if attempts < options[:retries]
-        self.current_server = next_live_server
-        retry_count += 1
-        retry
-      else
-        raise
-      end
-    end
-  end
-
   class Connection
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
@@ -77,14 +60,16 @@ module ElasticRecord
     }
 
     def http_request(method, path, body = nil)
-      request = METHODS[method].new(path)
-      request.body = body
-      http = new_http
+      with_retry do
+        request = METHODS[method].new(path)
+        request.body = body
+        http = new_http
 
-      ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
-        payload[:http]      = http
-        payload[:request]   = request
-        payload[:response]  = http.request(request)
+        ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
+          payload[:http]      = http
+          payload[:request]   = request
+          payload[:response]  = http.request(request)
+        end
       end
     end
 
@@ -93,7 +78,7 @@ module ElasticRecord
         if @live_servers.nil? || @live_servers.empty?
           @live_servers = servers.shuffle
         end
-
+# current_server_index => variable, current_server => method
         @live_servers.pop
       end
 
@@ -112,6 +97,21 @@ module ElasticRecord
           http.read_timeout = options[:timeout].to_i
         end
         http
+      end
+
+      def with_retry
+        retry_count = 0
+        begin
+          yield
+        rescue StandardError
+          if retry_count < options[:retries].to_i
+            self.current_server = next_live_server
+            retry_count += 1
+            retry
+          else
+            raise
+          end
+        end
       end
   end
 end
