@@ -24,7 +24,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Spec
     assert_equal expected, connection.json_put("/test")
   end
 
-  def test_json_request_with_error
+  def test_json_request_with_error_status
     response_json = {'error' => 'Doing it wrong'}
     FakeWeb.register_uri(:get, %r[/error], status: ["404", "Not Found"], body: ActiveSupport::JSON.encode(response_json))
 
@@ -33,6 +33,24 @@ class ElasticRecord::ConnectionTest < MiniTest::Spec
     end
 
     assert_equal 'Doing it wrong', error.message
+  end
+
+  def test_execute_retries
+    responses = [
+      {exception: StandardError},
+      {status: ["200", "OK"], body: ActiveSupport::JSON.encode('hello' => 'world')}
+    ]
+
+    ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
+      FakeWeb.register_uri :get, %r[/error], responses
+      assert_raises(StandardError) { connection.json_get("/error") }      
+    end
+
+    ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|
+      FakeWeb.register_uri :get, %r[/error], responses
+      json = connection.json_get("/error")
+      assert_equal({'hello' => 'world'}, json)
+    end
   end
 
   private
