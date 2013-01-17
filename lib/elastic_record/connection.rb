@@ -4,6 +4,23 @@ module ElasticRecord
   class ConnectionError < StandardError
   end
 
+  module RetryingConnection
+    RETRYABLE_ERRORS = []
+
+    def http_request(*args)
+      retry_count = 0
+      super
+    rescue *RETRYABLE_ERRORS
+      if attempts < options[:retries]
+        self.current_server = next_live_server
+        retry_count += 1
+        retry
+      else
+        raise
+      end
+    end
+  end
+
   class Connection
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
@@ -15,7 +32,7 @@ module ElasticRecord
         self.servers = servers.split(',')
       end
 
-      self.current_server = choose_server
+      self.current_server = next_live_server
       self.request_count = 0
       self.max_request_count = 100
       self.options = options
@@ -72,15 +89,19 @@ module ElasticRecord
     end
 
     private
-      def choose_server
-        servers.sample
+      def next_live_server
+        if @live_servers.nil? || @live_servers.empty?
+          @live_servers = servers.shuffle
+        end
+
+        @live_servers.pop
       end
 
       def new_http
         self.request_count += 1
 
         if request_count > max_request_count
-          self.current_server = choose_server
+          self.current_server = next_live_server
           self.request_count = 0
         end
 
