@@ -15,7 +15,7 @@ module ElasticRecord
         self.servers = servers.split(',')
       end
 
-      self.current_server = next_live_server
+      self.current_server = next_server
       self.request_count = 0
       self.max_request_count = 100
       self.options = options
@@ -74,19 +74,21 @@ module ElasticRecord
     end
 
     private
-      def next_live_server
-        if @live_servers.nil? || @live_servers.empty?
-          @live_servers = servers.shuffle
+      def next_server
+        if @shuffled_servers.nil?
+          @shuffled_servers = servers.shuffle
+        else
+          @shuffled_servers.push(@shuffled_servers.shift)
         end
-# current_server_index => variable, current_server => method
-        @live_servers.pop
+
+        @shuffled_servers.first
       end
 
       def new_http
         self.request_count += 1
 
         if request_count > max_request_count
-          self.current_server = next_live_server
+          self.current_server = next_server
           self.request_count = 0
         end
 
@@ -105,7 +107,7 @@ module ElasticRecord
           yield
         rescue StandardError
           if retry_count < options[:retries].to_i
-            self.current_server = next_live_server
+            self.current_server = next_server
             retry_count += 1
             retry
           else
