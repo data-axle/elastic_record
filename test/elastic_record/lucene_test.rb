@@ -13,10 +13,17 @@ class ElasticRecord::LuceneTest < MiniTest::Spec
     assert_smart_escape '(name:foo*)', 'foo', ['name']
     assert_smart_escape '(name:"foo-bar")', 'foo-bar', ['name']
     assert_smart_escape "(name:bob's*)", "bob's", ['name']
-    assert_smart_escape '(name.analyzed:foo*)', 'foo', ['name'] { |f| "#{f}.analyzed" }
     assert_smart_escape '(name:foo* OR street:foo*)', 'foo', ['name', 'street']
     assert_smart_escape '(name:"foo bar" OR street:"foo bar") AND (name:faz* OR street:faz*)', '"foo bar" faz', ['name', 'street']
     assert_smart_escape '(street:"42 place") AND (name:bar*)', 'street:"42 place" name:bar', ['name', 'street']
+  end
+
+  def test_smart_search_with_unmatched_quotes
+    assert_smart_escape '(name:"foo bar")', '"foo bar', ['name']
+  end
+
+  def test_smart_search_with_block
+    assert_smart_escape '(name.analyzed:foo*)', 'foo', ['name'] { |f| "#{f}.analyzed" }
   end
 
   private

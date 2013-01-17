@@ -12,6 +12,13 @@ module ElasticRecord
       end
 
       def query_words(query)
+        # If we have an odd number of double quotes,
+        # add a double quote to the end so that shellwords
+        # does not crap out.
+        if query.count('"') % 2 == 1
+          query = "#{query}\""
+        end
+
         Shellwords::shellwords query.gsub("'", "\"'\"")
       end
 
@@ -34,7 +41,7 @@ module ElasticRecord
 
         def match_word(word, fields, &block)
           if word =~ / / || word =~ ESCAPE_REGEX
-            word = "\"#{word}\""
+            word = "\"#{word.gsub('"', '')}\""
           else
             word = "#{word}*"
           end
