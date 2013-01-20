@@ -18,7 +18,7 @@ module ElasticRecord
       end
 
       def elastic_connection
-        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers)
+        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
       end
 
       def elastic_connection=(connection)
