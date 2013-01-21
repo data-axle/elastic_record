@@ -9,8 +9,12 @@ module ElasticRecord
         connection.json_put "/#{index_name}/#{type}/_mapping", type => mapping
       end
       
-      def get_mapping
-        get "_mapping"
+      def get_mapping(index_name = alias_name)
+        connection.json_get "/#{index_name}/#{type}/_mapping"
+      end
+
+      def delete_mapping(index_name = alias_name)
+        connection.json_delete "/#{index_name}/#{type}"
       end
 
       def mapping
