@@ -5,6 +5,7 @@ module ElasticRecord
         unless exists? percolator_index_name
           create percolator_index_name
         else
+          delete_mapping percolator_index_name # This crashes if the mapping for our type does not exist!
           update_mapping percolator_index_name
         end
 
