@@ -37,13 +37,13 @@ class ElasticRecord::ConnectionTest < MiniTest::Spec
 
   def test_execute_retries
     responses = [
-      {exception: StandardError},
+      {exception: Errno::ECONNREFUSED},
       {status: ["200", "OK"], body: ActiveSupport::JSON.encode('hello' => 'world')}
     ]
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
       FakeWeb.register_uri :get, %r[/error], responses
-      assert_raises(StandardError) { connection.json_get("/error") }      
+      assert_raises(Errno::ECONNREFUSED) { connection.json_get("/error") }      
     end
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|
