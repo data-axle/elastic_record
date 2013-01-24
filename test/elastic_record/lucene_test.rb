@@ -27,6 +27,7 @@ class ElasticRecord::LuceneTest < MiniTest::Spec
   end
 
   private
+
     def assert_smart_escape(expected, query, fields, &block)
       assert_equal expected, ElasticRecord::Lucene.smart_query(query, fields, &block)
     end

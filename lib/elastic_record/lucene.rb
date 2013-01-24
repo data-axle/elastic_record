@@ -4,7 +4,7 @@ module ElasticRecord
   class Lucene
     # Special characters:
     # + - && || ! ( ) { } [ ] ^ " ~ * ? : \
-    ESCAPE_REGEX = /(\+|-|&&|\|\||!|\(|\)|{|}|\[|\]|`|"|~|\?|:|\\)/
+    ESCAPE_REGEX = /(\+|-|&&|\|\||!|\(|\)|{|}|\[|\]|`|"|~\*|\?|:|\\)/
 
     class << self
       def escape(query)
@@ -22,7 +22,7 @@ module ElasticRecord
         Shellwords::shellwords query.gsub("'", "\"'\"")
       end
 
-      # Returns a lucene query that works like G
+      # Returns a lucene query that works like GMail
       def smart_query(query, fields, &block)
         return if query.blank?
 
@@ -37,22 +37,20 @@ module ElasticRecord
         end.join(' AND ')
       end
 
-      private
-
-        def match_word(word, fields, &block)
-          if word =~ / / || word =~ ESCAPE_REGEX
-            word = "\"#{word.gsub('"', '')}\""
-          else
-            word = "#{word}*"
-          end
-
-          or_query = fields.map do |field|
-            field = yield(field) if block_given?
-            "#{field}:#{word}"
-          end.join(' OR ')
-
-          "(#{or_query})"
+      def match_word(word, fields, &block)
+        if word =~ / / || word =~ ESCAPE_REGEX
+          word = "\"#{word.gsub('"', '')}\""
+        else
+          word = "#{word}*"
         end
+
+        or_query = fields.map do |field|
+          field = yield(field) if block_given?
+          "#{field}:#{word}"
+        end.join(' OR ')
+
+        "(#{or_query})"
+      end
     end
   end
 end
