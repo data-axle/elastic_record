@@ -21,9 +21,9 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   end
 
   def test_first
-    assert_equal '05', Widget.elastic_relation.first.id
-    assert_equal '05', Widget.elastic_relation.filter('color' => 'red').first.id
-    assert_equal '10', Widget.elastic_relation.filter('color' => 'blue').first.id
+    assert_equal '05', Widget.elastic_relation.order('_uid').first.id
+    assert_equal '05', Widget.elastic_relation.order('_uid').filter('color' => 'red').first.id
+    assert_equal '10', Widget.elastic_relation.order('_uid').filter('color' => 'blue').first.id
     assert_nil Widget.elastic_relation.filter('color' => 'green').first
   end
 

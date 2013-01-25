@@ -6,7 +6,7 @@ module ElasticRecord
       end
 
       def first
-        find_one order('_uid')
+        find_one self
       end
 
       def last
