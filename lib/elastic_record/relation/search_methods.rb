@@ -88,13 +88,25 @@ module ElasticRecord
         clone.facet! facet_or_name, options = {}
       end
 
-      def order!(*args)
+      def order!(*args) # :nodoc:
         self.order_values += args.flatten
         self
       end
 
       def order(*args)
         clone.order! *args
+      end
+
+      # Reverse the existing order clause on the relation.
+      #
+      #   User.order('name').reverse_order # generated search has 'sort: {'name' => :desc}
+      def reverse_order
+        clone.reverse_order!
+      end
+
+      def reverse_order! # :nodoc:
+        self.reverse_order_value = !reverse_order_value
+        self
       end
 
       def extending!(*modules, &block)
@@ -214,7 +226,25 @@ module ElasticRecord
         end
 
         def build_orders(orders)
-          Arelastic::Searches::Sort.new(orders) unless orders.empty?
+          unless orders.empty?
+            orders = reverse_query_order(orders) if reverse_order_value
+            Arelastic::Searches::Sort.new(orders) unless orders.empty?
+          end
+        end
+
+        def reverse_query_order(orders)
+          orders.reverse.map do |o|
+            case o
+            when String, Symbol
+              {o => :desc}
+            when Hash
+              o.each_with_object({}) do |(field, dir), memo|
+                memo[field] = (dir.to_sym == :asc ? :desc : :asc )
+              end
+            else
+              o
+            end
+          end
         end
     end
   end

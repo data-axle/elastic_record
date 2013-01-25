@@ -167,18 +167,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['from']
   end
 
-  def test_order
-    relation.order! 'foo'
-    relation.order! 'bar' => 'desc'
-
-    expected = [
-      'foo',
-      'bar' => 'desc'
-    ]
-
-    assert_equal expected, relation.as_elastic['sort']
-  end
-
   def test_select
     selectable_klass = Widget.anon do
       def self.select(values)
@@ -203,6 +191,32 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
     assert_equal 1, records.size
     assert_equal '10', records.first.id
+  end
+
+  
+  def test_order
+    relation.order! 'foo'
+    relation.order! 'bar' => 'desc'
+
+    expected = [
+      'foo',
+      'bar' => 'desc'
+    ]
+
+    assert_equal expected, relation.as_elastic['sort']
+  end
+
+  def test_reverse_order
+    relation.order! 'foo'
+    relation.order! 'bar' => 'desc'
+    relation.reverse_order!
+
+    expected = [
+      {'bar' => :asc},
+      {'foo' => :desc}
+    ]
+
+    assert_equal expected, relation.as_elastic['sort']
   end
 
   def test_extending_with_block

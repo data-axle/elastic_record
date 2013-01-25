@@ -10,7 +10,7 @@ module ElasticRecord
       end
 
       def last
-        find_one order('color' => 'reverse')
+        find_one reverse_order
       end
 
       def all
