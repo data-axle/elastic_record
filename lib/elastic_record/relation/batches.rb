@@ -7,7 +7,7 @@ module ElasticRecord
         end
       end
 
-      def find_in_batches(options = {})
+      def find_ids_in_batches(options = {})
         scroll_keep_alive = '10m'
 
         options = {
@@ -19,7 +19,13 @@ module ElasticRecord
         scroll_id = klass.elastic_index.search(as_elastic, options)['_scroll_id']
 
         while (hit_ids = get_scroll_hit_ids(scroll_id, scroll_keep_alive)).any?
-          yield klass.find(hit_ids)
+          yield hit_ids
+        end
+      end
+
+      def find_in_batches(options = {})
+        find_ids_in_batches(options) do |ids|
+          yield klass.find(ids)
         end
       end
 
