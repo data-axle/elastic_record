@@ -7,6 +7,12 @@ module ElasticRecord
         end
       end
 
+      def find_in_batches(options = {})
+        find_ids_in_batches(options) do |ids|
+          yield klass.find(ids)
+        end
+      end
+
       def find_ids_in_batches(options = {})
         scroll_keep_alive = '10m'
 
@@ -23,12 +29,6 @@ module ElasticRecord
         end
       end
 
-      def find_in_batches(options = {})
-        find_ids_in_batches(options) do |ids|
-          yield klass.find(ids)
-        end
-      end
-
       def reindex
         relation.find_in_batches do |batch|
           elastic_index.bulk_add(batch)
@@ -36,6 +36,7 @@ module ElasticRecord
       end
 
       private
+
         def get_scroll_hit_ids(scroll_id, scroll_keep_alive)
           json = klass.elastic_index.scroll(scroll_id, scroll_keep_alive)
           json['hits']['hits'].map { |hit| hit['_id'] }
