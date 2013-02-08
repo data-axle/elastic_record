@@ -76,7 +76,6 @@ module ElasticRecord
           @loaded = true
         end
 
-        loaded = true
         collection
       end
 
