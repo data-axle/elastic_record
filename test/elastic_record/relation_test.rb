@@ -16,6 +16,8 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_create_percolator
+    Widget.elastic_index.reset_percolator
+
     Widget.elastic_relation.filter(color: 'green').create_percolator('green')
     Widget.elastic_relation.filter(color: 'blue').create_percolator('blue')
     widget = Widget.new(color: 'green')
