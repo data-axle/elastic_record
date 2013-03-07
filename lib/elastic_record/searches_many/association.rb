@@ -55,10 +55,16 @@ module ElasticRecord
       end
 
       def delete(records)
-        if options[:autosave] || owner.new_record?
-          records.each(&:mark_for_destruction)
-        else
-          record.destroy
+        records.each do |record|
+          callback(:before_remove, record)
+
+          if options[:autosave] || owner.new_record?
+            record.mark_for_destruction
+          else
+            record.destroy
+          end
+
+          callback(:after_remove, record)
         end
       end
 
@@ -121,10 +127,10 @@ module ElasticRecord
 
         def callback(method, record)
           reflection.callbacks[method].each do |callback|
-            if callback.is_a?(Symbol)
-              owner.send(callback, record)
-            else
+            if callback.respond_to?(:call)
               callback.call(owner, record)
+            else
+              owner.send(callback, record)
             end
           end
         end
