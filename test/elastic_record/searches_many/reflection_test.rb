@@ -1,6 +1,11 @@
 require 'helper'
 
 class ElasticRecord::SearchesMany::ReflectionTest < MiniTest::Spec
+  def test_klass_name
+    assert_equal 'Product', reflection_class.new(Warehouse, :widgets, {class_name: 'Product'}).klass_name
+    assert_equal 'Widget', reflection_class.new(Warehouse, :widgets, {}).klass_name
+  end
+
   def test_touch_column
     assert_nil reflection_class.new(Warehouse, :widgets, {}).touch_column
     assert_equal :updated_at, reflection_class.new(Warehouse, :widgets, touch: true).touch_column
@@ -14,7 +19,9 @@ class ElasticRecord::SearchesMany::ReflectionTest < MiniTest::Spec
   end
 
   private
+
     def reflection_class
       ElasticRecord::SearchesMany::Reflection
     end
+
 end

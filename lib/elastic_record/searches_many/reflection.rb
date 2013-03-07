@@ -13,7 +13,7 @@ module ElasticRecord
       end
 
       def klass_name
-        name.to_s.classify
+        options[:class_name] || name.to_s.classify
       end
 
       def belongs_to

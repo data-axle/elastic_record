@@ -43,6 +43,10 @@ module ElasticRecord
       #   is used on the associate class (such as a Post class). You can also specify a custom counter
       #   cache column by providing a column name instead of a +true+/+false+ value to this
       #   option (e.g., <tt>:counter_cache => :my_custom_counter</tt>.)
+      # [:class_name]
+      #   Specify the class name of the association. Use it only if that name can't be inferred
+      #   from the association name. So <tt>has_one :manager</tt> will by default be linked to the Manager class, but
+      #   if the real class name is Person, you'll have to specify it with this option.
       # 
       # === Example
       # 
