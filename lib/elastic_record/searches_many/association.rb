@@ -91,10 +91,12 @@ module ElasticRecord
         end
 
         def persisted_collection
-          if reflection.counter_cache_column && (owner.send(reflection.counter_cache_column).nil? || owner.send(reflection.counter_cache_column) == 0)
-            []
-          else
-            scope.to_a
+          @persisted_collection ||= begin
+            if reflection.counter_cache_column && (owner.send(reflection.counter_cache_column).nil? || owner.send(reflection.counter_cache_column) == 0)
+              []
+            else
+              scope.to_a
+            end
           end
         end
 
