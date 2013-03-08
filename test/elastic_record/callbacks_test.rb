@@ -10,6 +10,15 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
     assert Widget.elastic_index.record_exists?(widget.id)
   end
 
+  def test_not_added_to_index_if_not_dirty
+    widget = Widget.new id: '10', color: 'green'
+    widget.changed_attributes.clear
+
+    widget.save
+
+    refute Widget.elastic_index.record_exists?(widget.id)
+  end
+
   def test_deleted_from_index
     widget = Widget.new id: '10', color: 'green'
     Widget.elastic_index.index_document(widget.id, widget.as_search)
