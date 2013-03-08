@@ -19,6 +19,10 @@ module ElasticRecord
           other_record.is_a?(Hash) ? klass.new(other_record) : other_record
         end
 
+        delete(load_collection - other_records)
+        merge_collections(load_collection, other_records)
+        concat(other_records - load_collection)
+
         if reflection.counter_cache_column
           owner.send("#{reflection.counter_cache_column}=", other_records.size)
         end
@@ -26,10 +30,6 @@ module ElasticRecord
         if reflection.touch_column
           owner.send("#{reflection.touch_column}=", Time.current)
         end
-
-        delete(load_collection - other_records)
-        merge_collections(load_collection, other_records)
-        concat(other_records - load_collection)
       end
   
       def reader
