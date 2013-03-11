@@ -8,9 +8,9 @@ module ElasticRecord
 
         index_name ||= alias_name
 
-        if @batch
-          @batch << { index: { _index: index_name, _type: type, _id: id } }
-          @batch << document
+        if batch = current_batch
+          current_batch << { index: { _index: index_name, _type: type, _id: id } }
+          current_batch << document
         else
           connection.json_put "/#{index_name}/#{type}/#{id}", document
         end
@@ -19,8 +19,8 @@ module ElasticRecord
       def delete_document(id, index_name = nil)
         index_name ||= alias_name
 
-        if @batch
-          @batch << { delete: { _index: index_name, _type: type, _id: id } }
+        if batch = current_batch
+          batch << { delete: { _index: index_name, _type: type, _id: id } }
         else
           connection.json_delete "/#{index_name}/#{type}/#{id}"
         end
@@ -49,14 +49,14 @@ module ElasticRecord
       end
 
       def bulk
-        @batch = []
+        @_batch = []
         yield
-        if @batch.any?
-          body = @batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+        if @_batch.any?
+          body = @_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
           connection.json_post "/_bulk", body
         end
       ensure
-        @batch = nil
+        @_batch = nil
       end
 
       def bulk_add(batch, index_name = nil)
@@ -65,6 +65,14 @@ module ElasticRecord
         bulk do
           batch.each do |record|
             index_document(record.id, record.as_search, index_name)
+          end
+        end
+      end
+
+      def current_batch
+        @_batch ||= begin
+          if model.superclass.respond_to?(:elastic_index)
+            model.superclass.elastic_index.current_batch
           end
         end
       end

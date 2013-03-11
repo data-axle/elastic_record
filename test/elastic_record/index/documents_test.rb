@@ -1,6 +1,12 @@
 require 'helper'
 
 class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
+  class InheritedWidget < Widget
+    def self.base_class
+      Widget
+    end
+  end
+
   def setup
     super
     index.disable_deferring!
@@ -32,7 +38,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
   end
 
   def test_bulk
-    assert_nil index.instance_variable_get(:@batch)
+    assert_nil index.instance_variable_get(:@_batch)
 
     index.bulk do
       index.index_document '5', color: 'green'
@@ -43,13 +49,26 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
         {color: "green"},
         {delete: {_index: "widgets", _type: "widget", _id: "3"}}
       ]
-      assert_equal expected, index.instance_variable_get(:@batch)
+      assert_equal expected, index.instance_variable_get(:@_batch)
     end
 
-    assert_nil index.instance_variable_get(:@batch)
+    assert_nil index.instance_variable_get(:@_batch)
+  end
+
+  def test_bulk_inheritence
+    index.bulk do
+      InheritedWidget.elastic_index.index_document '5', color: 'green'
+
+      expected = [
+        {index: {_index: "widgets", _type: "widget", _id: "5"}},
+        {color: "green"}
+      ]
+      assert_equal expected, index.instance_variable_get(:@_batch)
+    end
   end
 
   private
+
     def index
       @index ||= Widget.elastic_index
     end
