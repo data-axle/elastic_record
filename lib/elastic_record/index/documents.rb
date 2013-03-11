@@ -70,10 +70,10 @@ module ElasticRecord
       end
 
       def current_batch
-        @_batch ||= begin
-          if model.superclass.respond_to?(:elastic_index)
-            model.superclass.elastic_index.current_batch
-          end
+        if @_batch
+          @_batch
+        elsif model.superclass.respond_to?(:elastic_index)
+          model.superclass.elastic_index.current_batch
         end
       end
     end
