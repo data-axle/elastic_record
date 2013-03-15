@@ -14,32 +14,16 @@ namespace :index do
   desc "Create index for CLASS or all models."
   task create: :environment do
     ElasticRecord::Task.get_models.each do |model|
-      # begin
-        index_name = model.elastic_index.create_and_deploy
-        logger.info "Created #{model.name} index (#{index_name})"
-      # rescue => e
-      #   if e.message =~ /IndexAlreadyExistsException/
-      #     logger.info "#{model.name} index already exists"
-      #   else
-      #     raise e
-      #   end
-      # end
+      index_name = model.elastic_index.create_and_deploy
+      logger.info "Created #{model.name} index (#{index_name})"
     end
   end
 
   desc "Drop index for CLASS or all models."
   task drop: :environment do
     ElasticRecord::Task.get_models.each do |model|
-      # begin
-        model.elastic_index.delete_all
-        logger.info "Dropped #{model.name} index"
-      # rescue => e
-      #   if e.message =~ /IndexMissingException/
-      #     logger.info "#{model.name} index does not exist"
-      #   else
-      #     raise e
-      #   end
-      # end
+      model.elastic_index.delete_all
+      logger.info "Dropped #{model.name} index"
     end
   end
 
