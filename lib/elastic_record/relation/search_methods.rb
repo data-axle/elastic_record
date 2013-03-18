@@ -85,7 +85,7 @@ module ElasticRecord
       end
 
       def facet(facet_or_name, options = {})
-        clone.facet! facet_or_name, options = {}
+        clone.facet! facet_or_name, options
       end
 
       def order!(*args) # :nodoc:

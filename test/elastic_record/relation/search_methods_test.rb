@@ -57,41 +57,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['query']
   end
 
-  def test_filter_with_another_relation
-    relation.filter! Widget.elastic_search.query('red')
-
-    expected = {
-      "constant_score" => {
-        "filter" => {
-          "has_child" => {
-            "type" => "widget",
-            "query" => {
-              "query_string" => {"query"=>"red"}
-            }
-          }
-        }
-      }
-    }
-
-    assert_equal expected, relation.as_elastic['query']
-  end
-
-  def test_filter_with_nil
-    relation.filter! 'name' => nil
-
-    expected = {
-      "constant_score" => {
-        "filter" => {
-          "missing" => {
-            "field" => "name"
-          }
-        }
-      }
-    }
-
-    assert_equal expected, relation.as_elastic['query']
-  end
-
   def test_query_with_only_query
     relation.query!('foo')
 
@@ -138,7 +103,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['facets']
   end
 
-  def test_facet_with_string
+  def test_facet_bang_with_string
     relation.facet!('tags', 'size' => 10)
 
     expected = {
@@ -153,6 +118,21 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal expected, relation.as_elastic['facets']
   end
 
+  def test_facet_with_string
+    faceted = relation.facet('tags', 'size' => 10)
+
+    expected = {
+      "tags" => {
+        "terms" => {
+          "field" => "tags",
+          "size"  => 10
+        }
+      }
+    }
+
+    assert_equal expected, faceted.as_elastic['facets']
+  end
+
   def test_limit
     relation.limit!(5)
 
@@ -165,6 +145,18 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
 
     expected = 42
     assert_equal expected, relation.as_elastic['from']
+  end
+
+  def test_order
+    relation.order! 'foo'
+    relation.order! 'bar' => 'desc'
+
+    expected = [
+      'foo',
+      'bar' => 'desc'
+    ]
+
+    assert_equal expected, relation.as_elastic['sort']
   end
 
   def test_select
@@ -193,32 +185,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     assert_equal '10', records.first.id
   end
 
-  
-  def test_order
-    relation.order! 'foo'
-    relation.order! 'bar' => 'desc'
-
-    expected = [
-      'foo',
-      'bar' => 'desc'
-    ]
-
-    assert_equal expected, relation.as_elastic['sort']
-  end
-
-  def test_reverse_order
-    relation.order! 'foo'
-    relation.order! 'bar' => 'desc'
-    relation.reverse_order!
-
-    expected = [
-      {'bar' => :asc},
-      {'foo' => :desc}
-    ]
-
-    assert_equal expected, relation.as_elastic['sort']
-  end
-
   def test_extending_with_block
     relation.extending! do
       def foo
@@ -239,10 +205,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     relation.extending! mod
 
     assert_equal 'bar', relation.bar
-  end
-
-  def test_none
-    assert_kind_of ElasticRecord::Relation::None, relation.none
   end
 
   private
