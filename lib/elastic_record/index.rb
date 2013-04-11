@@ -6,12 +6,17 @@ require 'elastic_record/index/mapping'
 require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
 
-require 'active_support/core_ext/hash/deep_dup'
+require 'active_support/version'
+if ActiveSupport::VERSION::STRING < '4'
+  require 'active_support/core_ext/hash/deep_dup'
+else
+  require 'active_support/core_ext/object/deep_dup'
+end
 
 module ElasticRecord
   # ElasticRecord::Index provides access to elastic search's API. It is accessed with
   # <tt>Widget.elastic_index</tt>. The methods provided are:
-  # 
+  #
   # [create]
   #   Create a new index that is not aliased
   # [create_and_deploy]
