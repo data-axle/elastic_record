@@ -16,7 +16,7 @@ module ElasticRecord
       json = {}
       elastic_index.mapping[:properties].each_key do |key|
         next unless respond_to?(key)
-        value = value = send(key)
+        value = send(key)
 
         if value.present? || value == false
           json[key] = value
