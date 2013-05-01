@@ -15,7 +15,7 @@ module ElasticRecord
           connection.json_put "/#{index_name}/#{type}/#{id}", document
         end
       end
-      
+
       def delete_document(id, index_name = nil)
         index_name ||= alias_name
 
@@ -24,6 +24,10 @@ module ElasticRecord
         else
           connection.json_delete "/#{index_name}/#{type}/#{id}"
         end
+      end
+
+      def delete_by_query(query)
+        connection.json_delete "/#{alias_name}/#{type}/_query", query
       end
 
       def record_exists?(id)

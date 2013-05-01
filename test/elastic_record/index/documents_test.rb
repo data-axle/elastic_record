@@ -28,9 +28,19 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
     refute index.record_exists?('abc')
   end
 
+  def test_delete_by_query
+    index.index_document('bob', name: 'bob')
+    index.index_document('joe', name: 'joe')
+
+    index.delete_by_query(query_string: {query: 'name.analyzed:bob'})
+
+    refute index.record_exists?('bob')
+    assert index.record_exists?('joe')
+  end
+
   def test_bulk_add
     record = Widget.new(id: 'abc', color: 'red')
-    
+
     index.bulk_add [record]
 
     assert index.record_exists?('abc')
