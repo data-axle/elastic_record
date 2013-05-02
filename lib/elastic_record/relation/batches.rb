@@ -20,7 +20,7 @@ module ElasticRecord
           scroll: scroll_keep_alive,
           size: 100,
           search_type: 'scan'
-        }.merge(options)
+        }.update(options)
 
         scroll_id = klass.elastic_index.search(as_elastic, options)['_scroll_id']
 
