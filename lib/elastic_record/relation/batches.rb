@@ -1,8 +1,8 @@
 module ElasticRecord
   class Relation
     module Batches
-      def find_each
-        find_in_batches do |records|
+      def find_each(options = {})
+        find_in_batches(options) do |records|
           records.each { |record| yield record }
         end
       end
@@ -20,7 +20,7 @@ module ElasticRecord
           scroll: scroll_keep_alive,
           size: 100,
           search_type: 'scan'
-        }
+        }.update(options)
 
         scroll_id = klass.elastic_index.search(as_elastic, options)['_scroll_id']
 
