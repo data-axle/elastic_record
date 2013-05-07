@@ -12,34 +12,9 @@ The usual Gemfile addition:
 
 Include ElasticRecord into your model:
 
-  class Product < YourFavoriteOrm::Base
+  class Product < ActiveRecord::Base
     include ElasticRecord::Model
   end
-
-== Configuration
-
-While elastic search automatically maps fields, you may wish to override the defaults:
-
-  class Product < YourFavoriteOrm::Base
-    elastic_index.configure do
-      property :status, type: "string", index: "not_analyzed"
-    end
-  end
-
-You can also directly access Product.elastic_index.mapping and Product.elastic_index.settings:
-
-  class Product
-    elastic_index.mapping = {
-      properties: {
-        name: {type: "string", index: "analyzed"}
-        status: {type: "string", index: "not_analyzed"}
-      }
-    }
-  end
-
-Create the index:
-
-  rake index:create
 
 == Searching
 
@@ -97,7 +72,6 @@ To change the 'size' and 'from' values of a query, use offset and limit:
 
   search.limit(40).offset(80)   # Creates a query with {size: 40, from: 80}
 
-
 === Facets
 
 Since term facets are the most common, they are the easiest to add to a query:
@@ -135,6 +109,31 @@ Class methods can be executed within scopes:
 
   # Increase the price of all red products by $10.
   Product.filter(color: 'red').increase_prices
+
+== Configuration
+
+While elastic search automatically maps fields, you may wish to override the defaults:
+
+  class Product < ActiveRecord::Base
+    elastic_index.configure do
+      property :status, type: "string", index: "not_analyzed"
+    end
+  end
+
+You can also directly access Product.elastic_index.mapping and Product.elastic_index.settings:
+
+  class Product
+    elastic_index.mapping = {
+      properties: {
+        name: {type: "string", index: "analyzed"}
+        status: {type: "string", index: "not_analyzed"}
+      }
+    }
+  end
+
+Create the index:
+
+  rake index:create
 
 == Index Information
 
