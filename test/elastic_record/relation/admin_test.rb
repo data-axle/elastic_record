@@ -11,10 +11,13 @@ class ElasticRecord::Relation::AdminTest < MiniTest::Spec
     assert_equal ['green'], Widget.elastic_index.percolate(widget.as_search)
   end
 
-  # def test_create_warmer
-  #   Widget.elastic_relation.filter(color: 'green').create_warmer('green')
-  #   Widget.elastic_relation.filter(color: 'blue').create_warmer('blue')
-  #
-  #   assert_equal ['green'], Widget.elastic_index.percolate(widget.as_search)
-  # end
+  def test_create_warmer
+    Widget.elastic_index.delete_warmer('green') if Widget.elastic_index.warmer_exists?('green')
+
+    relation = Widget.elastic_relation.filter('color' => 'green')
+    relation.create_warmer('green')
+
+    expected = {}
+    assert_equal relation.as_elastic, Widget.elastic_index.get_warmer('green')['source']
+  end
 end
