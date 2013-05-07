@@ -7,7 +7,6 @@ require 'support/connect'
 require 'support/models/test_model'
 require 'support/models/warehouse'
 require 'support/models/widget'
-Widget.elastic_index.reset
 
 ElasticRecord::Config.model_names = %w(Warehouse Widget)
 
@@ -18,6 +17,8 @@ module MiniTest
     def setup
       super
       FakeWeb.clean_registry
+
+      Widget.elastic_index.create_and_deploy if Widget.elastic_index.all_names.empty?
 
       ElasticRecord::Config.models.each do |model|
         model.elastic_index.enable_deferring!

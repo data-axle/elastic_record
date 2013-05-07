@@ -5,6 +5,7 @@ require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
+require 'elastic_record/index/warmer'
 
 require 'active_support/version'
 if ActiveSupport::VERSION::STRING < '4'
@@ -34,9 +35,8 @@ module ElasticRecord
   class Index
     include Documents
     include Manage
-    include Mapping
-    include Percolator
-    include Settings
+    include Mapping, Settings
+    include Percolator, Warmer
     include Deferred
 
     attr_accessor :model

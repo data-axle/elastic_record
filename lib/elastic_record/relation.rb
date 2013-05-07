@@ -1,4 +1,5 @@
 require 'elastic_record/relation/value_methods'
+require 'elastic_record/relation/admin'
 require 'elastic_record/relation/batches'
 require 'elastic_record/relation/delegation'
 require 'elastic_record/relation/finder_methods'
@@ -8,7 +9,7 @@ require 'elastic_record/relation/search_methods'
 
 module ElasticRecord
   class Relation
-    include Batches, Delegation, FinderMethods, Merging, SearchMethods
+    include Admin, Batches, Delegation, FinderMethods, Merging, SearchMethods
 
     attr_reader :klass, :arelastic, :values
 
@@ -24,10 +25,6 @@ module ElasticRecord
 
     def facets
       search_results['facets']
-    end
-
-    def create_percolator(name)
-      klass.elastic_index.create_percolator(name, as_elastic)
     end
 
     def explain(id)
@@ -69,7 +66,7 @@ module ElasticRecord
       def reset
         @search_results = @records = nil
       end
-    
+
       def search_hits
         search_results['hits']['hits']
       end

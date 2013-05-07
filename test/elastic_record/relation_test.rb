@@ -15,16 +15,6 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     assert_equal 2, facets['popular_colors']['total']
   end
 
-  def test_create_percolator
-    Widget.elastic_index.reset_percolator
-
-    Widget.elastic_relation.filter(color: 'green').create_percolator('green')
-    Widget.elastic_relation.filter(color: 'blue').create_percolator('blue')
-    widget = Widget.new(color: 'green')
-
-    assert_equal ['green'], Widget.elastic_index.percolate(widget.as_search)
-  end
-
   def test_explain
     create_widgets [Widget.new(id: 10, color: 'blue')]
 
@@ -43,7 +33,7 @@ class ElasticRecord::RelationTest < MiniTest::Spec
 
   def test_to_a
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
-    
+
     array = Widget.elastic_relation.to_a
 
     assert_equal 2, array.size
