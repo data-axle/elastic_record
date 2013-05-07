@@ -17,7 +17,6 @@ class ElasticRecord::Relation::AdminTest < MiniTest::Spec
     relation = Widget.elastic_relation.filter('color' => 'green')
     relation.create_warmer('green')
 
-    expected = {}
     assert_equal relation.as_elastic, Widget.elastic_index.get_warmer('green')['source']
   end
 end
