@@ -1,59 +1,58 @@
 require 'helper'
 
-# class Cat
-#   include TestModel
-# end
-
 class ElasticRecord::Index::ManageTest < MiniTest::Spec
+  class Felon
+    include TestModel
+  end
+
   def setup
     super
-    index.disable_deferring!
-    index.delete_all
+    Felon.elastic_index.delete_all
   end
 
   def test_create
-    assert !index.exists?('widgets_foo')
+    assert !index.exists?('felons_foo')
 
-    index.create 'widgets_foo'
+    index.create 'felons_foo'
 
-    assert index.exists?('widgets_foo')
+    assert index.exists?('felons_foo')
   end
 
   def test_exists
-    index.create 'widgets_foo'
+    index.create 'felons_foo'
 
-    assert index.exists?('widgets_foo')
-    assert !index.exists?('widgets_bar')
+    assert index.exists?('felons_foo')
+    assert !index.exists?('felons_bar')
   end
 
   def test_type_exists
-    index.create 'widgets_foo'
+    index.create 'felons_foo'
 
-    assert index.type_exists?('widgets_foo')
-    assert !index.type_exists?('widgets_bar')
+    assert index.type_exists?('felons_foo')
+    assert !index.type_exists?('felons_bar')
   end
 
   def test_deploy
-    index.create 'widgets_foo'
+    index.create 'felons_foo'
 
     assert index.aliased_names.empty?
-    index.deploy 'widgets_foo'
+    index.deploy 'felons_foo'
 
-    assert_equal ['widgets_foo'], index.aliased_names
+    assert_equal ['felons_foo'], index.aliased_names
   end
 
   def test_deploy_when_already_deployed
-    index.create 'widgets_foo'
-    index.deploy 'widgets_foo'
+    index.create 'felons_foo'
+    index.deploy 'felons_foo'
 
-    index.deploy 'widgets_foo'
+    index.deploy 'felons_foo'
 
-    assert_equal ['widgets_foo'], index.aliased_names
+    assert_equal ['felons_foo'], index.aliased_names
   end
 
   private
 
     def index
-      @index ||= Widget.elastic_index
+      @index ||= Felon.elastic_index
     end
 end

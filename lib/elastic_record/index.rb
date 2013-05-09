@@ -53,11 +53,11 @@ module ElasticRecord
     end
 
     def alias_name
-      @alias_name ||= model.base_class.model_name.collection
+      @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
     end
 
     def type
-      @type ||= model.base_class.model_name.element
+      @type ||= model.base_class.name.demodulize.underscore
     end
 
     def disable!
