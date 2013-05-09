@@ -24,7 +24,7 @@ module ElasticRecord
           end                                  # end
         CODE
       end
-    
+
       def query!(value)
         self.query_value = value
         self
@@ -225,24 +225,33 @@ module ElasticRecord
           Arelastic::Searches::Facets.new(facets) unless facets.empty?
         end
 
+        MISSING_SORT = {'missing' => '_last'}
         def build_orders(orders)
-          unless orders.empty?
-            orders = reverse_query_order(orders) if reverse_order_value
-            Arelastic::Searches::Sort.new(orders) unless orders.empty?
+          return if orders.empty?
+
+          orders = orders.map do |order|
+            case order
+            when String, Symbol
+              {order => MISSING_SORT}
+            when Hash
+              order.each_with_object({}) do |(field, options), memo|
+                if options.is_a?(Hash)
+                  memo[field] = options.merge(MISSING_SORT)
+                else
+                  memo[field] = {'order' => options}.update(MISSING_SORT)
+                end
+              end
+            end
           end
+
+          orders = reverse_query_order(orders) if reverse_order_value
+          Arelastic::Searches::Sort.new(orders)
         end
 
         def reverse_query_order(orders)
-          orders.reverse.map do |o|
-            case o
-            when String, Symbol
-              {o => :desc}
-            when Hash
-              o.each_with_object({}) do |(field, dir), memo|
-                memo[field] = (dir.to_sym == :asc ? :desc : :asc )
-              end
-            else
-              o
+          orders.reverse.map do |order|
+            order.each_with_object({}) do |(field, options), memo|
+              memo[field] = options.merge('order' => options['order'].to_s == 'desc' ? 'asc' : 'desc')
             end
           end
         end
