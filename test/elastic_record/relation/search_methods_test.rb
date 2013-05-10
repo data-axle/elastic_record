@@ -152,20 +152,20 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Spec
     relation.order! 'bar' => 'desc'
 
     expected = [
-      {'foo' => {'missing' => '_last'}},
-      {'bar' => {'order' => 'desc', 'missing' => '_last'}}
+      'foo',
+      {'bar' => 'desc'}
     ]
 
     assert_equal expected, relation.as_elastic['sort']
   end
 
   def test_reverse_order
-    relation.order! 'foo'
+    relation.order! 'foo' => {'missing' => '_last'}
     relation.order! 'bar' => 'desc'
     relation.reverse_order!
 
     expected = [
-      {'bar' => {'order' => 'asc', 'missing' => '_last'}},
+      {'bar' => 'asc'},
       {'foo' => {'order' => 'desc', 'missing' => '_last'}}
     ]
 

@@ -225,22 +225,14 @@ module ElasticRecord
           Arelastic::Searches::Facets.new(facets) unless facets.empty?
         end
 
-        MISSING_SORT = {'missing' => '_last'}
         def build_orders(orders)
           return if orders.empty?
 
           orders = orders.map do |order|
-            case order
-            when String, Symbol
-              {order => MISSING_SORT}
-            when Hash
-              order.each_with_object({}) do |(field, options), memo|
-                if options.is_a?(Hash)
-                  memo[field] = options.merge(MISSING_SORT)
-                else
-                  memo[field] = {'order' => options}.update(MISSING_SORT)
-                end
-              end
+            if order.is_a?(Arelastic::Sorts::Sort)
+              order
+            else
+              Arelastic::Sorts::Sort.new(order)
             end
           end
 
@@ -250,9 +242,7 @@ module ElasticRecord
 
         def reverse_query_order(orders)
           orders.reverse.map do |order|
-            order.each_with_object({}) do |(field, options), memo|
-              memo[field] = options.merge('order' => options['order'].to_s == 'desc' ? 'asc' : 'desc')
-            end
+            order.reverse
           end
         end
     end
