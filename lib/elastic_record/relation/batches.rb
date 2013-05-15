@@ -14,11 +14,14 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {})
+        options.assert_valid_keys(:batch_size)
+
         scroll_keep_alive = '10m'
+        size = options[:batch_size] || 100
 
         options = {
           scroll: scroll_keep_alive,
-          size: 100,
+          size: size,
           search_type: 'scan'
         }.update(options)
 
