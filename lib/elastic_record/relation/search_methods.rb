@@ -2,27 +2,23 @@ module ElasticRecord
   class Relation
     module SearchMethods
       Relation::MULTI_VALUE_METHODS.each do |name|
-        class_eval <<-CODE, __FILE__, __LINE__ + 1
-          def #{name}_values                   # def filter_values
-            @values[:#{name}] || []            #   @values[:filter] || []
-          end                                  # end
-                                               #
-          def #{name}_values=(values)          # def filter_values=(values)
-            @values[:#{name}] = values         #   @values[:filter] = values
-          end                                  # end
-        CODE
+        define_method "#{name}_values" do
+          @values[name] || []
+        end
+
+        define_method "#{name}_values=" do |values|
+          @values[name] = values
+        end
       end
 
       Relation::SINGLE_VALUE_METHODS.each do |name|
-        class_eval <<-CODE, __FILE__, __LINE__ + 1
-          def #{name}_value                    # def offset_value
-            @values[:#{name}]                  #   @values[:offset]
-          end                                  # end
+        define_method "#{name}_value" do
+          @values[name]
+        end
 
-          def #{name}_value=(value)            # def offset_value=(value)
-            @values[:#{name}] = value          #   @values[:offset] = value
-          end                                  # end
-        CODE
+        define_method "#{name}_value=" do |value|
+          @values[name] = value
+        end
       end
 
       def query!(value)
