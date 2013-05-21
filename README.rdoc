@@ -1,5 +1,6 @@
 = ElasticRecord
 {<img src="https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0" />}[http://travis-ci.org/data-axle/elastic_record]
+{<img src="https://codeclimate.com/github/data-axle/elastic_record.png" />}[https://codeclimate.com/github/data-axle/elastic_record]
 
 ElasticRecord is an elasticsearch ORM.
 
