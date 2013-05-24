@@ -23,7 +23,7 @@ module ElasticRecord
         request_log << " '#{payload[:request].body}'"
       end
 
-      debug "(%.1fms) #{request_log}" % [event.duration]
+      debug "(#{event.duration.round(1)}ms) #{request_log}"
     end
 
     # def logger
