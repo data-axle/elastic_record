@@ -20,6 +20,11 @@ module ElasticRecord
         end
 
         delete(load_collection - other_records)
+
+        @collection = []
+        @persisted_collection = nil
+        @loaded = false
+
         merge_collections(load_collection, other_records)
         concat(other_records - load_collection)
 
@@ -31,7 +36,7 @@ module ElasticRecord
           owner.send("#{reflection.touch_column}=", Time.current)
         end
       end
-  
+
       def reader
         CollectionProxy.new(self)
       end

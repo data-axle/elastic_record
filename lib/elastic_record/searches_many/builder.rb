@@ -10,7 +10,7 @@ module ElasticRecord
         @model, @name, @options = model, name, options
       end
 
-      def build        
+      def build
         define_writer
         define_reader
 
