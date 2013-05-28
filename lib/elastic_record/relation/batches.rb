@@ -16,7 +16,7 @@ module ElasticRecord
       def find_ids_in_batches(options = {}, &block)
         options.assert_valid_keys(:batch_size, :keep_alive)
 
-        scroll_keep_alive = options[:keep_alive] || '5m'
+        scroll_keep_alive = options[:keep_alive] || ElasticRecord::Config.scroll_keep_alive
         size = options[:batch_size] || 100
 
         options = {
