@@ -39,18 +39,14 @@ module ElasticRecord
         clone.filter!(*args)
       end
 
-      def includes!(*args)
-        self.includes_values += args.flatten
+      def eager_load!(*args)
+        self.eager_load_values += args.flatten
         self
       end
 
-      alias :eager_load! :includes!
-
-      def includes(*args)
-        clone.includes! *args
+      def eager_load(*args)
+        clone.eager_load! *args
       end
-
-      alias :eager_load :includes
 
       def limit!(value)
         self.limit_value = value

@@ -26,7 +26,7 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_eager_loading?
-    assert Widget.elastic_relation.includes(:options).eager_loading?
+    assert Widget.elastic_relation.eager_load(:options).eager_loading?
   end
 
   def test_eager_loading_is_not_default

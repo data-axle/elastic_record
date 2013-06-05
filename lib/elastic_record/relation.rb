@@ -37,7 +37,7 @@ module ElasticRecord
     end
 
     def eager_loading?
-      @should_eager_load ||= includes_values.any?
+      @should_eager_load ||= eager_load_values.any?
     end
 
     def to_a
