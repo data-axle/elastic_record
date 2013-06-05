@@ -1,9 +1,7 @@
-class Widget
+class Option
   include TestModel
 
-  validates :color, format: {with: /[a-z]/}
-
-  define_attributes [:name, :color, :warehouse_id]
+  define_attributes [:name, :widget_id, :color]
 
   searches_many :options
 
@@ -15,10 +13,7 @@ class Widget
         analyzed: {type: 'string', index: 'analyzed'}
       }
     },
-    color: {
-      type: 'string', index: 'not_analyzed'
-    },
-    warehouse_id: {
+    widget_id: {
       type: 'string', index: 'not_analyzed'
     }
   )
@@ -27,7 +22,7 @@ class Widget
     def anon(&block)
       Class.new(self) do
         def self.name
-          'Widget'
+          'Option'
         end
 
         instance_eval(&block)
@@ -35,7 +30,7 @@ class Widget
     end
   end
 
-  def warehouse=(other)
-    self.warehouse_id = other.id
+  def widget=(other)
+    self.widget_id = other.id
   end
 end
