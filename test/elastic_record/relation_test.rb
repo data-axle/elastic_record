@@ -25,6 +25,14 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     # assert Widget.elastic_relation.search_results.is_a?(ElasticSearch::Api::Hits)
   end
 
+  def test_eager_loading?
+    assert Widget.elastic_relation.includes(:options).eager_loading?
+  end
+
+  def test_eager_loading_is_not_default
+    assert !Widget.elastic_relation.eager_loading?
+  end
+
   def test_to_ids
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 

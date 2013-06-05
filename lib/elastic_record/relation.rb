@@ -36,6 +36,10 @@ module ElasticRecord
       reset
     end
 
+    def eager_loading?
+      @should_eager_load ||= includes_values.any?
+    end
+
     def to_a
       @records ||= begin
         scope = select_values.any? ? klass.select(select_values) : klass
@@ -65,6 +69,7 @@ module ElasticRecord
     private
       def reset
         @search_results = @records = nil
+        @should_eager_load = nil
       end
 
       def search_hits
