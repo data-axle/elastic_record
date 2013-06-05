@@ -143,7 +143,7 @@ module ElasticRecord
             build_offset(offset_value),
             build_facets(facet_values),
             build_orders(order_values),
-            build_includes(includes_values)
+            build_eager_load(eager_load_values)
           ].compact
 
           Arelastic::Nodes::HashGroup.new searches
@@ -246,7 +246,7 @@ module ElasticRecord
           Arelastic::Searches::Sort.new(orders)
         end
 
-        def build_includes(includes)
+        def build_eager_load(eager_load)
           {}
         end
 
