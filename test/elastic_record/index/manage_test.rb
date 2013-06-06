@@ -50,21 +50,16 @@ class ElasticRecord::Index::ManageTest < MiniTest::Spec
     assert_equal ['felons_foo'], index.aliased_names
   end
 
-  def test_close
+  def test_close_and_open
     index.create 'felons_foo'
-    index.close 'felons_foo'
 
-    # test system fails for me
-    index.refresh
-  end
-
-  def test_reopen
-    index.create 'felons_foo'
     index.close 'felons_foo'
+    assert_equal({}, index.connection.json_get('/felons_foo/_status')['indices'])
+
     index.open 'felons_foo'
-
-    # test system fails for me
-    index.refresh
+    assert index.connection.json_get('/felons_foo/_status')['indices'].any?
+  ensure
+    index.delete('felons_foo') if index.exists?('felons_foo')
   end
 
 
