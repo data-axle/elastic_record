@@ -2,8 +2,10 @@ module ElasticRecord
   module Callbacks
     def self.included(base)
       base.class_eval do
-        after_save if: :changed? do
-          self.class.elastic_index.index_document id, as_search
+        after_save do
+          if changed? && !self.class.elastic_index.disabled
+            self.class.elastic_index.index_document id, as_search
+          end
         end
 
         after_destroy do
