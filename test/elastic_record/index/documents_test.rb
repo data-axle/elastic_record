@@ -77,6 +77,9 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
     end
   end
 
+
+
+
   private
 
     def index
