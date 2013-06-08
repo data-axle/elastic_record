@@ -142,8 +142,7 @@ module ElasticRecord
             build_limit(limit_value),
             build_offset(offset_value),
             build_facets(facet_values),
-            build_orders(order_values),
-            build_eager_load(eager_load_values)
+            build_orders(order_values)
           ].compact
 
           Arelastic::Nodes::HashGroup.new searches
@@ -244,10 +243,6 @@ module ElasticRecord
 
           orders = reverse_query_order(orders) if reverse_order_value
           Arelastic::Searches::Sort.new(orders)
-        end
-
-        def build_eager_load(eager_load)
-          {}
         end
 
         def reverse_query_order(orders)
