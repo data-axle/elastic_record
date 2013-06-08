@@ -35,19 +35,22 @@ class ElasticRecord::RelationTest < MiniTest::Spec
 
   def test_eager_load
 
+    Option._test_cache.clear
+
     warehouse = Warehouse.new
     widget = Widget.new(warehouse_id: warehouse.id)
     Widget.elastic_index.bulk_add [ widget ]
+
     Option.elastic_index.bulk_add [
       Option.new(id:  5, widget_id: widget.id),
-      Option.new(id: 10, widget_id: widget.id)
+      Option.new(id: 10, widget_id: widget.id),
     ]
 
     widgets = warehouse.widgets.eager_load(:options)
     widgets.to_a
 
     assert_no_queries do
-      assert_equal ["5", "10"], widgets.first.options.map(&:id)
+      assert_equal [5, 10], widgets.first.options.map(&:id)
     end
 
   end
