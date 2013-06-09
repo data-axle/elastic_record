@@ -43,7 +43,9 @@ module ElasticRecord
     def to_a
       @records ||= begin
         scope = select_values.any? ? klass.select(select_values) : klass
-        scope.find(to_ids)
+        records = scope.find(to_ids)
+        eager_load_associations(records) if eager_loading?
+        records
       end
     end
 
@@ -78,6 +80,20 @@ module ElasticRecord
 
       def search_results
         @search_results ||= klass.elastic_index.search(as_elastic)
+      end
+
+      def eager_load_associations(records)
+        ids = records.map(&:id)
+        eager_load_values.each do |to_load|
+          belongs_to_id = "#{klass.to_s.downcase.singularize}_id"
+          child_klass = to_load.to_s.singularize.camelize.constantize
+          children = child_klass.elastic_search.filter(belongs_to_id => ids).limit(1000)
+          records.each do |parent|
+            selected = children.select { |child| parent.id.to_s == child.send(belongs_to_id).to_s }
+            parent.send(to_load.to_s.pluralize).eager_loaded(selected)
+          end
+        end
+        records
       end
   end
 end

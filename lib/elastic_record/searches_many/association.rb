@@ -85,6 +85,15 @@ module ElasticRecord
         collection
       end
 
+      def eager_loaded_collection(records)
+        unless @loaded
+          @collection = records
+          @loaded = true
+        end
+
+        collection
+      end
+
       private
         def load_persisted_collection?
           !loaded? || owner.new_record?

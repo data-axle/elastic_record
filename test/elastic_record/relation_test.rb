@@ -33,7 +33,7 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     assert !Widget.elastic_relation.eager_loading?
   end
 
-  def test_eager_load
+  def test_eager_load_on_collection_proxy
 
     Option._test_cache.clear
 
@@ -47,7 +47,7 @@ class ElasticRecord::RelationTest < MiniTest::Spec
     ]
 
     widgets = warehouse.widgets.eager_load(:options)
-    widgets.to_a
+    widgets = widgets.to_a
 
     assert_no_queries do
       assert_equal [5, 10], widgets.first.options.map(&:id)
@@ -55,6 +55,25 @@ class ElasticRecord::RelationTest < MiniTest::Spec
 
   end
 
+  def test_eager_load_on_relation
+    Option._test_cache.clear
+
+    widget = Widget.new
+    Widget.elastic_index.bulk_add [ widget ]
+
+    Option.elastic_index.bulk_add [
+      Option.new(id:  5, widget_id: widget.id),
+      Option.new(id: 10, widget_id: widget.id),
+    ]
+
+    widgets = Widget.elastic_relation.eager_load(:options)
+    widgets = widgets.to_a
+
+    assert_no_queries do
+      assert_equal [5, 10], widgets.first.options.map(&:id)
+    end
+
+  end
 
   def test_to_ids
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
