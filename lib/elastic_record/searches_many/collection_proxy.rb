@@ -12,12 +12,9 @@ module ElasticRecord
       end
 
       def to_a
-        if @association.loaded? || !eager_loading?
-          @association.load_collection.reject(&:destroyed?)
-        else
-          records = @association.load_collection.reject(&:destroyed?)
-          eager_load_associations(records)
-        end
+        records = @association.load_collection.reject(&:destroyed?)
+        records = eager_load_associations(records) if eager_loading?
+        records
       end
 
       def <<(*records)
