@@ -69,7 +69,7 @@ module ElasticRecord
       end
 
       def scope
-        search = klass.elastic_search.filter("#{reflection.belongs_to}_id" => owner.id).limit(1000)
+        search = klass.elastic_search.filter("#{reflection.belongs_to}_id" => owner.id).limit(1000000)
         if options[:as]
           search.filter! "#{reflection.belongs_to}_type" => owner.class.name
         end
