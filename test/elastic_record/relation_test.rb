@@ -35,8 +35,6 @@ class ElasticRecord::RelationTest < MiniTest::Spec
 
   def test_eager_load_on_collection_proxy
 
-    Option._test_cache.clear
-
     warehouse = Warehouse.new
     widget = Widget.new(warehouse_id: warehouse.id)
     Widget.elastic_index.bulk_add [ widget ]
@@ -56,7 +54,6 @@ class ElasticRecord::RelationTest < MiniTest::Spec
   end
 
   def test_eager_load_on_relation
-    Option._test_cache.clear
 
     widget = Widget.new
     Widget.elastic_index.bulk_add [ widget ]

@@ -17,6 +17,10 @@ module MiniTest
   class Spec
     def setup
       super
+
+      Widget._test_cache.clear
+      Option._test_cache.clear
+
       FakeWeb.clean_registry
 
       Widget.elastic_index.create_and_deploy if Widget.elastic_index.all_names.empty?

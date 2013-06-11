@@ -14,8 +14,13 @@ module TestModel
   end
 
   module ClassMethods
+
+    def _test_cache
+      @_test_cache ||= []
+    end
+
     def find(ids)
-      ids.map { |id| new(id: id, color: 'red') }
+      ids.map { |id| _test_cache.detect { |m| m.id.to_s == id.to_s } || new(id: id, color: 'red') }
     end
 
     def base_class

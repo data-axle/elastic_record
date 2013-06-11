@@ -18,26 +18,6 @@ class Option
     }
   )
 
-  class << self
-    def anon(&block)
-      Class.new(self) do
-        def self.name
-          'Option'
-        end
-
-        instance_eval(&block)
-      end
-    end
-
-    def _test_cache
-      @_test_cache ||= []
-    end
-
-    def find(ids)
-      ids.map { |id| _test_cache.detect { |m| m.id.to_s == id.to_s } || new(id: id, color: 'red') }
-    end
-  end
-
   def initialize(*args)
     super
     self.class._test_cache << self
