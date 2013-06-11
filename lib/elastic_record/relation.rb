@@ -85,15 +85,13 @@ module ElasticRecord
       def eager_load_associations(records)
         ids = records.map(&:id)
         eager_load_values.each do |to_load|
-          reflection = klass.searches_many_reflections[to_load] || (raise "searches_many #{to_load} does not exist on #{klass}")
+          reflection = klass.searches_many_reflections[to_load] ||(raise "searches_many #{to_load} does not exist on #{klass}")
           foreign_key = reflection.foreign_key.to_sym
           grouped_children = reflection.klass.elastic_search.filter(foreign_key => ids).limit(1000000).group_by(&foreign_key)
-
           records.each do |record|
             children = grouped_children.fetch(record.id || [])
             record.send(to_load).eager_loaded(children)
           end
-
         end
         records
       end
