@@ -69,7 +69,7 @@ module ElasticRecord
       end
 
       def scope
-        search = klass.elastic_search.filter("#{reflection.belongs_to}_id" => owner.id).limit(1000)
+        search = klass.elastic_search.filter("#{reflection.belongs_to}_id" => owner.id).limit(1000000)
         if options[:as]
           search.filter! "#{reflection.belongs_to}_type" => owner.class.name
         end
@@ -79,6 +79,15 @@ module ElasticRecord
       def load_collection
         unless @loaded
           @collection = merge_collections(persisted_collection, collection)
+          @loaded = true
+        end
+
+        collection
+      end
+
+      def eager_loaded_collection(records)
+        unless @loaded
+          @collection = records
           @loaded = true
         end
 

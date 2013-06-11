@@ -39,6 +39,15 @@ module ElasticRecord
         clone.filter!(*args)
       end
 
+      def eager_load!(*args)
+        self.eager_load_values += args.flatten
+        self
+      end
+
+      def eager_load(*args)
+        clone.eager_load! *args
+      end
+
       def limit!(value)
         self.limit_value = value
         self

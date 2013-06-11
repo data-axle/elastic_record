@@ -5,6 +5,8 @@ class Widget
 
   define_attributes [:name, :color, :warehouse_id]
 
+  searches_many :options
+
   self.elastic_index.mapping[:properties].update(
     name: {
       type: 'multi_field', 

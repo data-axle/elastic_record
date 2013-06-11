@@ -36,10 +36,16 @@ module ElasticRecord
       reset
     end
 
+    def eager_loading?
+      @should_eager_load ||= eager_load_values.any?
+    end
+
     def to_a
       @records ||= begin
         scope = select_values.any? ? klass.select(select_values) : klass
-        scope.find(to_ids)
+        records = scope.find(to_ids)
+        eager_load_associations(records) if eager_loading?
+        records
       end
     end
 
@@ -65,6 +71,7 @@ module ElasticRecord
     private
       def reset
         @search_results = @records = nil
+        @should_eager_load = nil
       end
 
       def search_hits
@@ -73,6 +80,20 @@ module ElasticRecord
 
       def search_results
         @search_results ||= klass.elastic_index.search(as_elastic)
+      end
+
+      def eager_load_associations(records)
+        ids = records.map(&:id)
+        eager_load_values.each do |to_load|
+          reflection = klass.searches_many_reflections[to_load] ||(raise "searches_many #{to_load} does not exist on #{klass}")
+          foreign_key = reflection.foreign_key.to_sym
+          grouped_children = reflection.klass.elastic_search.filter(foreign_key => ids).limit(1000000).group_by(&foreign_key)
+          records.each do |record|
+            children = grouped_children.fetch(record.id || [])
+            record.send(to_load).eager_loaded(children)
+          end
+        end
+        records
       end
   end
 end
