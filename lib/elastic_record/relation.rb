@@ -87,7 +87,7 @@ module ElasticRecord
         eager_load_values.each do |to_load|
           reflection = klass.searches_many_reflections[to_load] || (raise "searches_many #{to_load} does not exist on #{klass}")
           foreign_key = reflection.foreign_key
-          to_load.to_s.singularize.camelize.constantize.elastic_search.
+          reflection.klass.elastic_search.
             filter(foreign_key => ids).limit(1000000).group_by { |child| child.send(foreign_key) }.
             each do |foreign_key, children|
             parent = records.detect { |record| record.id == foreign_key }
