@@ -91,7 +91,7 @@ module ElasticRecord
             filter(belongs_to_id => ids).limit(1000000).group_by { |child| child.send(belongs_to_id) }.
             each do |belongs_to_id, children|
             parent = records.detect { |record| record.id == belongs_to_id }
-            parent.send(to_load.to_s.pluralize).eager_loaded(children) if parent
+            parent.send(to_load).eager_loaded(children) if parent
           end
         end
         records
