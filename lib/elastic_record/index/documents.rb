@@ -3,6 +3,12 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     module Documents
+      def index_record(record, index_name = nil)
+        return if disabled
+
+        index_document(record.send(record.class.primary_key), record.as_search, index_name)
+      end
+
       def index_document(id, document, index_name = nil)
         return if disabled
 
@@ -68,7 +74,7 @@ module ElasticRecord
 
         bulk do
           batch.each do |record|
-            index_document(record.id, record.as_search, index_name)
+            index_record(record, index_name)
           end
         end
       end

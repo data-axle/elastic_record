@@ -13,6 +13,15 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
     index.reset
   end
 
+  def test_index_record
+    record = Widget.new(id: '5', color: 'red')
+
+    index.index_record(record)
+
+    assert index.record_exists?('5')
+    refute index.record_exists?('7')
+  end
+
   def test_index_document
     index.index_document('abc', color: 'red')
 

@@ -18,6 +18,10 @@ module TestModel
       ids.map { |id| new(id: id, color: 'red') }
     end
 
+    def primary_key
+      'id'
+    end
+
     def base_class
       self
     end

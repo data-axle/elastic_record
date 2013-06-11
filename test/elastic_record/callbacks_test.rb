@@ -49,12 +49,9 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
 
     attr_accessor :called_as_search
 
-    define_attributes [:name, :height]
+    define_attributes [:height]
 
     self.elastic_index.mapping[:properties].update(
-      name: {
-        type: 'string', index: 'analyzed'
-      },
       height: {
         type: 'string', index: 'not_analyzed'
       }
@@ -69,25 +66,11 @@ class ElasticRecord::CallbacksTest < MiniTest::Spec
 
   def test_disabled_skip_document
     DisablingModel.elastic_index.disable!
-    model = DisablingModel.new id: '5', name: 'doody', height: '9 feets'
+
+    model = DisablingModel.new id: '5', height: '9 feets'
     model.save
 
     refute Widget.elastic_index.record_exists?(model.id)
     refute model.called_as_search
-
-    # Test bulk mode as well
-    DisablingModel.elastic_index.bulk do
-      model = []
-
-      model << DisablingModel.new(id: '5', name: 'doody', height: '9 feets')
-      model.last.save
-
-      model << DisablingModel.new(id: '15', name: 'doody', height: '9 feets')
-      model.last.save
-    end
-    model.each do |m|
-      refute Widget.elastic_index.record_exists?(m.id)
-      refute m.called_as_search
-    end
   end
 end
