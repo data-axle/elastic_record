@@ -85,7 +85,8 @@ module ElasticRecord
       def eager_load_associations(records)
         ids = records.map(&:id)
         eager_load_values.each do |to_load|
-          belongs_to_id = "#{klass.to_s.downcase.singularize}_id"
+          reflection = ElasticRecord::SearchesMany::Reflection.new(klass, to_load, {})
+          belongs_to_id = "#{reflection.belongs_to}_id"
           to_load.to_s.singularize.camelize.constantize.elastic_search.
             filter(belongs_to_id => ids).limit(1000000).group_by { |child| child.send(belongs_to_id) }.
             each do |belongs_to_id, children|
