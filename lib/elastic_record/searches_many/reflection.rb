@@ -20,6 +20,10 @@ module ElasticRecord
         options[:as] ? options[:as].to_s : model.name.to_s.demodulize.underscore
       end
 
+      def foreign_key
+        options[:foreign_key] ? options[:foreign_key].to_s : "#{model.name.to_s.demodulize.underscore}_id"
+      end
+
       CALLBACKS = [:before_add, :after_add, :before_remove, :after_remove]
       def define_callbacks(options)
         Hash[CALLBACKS.map { |callback_name| [callback_name, Array(options[callback_name.to_sym])] }]

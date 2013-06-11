@@ -7,8 +7,14 @@ module ElasticRecord
         merge! association.scope
       end
 
+      def eager_loaded(records)
+        @association.eager_loaded_collection(records)
+      end
+
       def to_a
-        @association.load_collection.reject(&:destroyed?)
+        records = @association.load_collection.reject(&:destroyed?)
+        records = eager_load_associations(records) if eager_loading?
+        records
       end
 
       def <<(*records)
