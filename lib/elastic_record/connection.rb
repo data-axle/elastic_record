@@ -1,9 +1,6 @@
 require 'net/http'
 
 module ElasticRecord
-  class ConnectionError < StandardError
-  end
-
   class Connection
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server

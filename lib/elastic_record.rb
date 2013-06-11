@@ -21,4 +21,5 @@ module ElasticRecord
   end
 end
 
+require 'elastic_record/errors'
 require 'elastic_record/railtie' if defined?(Rails)
