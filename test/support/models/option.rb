@@ -18,11 +18,6 @@ class Option
     }
   )
 
-  def initialize(*args)
-    super
-    self.class._test_cache << self
-  end
-
   def widget=(other)
     self.widget_id = other.id
   end
