@@ -11,6 +11,7 @@ module TestModel
 
     include ElasticRecord::Model
     include ElasticRecord::Callbacks
+
   end
 
   module ClassMethods
@@ -59,6 +60,9 @@ module TestModel
 
   def initialize(attrs = {})
     self.attributes = attrs
+    cloned = self.clone
+    cloned.id = cloned.id.to_s
+    self.class._test_cache << cloned
   end
 
   def attributes=(attrs)
