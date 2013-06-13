@@ -1,8 +1,14 @@
 module ElasticRecord
   class Relation
     module FinderMethods
-      def find(id)
-        filter(arelastic.filter.ids(id)).to_a.first || (raise ActiveRecord::RecordNotFound)
+      def find(*ids)
+        ids = ids.flatten
+        case ids.size
+        when 0; raise ActiveRecord::RecordNotFound.new('empty argument')
+        when 1; filter(arelastic.filter.ids(ids)).to_a.first || (raise ActiveRecord::RecordNotFound)
+        else
+          filter(arelastic.filter.ids(ids))
+        end
       end
 
       def first
