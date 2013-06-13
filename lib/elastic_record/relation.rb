@@ -89,7 +89,7 @@ module ElasticRecord
           foreign_key = reflection.foreign_key.to_sym
           grouped_children = reflection.klass.elastic_search.filter(foreign_key => ids).limit(1000000).group_by(&foreign_key)
           records.each do |record|
-            children = grouped_children.fetch(record.id || [])
+            children = grouped_children.fetch(record.id, [])
             record.send(to_load).eager_loaded(children)
           end
         end

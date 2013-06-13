@@ -20,6 +20,19 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
     end
   end
 
+  def test_find_passed_an_array
+    assert_equal 2, Widget.elastic_relation.find(['05', '10']).size
+    assert_equal 2, Widget.elastic_relation.filter('color' => ['red', 'blue']).find(['05', '10']).size
+    assert_equal 0, Widget.elastic_relation.find(['15', '20']).size
+    assert_equal 0, Widget.elastic_relation.filter('color' => ['purple', 'gold']).find(['05', '10']).size
+  end
+
+  def test_find_passed_an_empty_args
+    assert_raises ActiveRecord::RecordNotFound do
+      Widget.elastic_relation.find()
+    end
+  end
+
   def test_first
     assert_equal '10', Widget.elastic_relation.order('color').first.id
     assert_equal '05', Widget.elastic_relation.order('color').filter('color' => 'red').first.id
