@@ -25,9 +25,13 @@ module ElasticRecord
           search_type: 'scan'
         }.update(options)
 
-        scroll_id = klass.elastic_index.search(as_elastic, options)['_scroll_id']
+        search_result = klass.elastic_index.search(as_elastic, options)
+        total_hits = search_result['hits']['total']
+        scroll_id = search_result['_scroll_id']
+        hit_count = 0
 
-        while (hit_ids = get_scroll_hit_ids(scroll_id, scroll_keep_alive)).any?
+        while (hit_ids = get_scroll_hit_ids(scroll_id, scroll_keep_alive, (hit_count < total_hits))).any?
+          hit_count += hit_ids.size
           hit_ids.each_slice(size, &block)
         end
       end
@@ -40,8 +44,11 @@ module ElasticRecord
 
       private
 
-        def get_scroll_hit_ids(scroll_id, scroll_keep_alive)
+        def get_scroll_hit_ids(scroll_id, scroll_keep_alive, exception_detection)
           json = klass.elastic_index.scroll(scroll_id, scroll_keep_alive)
+          if exception_detection && json['_shards'] && json['_shards']['failed'] > 0
+            raise ScrollKeepAliveError.new(json.to_s)
+          end
           json['hits']['hits'].map { |hit| hit['_id'] }
         end
     end
