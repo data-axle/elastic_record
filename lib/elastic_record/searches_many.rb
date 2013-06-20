@@ -36,7 +36,7 @@ module ElasticRecord
       #   will be updated with the current time in addition to the updated_at/on attribute.
       # [:autosave]
       #   If true, always save the associated objects or destroy them if marked for destruction, when
-      #   saving the parent object.
+      #   saving the parent object.  Default: true
       # [:counter_cache]
       #   Caches the number of belonging objects on the associate class. This requires that a column
       #   named <tt>#{table_name}_count</tt> (such as +comments_count+ for a belonging Comment class)
@@ -55,6 +55,7 @@ module ElasticRecord
       # * <tt>Firm#clients=(objects)</tt>
       # * <tt>Firm#client_params=(params)</tt>
       def searches_many(name, options = {})
+        options = { :autosave => true }.merge(options)
         ElasticRecord::SearchesMany::Builder.build(self, name, options)
       end
 
