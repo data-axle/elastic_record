@@ -58,7 +58,7 @@ module ElasticRecord
         records.each do |record|
           callback(:before_remove, record)
 
-          if options[:autosave] || owner.new_record?
+          if !options[:autosave] || owner.new_record?
             record.mark_for_destruction
           else
             record.destroy
