@@ -35,20 +35,16 @@ class ElasticRecord::SearchesManyTest < MiniTest::Spec
     assert_equal 1, widgets.size
   end
 
-  # FIXME / VALIDATE this test is invalid
-  # 1) autosave is on by default, thus destroying previous associations
-  # 2) the returned association proxy #to_a only returns non-destructed objects
-  #
-  # def test_write_marks_destroyed
-  #   warehouse = Warehouse.new
-  #   widget = Widget.create warehouse: warehouse
+  def test_write_marks_destroyed
+    warehouse = Warehouse.new
+    widget = Widget.create warehouse: warehouse
 
-  #   warehouse.widgets = []
+    warehouse.widgets = []
 
-  #   association = warehouse.searches_many_association(:widgets)
-  #   assert_equal 1, association.reader.size
-  #   assert association.reader.first.marked_for_destruction?
-  # end
+    association = warehouse.searches_many_association(:widgets)
+    assert_equal 1, association.reader.size
+    assert association.reader.first.marked_for_destruction?
+  end
 
   def test_write_existing_record
     widget = Widget.create name: 'Toy', color: 'green'

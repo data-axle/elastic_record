@@ -12,7 +12,7 @@ module ElasticRecord
       end
 
       def to_a
-        records = @association.load_collection.reject { |record| record.marked_for_destruction? || record.destroyed? }
+        records = @association.load_collection.reject(&:destroyed?)
         records = eager_load_associations(records) if eager_loading?
         records
       end

@@ -5,6 +5,7 @@ class ElasticRecord::SearchesMany::AutosaveTest < MiniTest::Spec
     warehouse = Warehouse.new
     widget = Widget.new
     warehouse.widgets = [widget]
+    assert warehouse.new_record?
     assert widget.new_record?
 
     warehouse.save
