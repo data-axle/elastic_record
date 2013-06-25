@@ -26,11 +26,11 @@ module ElasticRecord
       end
 
       def elastic_relation
-        ElasticRecord::Relation.new(self, arelastic)
+        ElasticRecord::Relation.new(self)
       end
 
       def arelastic
-        @arelastic ||= Arelastic::Builders::Search.new
+        Arelastic::Builders::Search
       end
 
       def elastic_index

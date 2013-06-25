@@ -3,7 +3,7 @@ module ElasticRecord
     class CollectionProxy < ElasticRecord::Relation
       def initialize(association)
         @association = association
-        super association.klass, association.klass.arelastic
+        super association.klass
         merge! association.scope
       end
 

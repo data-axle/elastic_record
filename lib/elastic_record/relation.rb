@@ -11,11 +11,10 @@ module ElasticRecord
   class Relation
     include Admin, Batches, Delegation, FinderMethods, Merging, SearchMethods
 
-    attr_reader :klass, :arelastic, :values
+    attr_reader :klass, :values
 
-    def initialize(klass, arelastic)
+    def initialize(klass)
       @klass = klass
-      @arelastic = arelastic
       @values = {}
     end
 
