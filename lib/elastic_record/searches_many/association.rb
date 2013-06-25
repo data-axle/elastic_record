@@ -16,11 +16,10 @@ module ElasticRecord
 
       def writer(other_records)
         other_records = other_records.map do |other_record|
-          other_record = other_record.is_a?(Hash) ? klass.new(other_record) : other_record
-          other_record.send("#{reflection.belongs_to}=", owner)
-          other_record
+          other_record.is_a?(Hash) ? klass.new(other_record) : other_record
         end
 
+        associate_owner(other_records)
         delete(load_collection - other_records)
         merge_collections(load_collection, other_records)
         concat(other_records - load_collection)
@@ -97,6 +96,11 @@ module ElasticRecord
       end
 
       private
+
+        def associate_owner(records)
+          records.each { |record| record.send("#{reflection.belongs_to}=", owner) }
+        end
+
         def load_persisted_collection?
           !loaded? || owner.new_record?
         end
@@ -133,7 +137,6 @@ module ElasticRecord
         def add_to_collection(record)
           callback(:before_add, record)
 
-          record.send("#{reflection.belongs_to}=", owner)
           yield(record) if block_given?
           @collection << record
 

@@ -7,7 +7,12 @@ class ElasticRecord::SearchesMany::AssociationTest < MiniTest::Spec
     warehouse.widgets = [{color: 'blue', name: 'thing'}]
 
     assert_equal 1, warehouse.widgets.all.count
-    assert_equal 'blue', warehouse.widgets[0].color
+    expected = {
+      'color' => 'blue',
+      'name' => 'thing',
+      'warehouse_id' => warehouse.id,
+    }
+    assert_equal expected, warehouse.widgets[0].attributes
   end
 
   def test_writer
@@ -23,8 +28,20 @@ class ElasticRecord::SearchesMany::AssociationTest < MiniTest::Spec
     assert warehouse.widgets[0].marked_for_destruction?
     refute warehouse.widgets[1].marked_for_destruction?
     refute warehouse.widgets[2].marked_for_destruction?
-    assert_equal 'red', warehouse.widgets[1].color
-    assert_equal 'blue', warehouse.widgets[2].color
+
+    expected = {
+      'color' => 'red',
+      'name' => 'device',
+      'warehouse_id' => warehouse.id,
+    }
+    assert_equal expected, warehouse.widgets[1].attributes
+
+    expected = {
+      'color' => 'blue',
+      'name' => 'thing',
+      'warehouse_id' => warehouse.id,
+    }
+    assert_equal expected, warehouse.widgets[2].attributes
   end
 
 end
