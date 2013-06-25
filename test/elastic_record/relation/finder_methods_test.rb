@@ -1,10 +1,5 @@
 require 'helper'
 
-module ActiveRecord
-  class RecordNotFound < StandardError
-  end
-end
-
 class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
   def setup
     super
@@ -57,6 +52,6 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
       Widget.elastic_index.bulk_add [
         Widget.new(color: 'red', id: '05'),
         Widget.new(color: 'blue', id: '10'),
-      ]      
+      ]
     end
 end
