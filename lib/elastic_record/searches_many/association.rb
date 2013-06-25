@@ -16,7 +16,9 @@ module ElasticRecord
 
       def writer(other_records)
         other_records = other_records.map do |other_record|
-          other_record.is_a?(Hash) ? klass.new(other_record) : other_record
+          other_record = other_record.is_a?(Hash) ? klass.new(other_record) : other_record
+          other_record.send("#{reflection.belongs_to}=", owner)
+          other_record
         end
 
         delete(load_collection - other_records)
