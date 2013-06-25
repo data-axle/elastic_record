@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchesMany::ReflectionTest < MiniTest::Spec
+class ElasticRecord::SearchesMany::ReflectionTest < MiniTest::Unit::TestCase
 
   def test_foreiegn_key
     assert_equal 'warehouse_id', reflection_class.new(Warehouse, :widgets, {}).foreign_key

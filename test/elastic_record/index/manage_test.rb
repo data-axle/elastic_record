@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::ManageTest < MiniTest::Spec
+class ElasticRecord::Index::ManageTest < MiniTest::Unit::TestCase
   class Felon
     include TestModel
   end

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::MappingTest < MiniTest::Spec
+class ElasticRecord::Index::MappingTest < MiniTest::Unit::TestCase
   def test_delete_mapping
     index_name = index.create
     index.get_mapping(index_name)

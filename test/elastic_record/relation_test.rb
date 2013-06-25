@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::RelationTest < MiniTest::Spec
+class ElasticRecord::RelationTest < MiniTest::Unit::TestCase
   def test_count
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 

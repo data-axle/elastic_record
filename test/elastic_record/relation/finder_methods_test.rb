@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Spec
+class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Unit::TestCase
   def setup
     super
     create_widgets

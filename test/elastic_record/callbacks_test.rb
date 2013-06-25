@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::CallbacksTest < MiniTest::Spec
+class ElasticRecord::CallbacksTest < MiniTest::Unit::TestCase
   def test_added_to_index
     widget = Widget.new id: '10', color: 'green'
     refute Widget.elastic_index.record_exists?(widget.id)

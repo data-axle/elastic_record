@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchesManyTest < MiniTest::Spec
+class ElasticRecord::SearchesManyTest < MiniTest::Unit::TestCase
   def test_reader
     warehouse = Warehouse.create
     related_widget = Widget.create warehouse: warehouse

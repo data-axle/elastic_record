@@ -29,26 +29,28 @@ end
 ActiveSupport::Notifications.subscribe('request.elastic_record', ElasticSearchCounter.new)
 
 module MiniTest
-  class Spec
-    def assert_queries(num = 1, options = {})
-      ignore_none = options.fetch(:ignore_none) { num == :any }
-      ElasticSearchCounter.clear_log
-      x = yield
-      the_log = ignore_none ? ElasticSearchCounter.log_all : ElasticSearchCounter.log
-      if num == :any
-        assert_operator the_log.size, :>=, 1, "1 or more queries expected, but none were executed."
-      else
-        queries = the_log.map { |event| "  #{event[:request].method} #{event[:request].path} #{event[:request].body}\n" }.join("\n")
+  class Unit
+    class TestCase
+      def assert_queries(num = 1, options = {})
+        ignore_none = options.fetch(:ignore_none) { num == :any }
+        ElasticSearchCounter.clear_log
+        x = yield
+        the_log = ignore_none ? ElasticSearchCounter.log_all : ElasticSearchCounter.log
+        if num == :any
+          assert_operator the_log.size, :>=, 1, "1 or more queries expected, but none were executed."
+        else
+          queries = the_log.map { |event| "  #{event[:request].method} #{event[:request].path} #{event[:request].body}\n" }.join("\n")
 
-        mesg = "#{the_log.size} instead of #{num} queries were executed.#{the_log.size == 0 ? '' : "\nQueries:\n#{queries}"}"
-        assert_equal num, the_log.size, mesg
+          mesg = "#{the_log.size} instead of #{num} queries were executed.#{the_log.size == 0 ? '' : "\nQueries:\n#{queries}"}"
+          assert_equal num, the_log.size, mesg
+        end
+
+        x
       end
 
-      x
-    end
-
-    def assert_no_queries(&block)
-      assert_queries(0, :ignore_none => true, &block)
+      def assert_no_queries(&block)
+        assert_queries(0, :ignore_none => true, &block)
+      end
     end
   end
 end

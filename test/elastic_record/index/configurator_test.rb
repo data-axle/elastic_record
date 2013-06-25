@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::ConfiguratorTest < MiniTest::Spec
+class ElasticRecord::Index::ConfiguratorTest < MiniTest::Unit::TestCase
   def test_property
     configurator.property :am_i_cool, type: "boolean"
 

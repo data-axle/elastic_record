@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchesMany::CollectionProxyTest < MiniTest::Spec
+class ElasticRecord::SearchesMany::CollectionProxyTest < MiniTest::Unit::TestCase
   def test_add_to_new_record
     warehouse = Warehouse.new
     widget = Widget.new

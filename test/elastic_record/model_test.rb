@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::ModelTest < MiniTest::Spec
+class ElasticRecord::ModelTest < MiniTest::Unit::TestCase
   class InheritedModel < Widget
   end
 

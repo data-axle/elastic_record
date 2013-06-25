@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::DocumentsTest < MiniTest::Spec
+class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
   class InheritedWidget < Widget
     def self.base_class
       Widget

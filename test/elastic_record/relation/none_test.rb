@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::NoneTest < MiniTest::Spec
+class ElasticRecord::Relation::NoneTest < MiniTest::Unit::TestCase
   def test_none
     none = Widget.elastic_relation.none
 

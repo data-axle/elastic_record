@@ -15,25 +15,25 @@ ElasticRecord::Config.model_names = %w(Warehouse Widget Option)
 FakeWeb.allow_net_connect = %r[^https?://127.0.0.1]
 
 module MiniTest
-  class Spec
-    def setup
-      super
+  class Unit
+    class TestCase
+      def setup
+        Widget._test_cache.clear
+        Option._test_cache.clear
 
-      Widget._test_cache.clear
-      Option._test_cache.clear
+        FakeWeb.clean_registry
 
-      FakeWeb.clean_registry
+        Widget.elastic_index.create_and_deploy if Widget.elastic_index.all_names.empty?
 
-      Widget.elastic_index.create_and_deploy if Widget.elastic_index.all_names.empty?
-
-      ElasticRecord::Config.models.each do |model|
-        model.elastic_index.enable_deferring!
+        ElasticRecord::Config.models.each do |model|
+          model.elastic_index.enable_deferring!
+        end
       end
-    end
 
-    def teardown
-      ElasticRecord::Config.models.each do |model|
-        model.elastic_index.reset_deferring!
+      def teardown
+        ElasticRecord::Config.models.each do |model|
+          model.elastic_index.reset_deferring!
+        end
       end
     end
   end

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::AdminTest < MiniTest::Spec
+class ElasticRecord::Relation::AdminTest < MiniTest::Unit::TestCase
   def test_create_percolator
     Widget.elastic_index.reset_percolator
 

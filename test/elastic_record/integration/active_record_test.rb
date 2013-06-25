@@ -28,7 +28,7 @@ class Project < ActiveRecord::Base
   )
 end
 
-class ElasticRecord::ActiveRecordTest < MiniTest::Spec
+class ElasticRecord::ActiveRecordTest < MiniTest::Unit::TestCase
   def test_load_elastic_record_hits
     poo_product = Project.create! name: "Poo"
     bear_product = Project.create! name: "Bear"
