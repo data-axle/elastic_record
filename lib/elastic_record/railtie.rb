@@ -15,5 +15,15 @@ module ElasticRecord
         include ElasticRecord::Railties::ControllerRuntime
       end
     end
+
+    initializer "elastic_record.orm" do |app|
+      ActiveSupport.on_load(:active_record) do
+        require 'elastic_record/integration/active_record'
+      end
+
+      ActiveSupport.on_load(:cassandra_object) do
+        require 'elastic_record/integration/cassandra_object'
+      end
+    end
   end
 end

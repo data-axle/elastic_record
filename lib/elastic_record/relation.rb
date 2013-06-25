@@ -42,7 +42,7 @@ module ElasticRecord
     def to_a
       @records ||= begin
         scope = select_values.any? ? klass.select(select_values) : klass
-        records = scope.find(to_ids)
+        records = scope.load_elastic_record_hits(to_ids)
         eager_load_associations(records) if eager_loading?
         records
       end

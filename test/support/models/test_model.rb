@@ -20,6 +20,10 @@ module TestModel
       @_test_cache ||= []
     end
 
+    def load_elastic_record_hits(*args)
+      find(*args)
+    end
+
     def find(ids)
       ids.map { |id| _test_cache.detect { |m| m.id.to_s == id.to_s } || new(id: id, color: 'red') }
     end
