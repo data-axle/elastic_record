@@ -25,7 +25,10 @@ module TestModel
     end
 
     def find(ids)
-      ids.map { |id| _test_cache.detect { |m| m.id.to_s == id.to_s } || new(id: id, color: 'red') }
+      ids.map do |id|
+        record = _test_cache.detect { |m| m.id.to_s == id.to_s }
+        record.nil? ? new(id: id, color: 'red') : record.clone
+      end
     end
 
     def primary_key
@@ -66,6 +69,7 @@ module TestModel
     self.attributes = attrs
     cloned = self.clone
     cloned.id = cloned.id.to_s
+    self.class._test_cache.delete_if { |record| record.id == cloned.id }
     self.class._test_cache << cloned
   end
 
