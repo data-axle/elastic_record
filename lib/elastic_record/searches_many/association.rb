@@ -31,7 +31,7 @@ module ElasticRecord
           owner.send("#{reflection.touch_column}=", Time.current)
         end
       end
-  
+
       def reader
         CollectionProxy.new(self)
       end
@@ -95,6 +95,7 @@ module ElasticRecord
       end
 
       private
+
         def load_persisted_collection?
           !loaded? || owner.new_record?
         end

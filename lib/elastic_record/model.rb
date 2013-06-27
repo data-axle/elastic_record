@@ -30,7 +30,7 @@ module ElasticRecord
       end
 
       def arelastic
-        @arelastic ||= Arelastic::Builders::Search.new
+        Arelastic::Builders::Search
       end
 
       def elastic_index
