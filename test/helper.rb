@@ -9,6 +9,7 @@ require 'support/models/test_model'
 require 'support/models/warehouse'
 require 'support/models/widget'
 require 'support/models/option'
+require 'pp'
 
 ElasticRecord::Config.model_names = %w(Warehouse Widget Option)
 
