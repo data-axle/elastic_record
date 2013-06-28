@@ -90,6 +90,8 @@ module ElasticRecord
       private
 
         def verify_bulk_results(results)
+          return unless results.is_a?(Hash)
+
           errors = results['items'].select do |item|
             item.values.first['error']
           end
