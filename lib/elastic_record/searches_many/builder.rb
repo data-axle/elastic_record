@@ -10,14 +10,14 @@ module ElasticRecord
         @model, @name, @options = model, name, options
       end
 
-      def build        
+      def build
         define_writer
         define_reader
 
         reflection = ElasticRecord::SearchesMany::Reflection.new(model, name, options)
         model.searches_many_reflections = model.searches_many_reflections.merge(name => reflection)
 
-        model.add_autosave_callbacks(reflection) # if options[:autosave]
+        model.add_autosave_callbacks(reflection) if options[:autosave]
       end
 
       def mixin

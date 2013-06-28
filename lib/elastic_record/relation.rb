@@ -82,6 +82,7 @@ module ElasticRecord
       end
 
       def eager_load_associations(records)
+        records = records.reject(&:marked_for_destruction?)
         ids = records.map(&:id)
         eager_load_values.each do |to_load|
           reflection = klass.searches_many_reflections[to_load] ||(raise "searches_many #{to_load} does not exist on #{klass}")
