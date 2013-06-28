@@ -63,7 +63,7 @@ module ElasticRecord
         yield
         if @_batch.any?
           body = @_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-          connection.json_post "/_bulk", body
+          verify_bulk_results connection.json_post("/_bulk", body)
         end
       ensure
         @_batch = nil
@@ -86,6 +86,16 @@ module ElasticRecord
           model.superclass.elastic_index.current_batch
         end
       end
+
+      private
+
+        def verify_bulk_results(results)
+          errors = results['items'].select do |item|
+            item.values.first['error']
+          end
+
+          raise ElasticRecord::BulkError.new(errors) unless errors.empty?
+        end
     end
   end
 end

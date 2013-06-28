@@ -7,4 +7,7 @@ module ElasticRecord
 
   class ScrollKeepAliveError < Error
   end
+
+  class BulkError < Error
+  end
 end

@@ -74,6 +74,16 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
     assert_nil index.instance_variable_get(:@_batch)
   end
 
+  def test_bulk_error
+    index.bulk do
+      index.index_document '5', color: 'green'
+      index.index_document '3', color: {'bad' => 'stuff'}
+    end
+    assert false, 'Expected ElasticRecord::BulkError'
+  rescue => e
+    assert_match '[{"index"', e.message
+  end
+
   def test_bulk_inheritence
     index.bulk do
       InheritedWidget.elastic_index.index_document '5', color: 'green'
@@ -85,9 +95,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
       assert_equal expected, index.instance_variable_get(:@_batch)
     end
   end
-
-
-
 
   private
 
