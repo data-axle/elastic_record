@@ -75,7 +75,7 @@ module ElasticRecord
         if @shuffled_servers.nil?
           @shuffled_servers = servers.shuffle
         else
-          @shuffled_servers.push(@shuffled_servers.shift)
+          @shuffled_servers.rotate!
         end
 
         @shuffled_servers.first
