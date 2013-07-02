@@ -14,11 +14,11 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {}, &block)
-        options.assert_valid_keys(:batch_size, :keep_alive, :skip_scroll_validation)
+        options.assert_valid_keys(:batch_size, :keep_alive, :scroll_validation)
 
         scroll_keep_alive = options[:keep_alive] || ElasticRecord::Config.scroll_keep_alive
         size = options[:batch_size] || 100
-        skip_scroll_validation = options.delete :skip_scroll_validation
+        scroll_validation = options.delete :scroll_validation
 
         options = {
           scroll: scroll_keep_alive,
@@ -35,10 +35,9 @@ module ElasticRecord
           hit_count += hit_ids.size
           hit_ids.each_slice(size, &block)
         end
-        if !skip_scroll_validation && (hit_count < total_hits)
+        if scroll_validation && (hit_count < total_hits)
           raise ScrollKeepAliveError.new("Scan returned fewer than expected results: Search=#{as_elastic}; Options=#{options}; Expected Hits: #{total_hits}; Hits: #{hit_count}")
         end
-
       end
 
       def reindex

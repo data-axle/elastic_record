@@ -68,7 +68,7 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Unit::TestCase
 
   def test_scroll_validation
     results = []
-    Widget.elastic_relation.find_in_batches(skip_scroll_validation: true) do |widgets|
+    Widget.elastic_relation.find_in_batches(scroll_validation: true) do |widgets|
       results << widgets.map(&:id)
     end
     assert_equal [['5', '10', '15'].to_set], results.map(&:to_set)
