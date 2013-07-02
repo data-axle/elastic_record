@@ -66,6 +66,14 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Unit::TestCase
 
   end
 
+  def test_scroll_validation
+    results = []
+    Widget.elastic_relation.find_in_batches(skip_scroll_validation: true) do |widgets|
+      results << widgets.map(&:id)
+    end
+    assert_equal [['5', '10', '15'].to_set], results.map(&:to_set)
+  end
+
   private
     def create_widgets
       Widget.elastic_index.bulk_add [
