@@ -5,9 +5,6 @@ module ElasticRecord
   class ConnectionError < Error
   end
 
-  class ScrollKeepAliveError < Error
-  end
-
   class BulkError < Error
   end
 end
