@@ -58,12 +58,13 @@ module ElasticRecord
         connection.json_get("/_search/scroll?#{options.to_query}")
       end
 
-      def bulk
+      def bulk(options = {})
         @_batch = []
         yield
         if @_batch.any?
           body = @_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-          verify_bulk_results connection.json_post("/_bulk", body)
+          results = connection.json_post("/_bulk?#{options.to_query}", body)
+          verify_bulk_results(results)
         end
       ensure
         @_batch = nil
