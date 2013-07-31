@@ -5,6 +5,9 @@ module ElasticRecord
         extend Searching
         extend ClassMethods
         include SearchesMany
+
+        class_attribute :elastic_connection
+        self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
       end
     end
 
@@ -15,14 +18,6 @@ module ElasticRecord
         if child < child.base_class
           child.elastic_index = elastic_index.dup
         end
-      end
-
-      def elastic_connection
-        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
-      end
-
-      def elastic_connection=(connection)
-        @elastic_connection = connection
       end
 
       def elastic_relation
