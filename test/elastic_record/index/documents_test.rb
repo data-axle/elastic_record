@@ -68,10 +68,10 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
         {color: "green"},
         {delete: {_index: "widgets", _type: "widget", _id: "3"}}
       ]
-      assert_equal expected, index.instance_variable_get(:@_batch)
+      assert_equal expected, index.current_bulk_batch
     end
 
-    assert_nil index.instance_variable_get(:@_batch)
+    assert_nil index.current_bulk_batch
   end
 
   def test_bulk_error
@@ -92,7 +92,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
         {index: {_index: "widgets", _type: "widget", _id: "5"}},
         {color: "green"}
       ]
-      assert_equal expected, index.instance_variable_get(:@_batch)
+      assert_equal expected, index.current_bulk_batch
     end
   end
 
