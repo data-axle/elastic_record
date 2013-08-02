@@ -101,13 +101,7 @@ module ElasticRecord
         end
 
         def persisted_collection
-          @persisted_collection ||= begin
-            if reflection.counter_cache_column && (owner.send(reflection.counter_cache_column).nil? || owner.send(reflection.counter_cache_column) == 0)
-              []
-            else
-              scope.to_a
-            end
-          end
+          @persisted_collection ||= scope.to_a
         end
 
         def merge_collections(existing_records, new_records)
