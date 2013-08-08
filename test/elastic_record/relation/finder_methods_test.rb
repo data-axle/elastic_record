@@ -35,6 +35,13 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Unit::TestCase
     assert_nil Widget.elastic_relation.filter('color' => 'green').first
   end
 
+  def test_first_with_bang
+    assert_equal '10', Widget.elastic_relation.order('color').first!.id
+    assert_raises ActiveRecord::RecordNotFound do
+      Widget.elastic_relation.filter('color' => 'green').first!
+    end
+  end
+
   def test_last
     assert_equal '05', Widget.elastic_relation.order('color').last.id
     assert_equal '05', Widget.elastic_relation.order('color' => 'asc').last.id

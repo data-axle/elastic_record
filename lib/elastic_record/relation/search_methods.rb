@@ -39,6 +39,14 @@ module ElasticRecord
         clone.filter!(*args)
       end
 
+      def find_by(*args)
+        filter(*args).first
+      end
+
+      def find_by!(*args)
+        filter(*args).first!
+      end
+
       def eager_load!(*args)
         self.eager_load_values += args.flatten
         self

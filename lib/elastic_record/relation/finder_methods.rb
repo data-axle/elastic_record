@@ -5,7 +5,7 @@ module ElasticRecord
         ids = ids.flatten
         case ids.size
         when 0; raise ActiveRecord::RecordNotFound.new('empty argument')
-        when 1; filter(arelastic.filter.ids(ids)).to_a.first || (raise ActiveRecord::RecordNotFound)
+        when 1; filter(arelastic.filter.ids(ids)).first!
         else
           filter(arelastic.filter.ids(ids))
         end
@@ -13,6 +13,10 @@ module ElasticRecord
 
       def first
         find_one self
+      end
+
+      def first!
+        first or raise ActiveRecord::RecordNotFound
       end
 
       def last

@@ -57,6 +57,19 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Unit::TestCase
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_find_by
+    Widget.elastic_index.bulk_add [
+      Widget.new(color: 'red', id: '05'),
+      Widget.new(color: 'blue', id: '10'),
+    ]
+
+    assert_equal '05', relation.find_by(color: 'red').id
+    assert_equal '05', relation.find_by!(color: 'red').id
+    assert_raises ActiveRecord::RecordNotFound do
+      relation.find_by!(color: 'green')
+    end
+  end
+
   def test_query_with_only_query
     relation.query!('foo')
 
