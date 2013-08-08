@@ -19,8 +19,6 @@ module ElasticRecord
           other_record.is_a?(Hash) ? klass.new(other_record) : other_record
         end
 
-        original_target = load_collection.dup
-
         delete(load_collection - other_records)
         merge_collections(load_collection, other_records)
         concat(other_records - load_collection)
