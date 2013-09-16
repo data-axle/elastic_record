@@ -5,8 +5,8 @@ module ElasticRecord
         unless exists? percolator_index_name
           create percolator_index_name
         else
-          delete_mapping(percolator_index_name) if type_exists?(percolator_index_name)
-          update_mapping percolator_index_name
+          # delete_mapping(percolator_index_name) if type_exists?(percolator_index_name)
+          # update_mapping percolator_index_name
         end
 
         connection.json_put "/_percolator/#{percolator_index_name}/#{name}", elastic_query
