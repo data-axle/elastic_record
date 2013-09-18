@@ -48,7 +48,7 @@ class ElasticRecord::RelationTest < MiniTest::Unit::TestCase
     widgets = widgets.to_a
 
     assert_no_queries do
-      assert_equal ["5", "10"], widgets.first.options.map(&:id)
+      assert_equal ["5", "10"].to_set, widgets.first.options.map(&:id).to_set
     end
 
   end
@@ -67,7 +67,7 @@ class ElasticRecord::RelationTest < MiniTest::Unit::TestCase
     widgets = widgets.to_a
 
     assert_no_queries do
-      assert_equal ["5", "10"], widgets.first.options.map(&:id)
+      assert_equal ["5", "10"].to_set, widgets.first.options.map(&:id).to_set
     end
 
   end
