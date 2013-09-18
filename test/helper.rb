@@ -15,6 +15,8 @@ ElasticRecord::Config.model_names = %w(Warehouse Widget Option)
 
 FakeWeb.allow_net_connect = %r[^https?://127.0.0.1]
 
+# Widget.elastic_index.create_and_deploy if Widget.elastic_index.all_names.empty?
+
 module MiniTest
   class Unit
     class TestCase

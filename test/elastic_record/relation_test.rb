@@ -75,7 +75,7 @@ class ElasticRecord::RelationTest < MiniTest::Unit::TestCase
   def test_to_ids
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
-    assert_equal ['5', '10'], Widget.elastic_relation.to_ids
+    assert_equal ['5', '10'].to_set, Widget.elastic_relation.to_ids.to_set
   end
 
   def test_to_a

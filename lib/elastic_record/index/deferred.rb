@@ -47,11 +47,15 @@ module ElasticRecord
 
             if READ_METHODS.include?(method)
               flush!
-              index.real_connection.json_post "/#{index.alias_name}/_refresh"
+              index.real_connection.json_post("/#{index.alias_name}/_refresh") if requires_refresh?(method, *args)
               index.real_connection.send(method, *args, &block)
             else
               deferred_actions << DeferredAction.new(method, args, block)
             end
+          end
+
+          def requires_refresh?(method, *args)
+            method == :json_get && args.first =~ /_search/
           end
       end
 
