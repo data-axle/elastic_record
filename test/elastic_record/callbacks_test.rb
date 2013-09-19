@@ -44,6 +44,21 @@ class ElasticRecord::CallbacksTest < MiniTest::Unit::TestCase
     end
   end
 
+
+  def test_as_dirty_search
+    Widget.new(id: '10', color: 'green').tap do |widget|
+      assert_equal({color: "green"}, widget.as_dirty_search)
+    end
+
+    Widget.new(id: '10').tap do |widget|
+      assert_equal({}, widget.as_dirty_search)
+    end
+
+    Widget.new(id: '10', color: '').tap do |widget|
+      assert_equal({}, widget.as_dirty_search)
+    end
+  end
+
   class DisablingModel
     include TestModel
 

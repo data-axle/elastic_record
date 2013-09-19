@@ -81,7 +81,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Unit::TestCase
     end
     assert false, 'Expected ElasticRecord::BulkError'
   rescue => e
-    assert_match '[{"index"', e.message
+    assert_match 'MapperParsingException', e.message
   end
 
   def test_bulk_inheritence

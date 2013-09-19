@@ -3,28 +3,37 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     module Documents
-      def index_record(record, index_name = nil)
+      def index_record(record, index_name = alias_name)
         return if disabled
 
-        index_document(record.send(record.class.primary_key), record.as_search, index_name)
+        index_document(record.send(record.class.primary_key), record.as_dirty_search, index_name)
       end
 
-      def index_document(id, document, index_name = nil)
+      # def index_document(id, document, index_name = alias_name)
+      #   return if disabled
+      #
+      #   if batch = current_bulk_batch
+      #     batch << { index: { _index: index_name, _type: type, _id: id } }
+      #     batch << document
+      #   else
+      #     connection.json_put "/#{index_name}/#{type}/#{id}", document
+      #   end
+      # end
+
+      def index_document(id, document, index_name = alias_name)
+      # def update_document(id, document, index_name = alias_name)
         return if disabled
 
-        index_name ||= alias_name
-
+        params = {doc: document, doc_as_upsert: true}
         if batch = current_bulk_batch
-          batch << { index: { _index: index_name, _type: type, _id: id } }
-          batch << document
+          batch << { update: { _index: index_name, _type: type, _id: id } }
+          batch << params
         else
-          connection.json_put "/#{index_name}/#{type}/#{id}", document
+          connection.json_post "/#{index_name}/#{type}/#{id}/_update", params
         end
       end
 
-      def delete_document(id, index_name = nil)
-        index_name ||= alias_name
-
+      def delete_document(id, index_name = alias_name)
         if batch = current_bulk_batch
           batch << { delete: { _index: index_name, _type: type, _id: id } }
         else
