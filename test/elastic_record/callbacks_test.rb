@@ -44,6 +44,40 @@ class ElasticRecord::CallbacksTest < MiniTest::Unit::TestCase
     end
   end
 
+  class SpecialFieldsModel
+    include TestModel
+
+    class Author
+      def as_search
+        {name: 'Jonny'}
+      end
+    end
+
+    self.elastic_index.mapping[:properties].update(
+      author: {
+        type: :object
+      },
+      commenters: {
+        type: :nested
+      }
+    )
+
+    def author
+      Author.new
+    end
+
+    def commenters
+      [Author.new, Author.new]
+    end
+  end
+
+  def test_as_search_with_special_fields
+    doc = SpecialFieldsModel.new.as_search
+
+    assert_equal({name: 'Jonny'}, doc[:author])
+    assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
+  end
+
   class DisablingModel
     include TestModel
 

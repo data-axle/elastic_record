@@ -28,6 +28,11 @@ module ElasticRecord
         end
       end
 
+      def reset_percolator
+        delete(percolator_index_name) if exists?(percolator_index_name)
+        create(percolator_index_name)
+      end
+
       def percolator_index_name
         alias_name
         # @percolator_index_name ||= "percolate_#{alias_name}"

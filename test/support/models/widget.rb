@@ -9,7 +9,7 @@ class Widget
 
   self.elastic_index.mapping[:properties].update(
     name: {
-      type: 'multi_field', 
+      type: 'multi_field',
       fields: {
         name: {type: 'string', index: 'not_analyzed'},
         analyzed: {type: 'string', index: 'analyzed'}
