@@ -2,6 +2,9 @@ module ElasticRecord
   class Index
     module Percolator
       def create_percolator(name, elastic_query)
+        unless exists? percolator_index_name
+          create percolator_index_name
+        end
         connection.json_put "/_percolator/#{percolator_index_name}/#{name}", elastic_query
       end
 
@@ -34,8 +37,7 @@ module ElasticRecord
       end
 
       def percolator_index_name
-        alias_name
-        # @percolator_index_name ||= "percolate_#{alias_name}"
+        @percolator_index_name ||= "percolate_#{alias_name}"
       end
     end
   end
