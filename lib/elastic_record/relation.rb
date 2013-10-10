@@ -41,8 +41,7 @@ module ElasticRecord
 
     def to_a
       @records ||= begin
-        scope = select_values.any? ? klass.select(select_values) : klass
-        records = scope.load_elastic_record_hits(to_ids)
+        records = load_hits(to_ids)
         eager_load_associations(records) if eager_loading?
         records
       end
@@ -79,6 +78,14 @@ module ElasticRecord
 
       def search_results
         @search_results ||= klass.elastic_index.search(as_elastic)
+      end
+
+      def load_hits(ids)
+        scope = select_values.any? ? klass.select(select_values) : klass
+        if defined?(ActiveRecord::Base) && klass < ActiveRecord::Base
+          scope = scope.order("FIELD(#{connection.quote_column_name(primary_key)}, #{ids.join(',')})")
+        end
+        scope.find(ids)
       end
 
       def eager_load_associations(records)
