@@ -19,9 +19,9 @@ ActiveSupport.on_load :active_record do
   end
 end
 
-require 'elastic_record/integration/active_record'
 class Project < ActiveRecord::Base
   include ElasticRecord::Model
+  include ElasticRecord::Callbacks
 
   self.elastic_index.mapping[:properties].update(
     name: { type: 'string', index: 'not_analyzed' }
@@ -29,11 +29,17 @@ class Project < ActiveRecord::Base
 end
 
 class ElasticRecord::ActiveRecordTest < MiniTest::Unit::TestCase
-  def test_load_elastic_record_hits
+  def setup
+    super
+    Project.elastic_index.create_and_deploy if Project.elastic_index.all_names.empty?
+  end
+
+  def test_ordering
     poo_product = Project.create! name: "Poo"
     bear_product = Project.create! name: "Bear"
+    Project.elastic_index.refresh
 
-    assert_equal [poo_product, bear_product], Project.load_elastic_record_hits([poo_product.id, bear_product.id])
-    assert_equal [bear_product, poo_product], Project.load_elastic_record_hits([bear_product.id, poo_product.id])
+    assert_equal [bear_product, poo_product], Project.elastic_relation.order(name: 'asc')
+    assert_equal [poo_product, bear_product], Project.elastic_relation.order(name: 'desc')
   end
 end
