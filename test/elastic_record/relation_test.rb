@@ -25,53 +25,6 @@ class ElasticRecord::RelationTest < MiniTest::Unit::TestCase
     # assert Widget.elastic_relation.search_results.is_a?(ElasticSearch::Api::Hits)
   end
 
-  def test_eager_loading?
-    assert Widget.elastic_relation.eager_load(:options).eager_loading?
-  end
-
-  def test_eager_loading_is_not_default
-    assert !Widget.elastic_relation.eager_loading?
-  end
-
-  def test_eager_load_on_collection_proxy
-
-    warehouse = Warehouse.new
-    widget = Widget.new(warehouse_id: warehouse.id)
-    Widget.elastic_index.bulk_add [ widget ]
-
-    Option.elastic_index.bulk_add [
-      Option.new(id:  5, widget_id: widget.id),
-      Option.new(id: 10, widget_id: widget.id),
-    ]
-
-    widgets = warehouse.widgets.eager_load(:options)
-    widgets = widgets.to_a
-
-    assert_no_queries do
-      assert_equal ["5", "10"].to_set, widgets.first.options.map(&:id).to_set
-    end
-
-  end
-
-  def test_eager_load_on_relation
-
-    widget = Widget.new
-    Widget.elastic_index.bulk_add [ widget ]
-
-    Option.elastic_index.bulk_add [
-      Option.new(id:  5, widget_id: widget.id),
-      Option.new(id: 10, widget_id: widget.id),
-    ]
-
-    widgets = Widget.elastic_relation.eager_load(:options)
-    widgets = widgets.to_a
-
-    assert_no_queries do
-      assert_equal ["5", "10"].to_set, widgets.first.options.map(&:id).to_set
-    end
-
-  end
-
   def test_to_ids
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
