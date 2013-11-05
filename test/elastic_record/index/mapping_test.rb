@@ -6,7 +6,7 @@ class ElasticRecord::Index::MappingTest < MiniTest::Unit::TestCase
     index.get_mapping(index_name)
 
     index.delete_mapping(index_name)
-    
+
     assert_raises ElasticRecord::ConnectionError do
       index.get_mapping(index_name)
     end
@@ -20,11 +20,12 @@ class ElasticRecord::Index::MappingTest < MiniTest::Unit::TestCase
   end
 
   def test_merge_mapping
-    index = ElasticRecord::Index.new(Widget)
     index.mapping.clear
-    index.mapping[:properties] = {field: {type: 'string'}}
-    custom = {properties: {field: {type: 'integer'}}, other: 'stuff'}
+    index.mapping[:properties] = {color: {type: 'string'}}
+
+    custom = {properties: {color: {type: 'integer'}}, other: 'stuff'}
     index.mapping = custom
+
     assert_equal custom, index.mapping
   end
 

@@ -17,8 +17,6 @@ module MiniTest
   class Unit
     class TestCase
       def setup
-        # Widget._test_cache.clear
-
         FakeWeb.clean_registry
 
         ElasticRecord::Config.models.each do |model|
