@@ -1,8 +1,8 @@
 module ElasticRecord
   class Index
     module Mapping
-      def mapping=(mapping)
-        mapping.deep_merge!(mapping)
+      def mapping=(custom_mapping)
+        mapping.deep_merge!(custom_mapping)
       end
 
       def update_mapping(index_name = alias_name)
