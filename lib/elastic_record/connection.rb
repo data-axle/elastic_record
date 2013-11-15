@@ -51,10 +51,10 @@ module ElasticRecord
     end
 
     METHODS = {
-      head: Net::HTTP::Head,
-      get: Net::HTTP::Get,
-      post: Net::HTTP::Post,
-      put: Net::HTTP::Put,
+      head:   Net::HTTP::Head,
+      get:    Net::HTTP::Get,
+      post:   Net::HTTP::Post,
+      put:    Net::HTTP::Put,
       delete: Net::HTTP::Delete
     }
 
