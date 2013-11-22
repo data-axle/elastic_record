@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::ConnectionTest < MiniTest::Unit::TestCase
   def test_servers
-    assert_equal ['foo', 'bar'], ElasticRecord::Connection.new('foo,bar').servers
+    assert_equal ['foo'], ElasticRecord::Connection.new('foo').servers
     assert_equal ['foo', 'bar'], ElasticRecord::Connection.new(['foo', 'bar']).servers
   end
 
@@ -43,7 +43,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Unit::TestCase
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
       FakeWeb.register_uri :get, %r[/error], responses
-      assert_raises(Errno::ECONNREFUSED) { connection.json_get("/error") }      
+      assert_raises(Errno::ECONNREFUSED) { connection.json_get("/error") }
     end
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|

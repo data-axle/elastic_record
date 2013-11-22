@@ -7,11 +7,7 @@ module ElasticRecord
     attr_accessor :max_request_count
     attr_accessor :bulk_stack
     def initialize(servers, options = {})
-      if servers.is_a?(Array)
-        self.servers = servers
-      else
-        self.servers = servers.split(',')
-      end
+      self.servers = Array(servers)
 
       self.current_server     = next_server
       self.request_count      = 0
