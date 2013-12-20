@@ -58,7 +58,10 @@ module ElasticRecord
       with_retry do
         request = METHODS[method].new(path)
         request.body = body
-        http = new_http
+        http, uri = new_http
+        if uri.user || uri.password
+          request.basic_auth uri.user, uri.password
+        end
 
         ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
           payload[:http]      = http
@@ -87,13 +90,13 @@ module ElasticRecord
           self.request_count = 0
         end
 
-        host, port = current_server.split ':'
-
-        http = Net::HTTP.new(host, port)
+        uri = URI(current_server.start_with?('http') ? current_server : "http://#{current_server}")
+        http = Net::HTTP.new(uri.host, uri.port)
         if options[:timeout]
           http.read_timeout = options[:timeout].to_i
         end
-        http
+
+        [http, uri]
       end
 
       def with_retry
