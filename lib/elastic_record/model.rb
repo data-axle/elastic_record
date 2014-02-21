@@ -4,6 +4,7 @@ module ElasticRecord
       base.class_eval do
         extend Searching
         extend ClassMethods
+        include Callbacks
 
         class_attribute :elastic_connection
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)

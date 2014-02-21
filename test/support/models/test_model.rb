@@ -10,8 +10,6 @@ module TestModel
     include ActiveModel::Validations
 
     include ElasticRecord::Model
-    include ElasticRecord::Callbacks
-
   end
 
   module ClassMethods

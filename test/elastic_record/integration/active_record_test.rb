@@ -7,7 +7,6 @@ require 'pg'
 
 class Project < ActiveRecord::Base
   include ElasticRecord::Model
-  include ElasticRecord::Callbacks
 
   self.elastic_index.mapping[:properties].update(
     name: { type: 'string', index: 'not_analyzed' }
