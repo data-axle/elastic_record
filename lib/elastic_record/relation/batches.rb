@@ -1,5 +1,26 @@
 module ElasticRecord
   class Relation
+    class ScanSearch
+      def initialize(model, scroll_id, options = {})
+        @model     = model
+        @scroll_id = scroll_id
+        @options   = options
+      end
+
+      def request_more_ids
+        json = @model.elastic_index.scroll(@scroll_id, keep_alive)
+        json['hits']['hits'].map { |hit| hit['_id'] }
+      end
+
+      def keep_alive
+        @options[:keep_alive] || (raise "Must provide a :keep_alive option")
+      end
+
+      def requested_batch_size
+        @options[:batch_size]
+      end
+    end
+
     module Batches
       def find_each(options = {})
         find_in_batches(options) do |records|
@@ -14,24 +35,10 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {}, &block)
-        options.assert_valid_keys(:batch_size, :keep_alive)
+        scan_search = create_scan_search(options)
 
-        scroll_keep_alive = options[:keep_alive] || ElasticRecord::Config.scroll_keep_alive
-        size = options[:batch_size] || 100
-
-        options = {
-          scroll: scroll_keep_alive,
-          size: size,
-          search_type: 'scan'
-        }.update(options)
-
-        search_result = klass.elastic_index.search(as_elastic, options)
-        scroll_id = search_result['_scroll_id']
-        hit_count = 0
-
-        while (hit_ids = get_scroll_hit_ids(scroll_id, scroll_keep_alive)).any?
-          hit_count += hit_ids.size
-          hit_ids.each_slice(size, &block)
+        while (hit_ids = scan_search.request_more_ids).any?
+          hit_ids.each_slice(scan_search.requested_batch_size, &block)
         end
       end
 
@@ -41,12 +48,15 @@ module ElasticRecord
         end
       end
 
-      private
+      def create_scan_search(options = {})
+        options[:batch_size] ||= 100
+        options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
 
-        def get_scroll_hit_ids(scroll_id, scroll_keep_alive)
-          json = klass.elastic_index.scroll(scroll_id, scroll_keep_alive)
-          json['hits']['hits'].map { |hit| hit['_id'] }
-        end
+        search_options = {search_type: 'scan', size: options[:batch_size], scroll: options[:keep_alive]}
+        json = klass.elastic_index.search(as_elastic, search_options)
+
+        ElasticRecord::Relation::ScanSearch.new(klass, json['_scroll_id'], options)
+      end
     end
   end
 end
