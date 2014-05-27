@@ -53,17 +53,22 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Unit::TestCase
   def test_find_offset_shards
     create_additional_widgets
 
-    #assert_queries 3 do
-      results = []
-      Widget.elastic_relation.find_ids_in_batches(batch_size: 1) do |ids|
-        results << ids
-      end
-    #end
+    results = []
+    Widget.elastic_relation.find_ids_in_batches(batch_size: 1) do |ids|
+      results << ids
+    end
 
     assert_equal 8, results.size
     results.each do |r| assert_equal 1, r.size end
     assert_equal ['5', '10', '15', '20', '25', '30', '35', '40'].to_set, results.flatten.to_set
+  end
 
+  def test_create_scan_search
+    scan_search = Widget.elastic_relation.create_scan_search
+
+    assert_equal 3, scan_search.total_hits
+    refute_nil scan_search.scroll_id
+    assert_equal 3, scan_search.request_more_ids.size
   end
 
   private

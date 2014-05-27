@@ -2,6 +2,7 @@ module ElasticRecord
   class Relation
     class ScanSearch
       attr_reader :scroll_id
+      attr_accessor :total_hits
 
       def initialize(model, scroll_id, options = {})
         @model     = model
@@ -57,7 +58,9 @@ module ElasticRecord
         search_options = {search_type: 'scan', size: options[:batch_size], scroll: options[:keep_alive]}
         json = klass.elastic_index.search(as_elastic, search_options)
 
-        ElasticRecord::Relation::ScanSearch.new(klass, json['_scroll_id'], options)
+        ElasticRecord::Relation::ScanSearch.new(klass, json['_scroll_id'], options).tap do |scan_search|
+          scan_search.total_hits = json['hits']['total']
+        end
       end
     end
   end
