@@ -1,6 +1,8 @@
 module ElasticRecord
   class Relation
     class ScanSearch
+      attr_reader :scroll_id
+
       def initialize(model, scroll_id, options = {})
         @model     = model
         @scroll_id = scroll_id
