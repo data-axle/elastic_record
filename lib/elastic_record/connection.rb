@@ -12,7 +12,7 @@ module ElasticRecord
       self.current_server     = next_server
       self.request_count      = 0
       self.max_request_count  = 100
-      self.options            = options
+      self.options            = options.symbolize_keys
       self.bulk_stack        = []
     end
 

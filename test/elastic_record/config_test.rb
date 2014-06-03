@@ -10,4 +10,8 @@ class ElasticRecord::ConfigTest < MiniTest::Unit::TestCase
 
     assert_equal [Warehouse, Widget], ElasticRecord::Config.models
   end
+
+  def test_settings
+    
+  end
 end

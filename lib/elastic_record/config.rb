@@ -17,6 +17,14 @@ module ElasticRecord
       def models
         @models ||= model_names.map { |model_name| model_name.constantize }
       end
+
+      def settings=(settings)
+        self.servers = settings['servers']
+        self.connection_options = settings['options']
+        if scroll_keep_alive = settings['scroll_keep_alive'].presence
+          self.scroll_keep_alive = scroll_keep_alive
+        end
+      end
     end
   end
 end

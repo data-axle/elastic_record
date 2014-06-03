@@ -6,6 +6,11 @@ class ElasticRecord::ConnectionTest < MiniTest::Unit::TestCase
     assert_equal ['foo', 'bar'], ElasticRecord::Connection.new(['foo', 'bar']).servers
   end
 
+  def test_options
+    expected = {lol: 'rofl'}
+    assert_equal expected, ElasticRecord::Connection.new('foo', 'lol' => 'rofl').options
+  end
+
   def test_head
     FakeWeb.register_uri(:head, %r[/success], status: ["200", "OK"])
     assert_equal "200", connection.head("/success")

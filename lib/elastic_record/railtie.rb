@@ -4,6 +4,19 @@ module ElasticRecord
       require 'elastic_record/log_subscriber'
     end
 
+    initializer "elastic_record.config" do |app|
+      pathname = Rails.root.join('config', 'elasticsearch.yml')
+      if pathname.exist?
+        config = YAML.load(pathname.read)
+
+        if config = config[Rails.env]
+          ElasticRecord::Config.settings = config
+        else
+          raise "Missing environment #{Rails.env} in superstore.yml"
+        end
+      end
+    end
+
     rake_tasks do
       load "elastic_record/tasks/index.rake"
     end
