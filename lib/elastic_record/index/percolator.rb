@@ -2,36 +2,41 @@ module ElasticRecord
   class Index
     module Percolator
       def create_percolator(name, elastic_query)
-        connection.json_put "/#{alias_name}/.percolator/#{name}", elastic_query
+        connection.json_put "/#{percolator_name}/.percolator/#{name}", elastic_query
       end
 
       def delete_percolator(name)
-        connection.json_delete "/#{alias_name}/.percolator/#{name}"
+        connection.json_delete "/#{percolator_name}/.percolator/#{name}"
       end
 
       def percolator_exists?(name)
-        connection.head("/#{alias_name}/.percolator/#{name}") == '200'
+        connection.head("/#{percolator_name}/.percolator/#{name}") == '200'
       end
 
       def get_percolator(name)
-        json = connection.json_get("/#{alias_name}/.percolator/#{name}")
+        json = connection.json_get("/#{percolator_name}/.percolator/#{name}")
         json['_source'] if json['found']
       end
 
       def percolate(document)
-        connection.json_get("/#{alias_name}/#{type}/_percolate", 'doc' => document)['matches']
+        hits = connection.json_get("/#{percolator_name}/#{type}/_percolate", 'doc' => document)['matches']
+        hits.map { |hits| hits['_id']}
       end
 
       def all_percolators
-        if hits = connection.json_get("/#{alias_name}/.percolator/_search?q=*&size=500")['hits']
+        if hits = connection.json_get("/#{percolator_name}/.percolator/_search?q=*&size=500")['hits']
           hits['hits'].map { |hit| hit['_id'] }
         end
       end
 
-      # def reset_percolator
-      #   delete(percolator_index_name) if exists?(percolator_index_name)
-      #   create(percolator_index_name)
-      # end
+      def reset_percolators
+        delete(percolator_name) if exists?(percolator_name)
+        create(percolator_name)
+      end
+
+      def percolator_name
+        "#{alias_name}_percolator"
+      end
     end
   end
 end

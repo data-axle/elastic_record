@@ -23,6 +23,17 @@ class ElasticRecord::Index::PercolatorTest < MiniTest::Test
     refute index.percolator_exists?('green')
   end
 
+  def test_reset_percolators
+    index.disable_deferring!
+
+    index.create_percolator('green', 'query' => {'match' => {'color' => 'green'}})
+    assert index.percolator_exists?('green')
+
+    index.reset_percolators
+
+    refute index.percolator_exists?('green')
+  end
+
   def test_percolate
   end
 
