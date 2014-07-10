@@ -6,18 +6,18 @@ module ElasticRecord
       end
 
       def delete_warmer(name)
-        connection.json_delete "/#{alias_name}/#{type}/_warmer/#{name}"
+        connection.json_delete "/#{alias_name}/_warmer/#{name}"
       end
 
       def get_warmer(name)
-        connection.json_get("/#{alias_name}/#{type}/_warmer/#{name}").values.first['warmers'][name]
+        json = connection.json_get("/#{alias_name}/#{type}/_warmer/#{name}")
+        if json.any?
+          json.values.first['warmers'][name]
+        end
       end
 
       def warmer_exists?(name)
-        get_warmer(name)
-        true
-      rescue ElasticRecord::ConnectionError
-        false
+        !get_warmer(name).nil?
       end
     end
   end
