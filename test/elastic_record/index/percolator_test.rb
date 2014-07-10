@@ -7,7 +7,7 @@ class ElasticRecord::Index::PercolatorTest < MiniTest::Unit::TestCase
     index.delete_percolator('green') if index.percolator_exists?('green')
     index.delete_percolator('blue') if index.percolator_exists?('blue')
 
-    index.create_percolator('green', 'color' => 'green')
+    index.create_percolator('green', 'query' => {'match' => {'color' => 'green'}})
 
     assert index.percolator_exists?('green')
     refute index.percolator_exists?('blue')
@@ -16,7 +16,7 @@ class ElasticRecord::Index::PercolatorTest < MiniTest::Unit::TestCase
   def test_delete_percolator
     index.disable_deferring!
 
-    index.create_percolator('green', 'color' => 'green')
+    index.create_percolator('green', 'query' => {'match' => {'color' => 'green'}})
     assert index.percolator_exists?('green')
 
     index.delete_percolator('green')

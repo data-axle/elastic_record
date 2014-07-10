@@ -10,6 +10,7 @@ module ElasticRecord
       end
 
       def get_warmer(name)
+        p connection.json_get("/#{alias_name}/#{type}/_warmer/#{name}")
         connection.json_get("/#{alias_name}/#{type}/_warmer/#{name}").values.first['warmers'][name]
       end
 
