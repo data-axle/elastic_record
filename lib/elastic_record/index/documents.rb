@@ -37,7 +37,7 @@ module ElasticRecord
       end
 
       def record_exists?(id)
-        get(id)['exists']
+        get(id)['found']
       end
 
       def search(elastic_query, options = {})
