@@ -3,13 +3,11 @@ require 'helper'
 class ElasticRecord::Index::MappingTest < MiniTest::Test
   def test_delete_mapping
     index_name = index.create
-    index.get_mapping(index_name)
+    refute_nil index.get_mapping(index_name)['widget']
 
     index.delete_mapping(index_name)
 
-    assert_raises ElasticRecord::ConnectionError do
-      index.get_mapping(index_name)
-    end
+    assert_nil index.get_mapping(index_name)
   end
 
   def test_default_mapping

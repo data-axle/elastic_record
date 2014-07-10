@@ -41,7 +41,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.index_document('bob', name: 'bob')
     index.index_document('joe', name: 'joe')
 
-    index.delete_by_query(query_string: {query: 'name.analyzed:bob'})
+    index.delete_by_query('query' => {query_string: {query: 'name.analyzed:bob'}})
 
     refute index.record_exists?('bob')
     assert index.record_exists?('joe')

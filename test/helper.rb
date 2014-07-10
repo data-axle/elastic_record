@@ -18,7 +18,7 @@ module MiniTest
       FakeWeb.clean_registry
 
       ElasticRecord::Config.models.each do |model|
-        model.elastic_index.create_and_deploy# if model.elastic_index.all_names.empty?
+        model.elastic_index.create_and_deploy if model.elastic_index.all_names.empty?
         model.elastic_index.enable_deferring!
       end
     end
