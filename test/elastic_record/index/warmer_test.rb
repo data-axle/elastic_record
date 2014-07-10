@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::WarmerTest < MiniTest::Unit::TestCase
+class ElasticRecord::Index::WarmerTest < MiniTest::Test
   # def test_create_warmer
   #   index.delete_warmer('green') if index.warmer_exists?('green')
   #   refute index.warmer_exists?('green')

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::PercolatorTest < MiniTest::Unit::TestCase
+class ElasticRecord::Index::PercolatorTest < MiniTest::Test
   def test_create_percolator
     index.disable_deferring!
 

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::DelegationTest < MiniTest::Unit::TestCase
+class ElasticRecord::Relation::DelegationTest < MiniTest::Test
   def test_delegate_to_array
     Widget.elastic_index.index_document('5', color: 'red')
     

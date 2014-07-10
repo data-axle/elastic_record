@@ -49,7 +49,7 @@ module ElasticRecord
   end
 end
 
-class ElasticRecord::Mysql2Test < MiniTest::Unit::TestCase
+class ElasticRecord::Mysql2Test < MiniTest::Test
   include ElasticRecord::ActiveRecordIntegration
 
   def setup
@@ -64,7 +64,7 @@ class ElasticRecord::Mysql2Test < MiniTest::Unit::TestCase
   end
 end
 
-class ElasticRecord::PostgresqlTest < MiniTest::Unit::TestCase
+class ElasticRecord::PostgresqlTest < MiniTest::Test
   include ElasticRecord::ActiveRecordIntegration
 
   def setup

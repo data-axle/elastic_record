@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::SettingsTest < MiniTest::Unit::TestCase
+class ElasticRecord::Index::SettingsTest < MiniTest::Test
   def test_default_settings
     expected = {}
     assert_equal expected, ElasticRecord::Index.new(Widget).settings

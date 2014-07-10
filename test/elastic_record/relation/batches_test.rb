@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::BatchesTest < MiniTest::Unit::TestCase
+class ElasticRecord::Relation::BatchesTest < MiniTest::Test
   def setup
     super
     create_widgets

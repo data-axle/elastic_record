@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Unit::TestCase
+class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
   def test_query_with_no_queries
     expected = {"match_all" => {}}
 

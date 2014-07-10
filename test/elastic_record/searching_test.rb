@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchingTest < MiniTest::Unit::TestCase
+class ElasticRecord::SearchingTest < MiniTest::Test
   def test_elastic_search
 
   end

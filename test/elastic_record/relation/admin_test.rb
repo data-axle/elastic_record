@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::AdminTest < MiniTest::Unit::TestCase
+class ElasticRecord::Relation::AdminTest < MiniTest::Test
   def test_create_percolator
     index.delete_percolator('green') if index.percolator_exists?('green')
 
