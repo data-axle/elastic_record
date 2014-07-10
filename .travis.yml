@@ -1,7 +1,7 @@
 services:
   - elasticsearch
 rvm:
-  - 2.0.0
+  - 2.1.2
 env:
   - "GEM=ar:mysql2"
   - "GEM=ar:postgresql"
