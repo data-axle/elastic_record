@@ -15,7 +15,7 @@ module ElasticRecord
 
       def get_percolator(name)
         json = connection.json_get("/#{alias_name}/.percolator/#{name}")
-        json['_source'] if json['exists']
+        json['_source'] if json['found']
       end
 
       def percolate(document)
