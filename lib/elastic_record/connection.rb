@@ -92,6 +92,10 @@ module ElasticRecord
 
         uri = URI(current_server.start_with?('http') ? current_server : "http://#{current_server}")
         http = Net::HTTP.new(uri.host, uri.port)
+        if uri.scheme == 'https'
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE if ENV['ELASTIC_RECORD_SSL_VERIFY_NONE'] == '1'
+        end
         if options[:timeout]
           http.read_timeout = options[:timeout].to_i
         end
