@@ -40,7 +40,11 @@ module ElasticRecord
       body = json.is_a?(Hash) ? ActiveSupport::JSON.encode(json) : json
       response = http_request(method, path, body)
 
-      json = ActiveSupport::JSON.decode response.body
+      begin
+        json = ActiveSupport::JSON.decode response.body
+      rescue
+        raise ConnectionError.new(response.body)
+      end
       raise ConnectionError.new(json['error']) if json['error']
 
       json
