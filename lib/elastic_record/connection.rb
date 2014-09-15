@@ -46,18 +46,9 @@ module ElasticRecord
       json
     end
 
-    METHODS = {
-      head:   Net::HTTP::Head,
-      get:    Net::HTTP::Get,
-      post:   Net::HTTP::Post,
-      put:    Net::HTTP::Put,
-      delete: Net::HTTP::Delete
-    }
-
     def http_request(method, path, body = nil)
       with_retry do
-        request = METHODS[method].new(path)
-        request.body = body
+        request = new_request(method, path, body)
         http = new_http
 
         ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
@@ -66,6 +57,19 @@ module ElasticRecord
           payload[:response]  = http.request(request)
         end
       end
+    end
+
+    METHODS = {
+      head:   Net::HTTP::Head,
+      get:    Net::HTTP::Get,
+      post:   Net::HTTP::Post,
+      put:    Net::HTTP::Put,
+      delete: Net::HTTP::Delete
+    }
+    def new_request(method, path, body)
+      request = METHODS[method].new(path)
+      request.basic_auth(options[:username], options[:password]) if options[:username] && options[:password]
+      request.body = body
     end
 
     private
