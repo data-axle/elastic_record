@@ -70,6 +70,7 @@ module ElasticRecord
       request = METHODS[method].new(path)
       request.basic_auth(options[:username], options[:password]) if options[:username] && options[:password]
       request.body = body
+      request
     end
 
     private
