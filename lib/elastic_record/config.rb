@@ -20,7 +20,14 @@ module ElasticRecord
 
       def settings=(settings)
         self.servers = settings['servers']
-        self.connection_options = settings['options']
+
+        if settings['options']
+          # Deprecated route
+          self.connection_options = settings['options']
+        else
+          self.connection_options = settings
+        end
+
         if scroll_keep_alive = settings['scroll_keep_alive'].presence
           self.scroll_keep_alive = scroll_keep_alive
         end
