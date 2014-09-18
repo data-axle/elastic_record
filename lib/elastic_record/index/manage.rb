@@ -79,6 +79,9 @@ module ElasticRecord
 
       def all_names
         connection.json_get("/_mapping/#{type}/").keys
+      rescue
+        # TODO: In ES 1.4, this returns empty rather than a 404
+        []
       end
     end
   end
