@@ -76,10 +76,7 @@ module ElasticRecord
       end
 
       def all_names
-        json = connection.json_get '/_status'
-
-        regex = %r{^#{alias_name}_?}
-        json['indices'].keys.grep(regex)
+        connection.json_get("/_mapping/#{type}/").keys
       end
     end
   end
