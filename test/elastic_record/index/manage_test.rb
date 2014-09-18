@@ -7,7 +7,7 @@ class ElasticRecord::Index::ManageTest < MiniTest::Test
 
   def setup
     super
-    Felon.elastic_index.delete_all
+    Felon.elastic_index.delete('felons*')
   end
 
   def test_create

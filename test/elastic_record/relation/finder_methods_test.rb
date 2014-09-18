@@ -24,7 +24,7 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
 
   def test_find_passed_an_empty_args
     assert_raises ActiveRecord::RecordNotFound do
-      Widget.elastic_relation.find()
+      Widget.elastic_relation.find
     end
   end
 

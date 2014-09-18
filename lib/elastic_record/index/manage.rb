@@ -71,14 +71,18 @@ module ElasticRecord
       end
 
       def aliased_names
-        json = connection.json_get "/#{all_names.join(',')}/_alias"
-        json.keys.select do |index_name|
-          json[index_name]['aliases'].keys.include?(alias_name)
+        if (index_names = all_names).any?
+          json = connection.json_get "/#{index_names.join(',')}/_alias"
+          json.keys.select do |index_name|
+            json[index_name]['aliases'].keys.include?(alias_name)
+          end
+        else
+          []
         end
       end
 
       def all_names
-        connection.json_get("/_mapping/#{type}/").keys
+        connection.json_get("/#{alias_name}/_mapping/#{type}/").keys
       rescue
         # TODO: In ES 1.4, this returns empty rather than a 404
         []

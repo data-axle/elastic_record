@@ -53,7 +53,6 @@ module ElasticRecord
     end
 
     def alias_name
-      # 'poop_face'
       @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
     end
 

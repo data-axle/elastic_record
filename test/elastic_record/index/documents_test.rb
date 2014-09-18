@@ -64,9 +64,9 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
       index.delete_document '3'
 
       expected = [
-        {index: {_index: "widgets", _type: "widget", _id: "5"}},
+        {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
         {color: "green"},
-        {delete: {_index: "widgets", _type: "widget", _id: "3"}}
+        {delete: {_index: index.alias_name, _type: "widget", _id: "3"}}
       ]
       assert_equal expected, index.current_bulk_batch
     end
@@ -89,7 +89,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
       InheritedWidget.elastic_index.index_document '5', color: 'green'
 
       expected = [
-        {index: {_index: "widgets", _type: "widget", _id: "5"}},
+        {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
         {color: "green"}
       ]
       assert_equal expected, index.current_bulk_batch
