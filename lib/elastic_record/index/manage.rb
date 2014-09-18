@@ -71,8 +71,10 @@ module ElasticRecord
       end
 
       def aliased_names
-        json = connection.json_get '/_cluster/state'
-        json["metadata"]["indices"].select { |name, status| status["aliases"].include?(alias_name) }.map { |name, status| name }
+        json = connection.json_get "/#{all_names.join(',')}/_alias"
+        json.keys.select do |index_name|
+          json[index_name]['aliases'].keys.include?(alias_name)
+        end
       end
 
       def all_names
