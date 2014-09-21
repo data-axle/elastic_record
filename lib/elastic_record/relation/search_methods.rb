@@ -155,6 +155,7 @@ module ElasticRecord
             build_limit(limit_value),
             build_offset(offset_value),
             build_facets(facet_values),
+            build_aggregations(aggregation_values),
             build_orders(order_values)
           ].compact
 
@@ -241,6 +242,10 @@ module ElasticRecord
 
         def build_facets(facets)
           Arelastic::Searches::Facets.new(facets) unless facets.empty?
+        end
+
+        def build_aggregations(aggregations)
+          Arelastic::Searches::Aggregations.new(aggregations) unless aggregations.empty?
         end
 
         def build_orders(orders)
