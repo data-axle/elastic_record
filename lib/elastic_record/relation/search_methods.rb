@@ -92,6 +92,20 @@ module ElasticRecord
         clone.facet! facet_or_name, options
       end
 
+      def aggregate!(name_or_facet, options = {})
+        # if name_or_facet.is_a?(String)
+          # self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]
+        # else
+          self.aggregation_values += [name_or_node]
+        # end
+
+        self
+      end
+
+      def aggregate(name_or_node, options = {})
+        clone.aggregate! name_or_node, options
+      end
+
       def order!(*args) # :nodoc:
         self.order_values += args.flatten
         self
