@@ -243,10 +243,6 @@ module ElasticRecord
           Arelastic::Searches::Facets.new(facets) unless facets.empty?
         end
 
-        def build_aggregations(aggregations)
-          Arelastic::Searches::Aggregations.new(aggregations) unless aggregations.empty?
-        end
-
         def build_orders(orders)
           return if orders.empty?
 
