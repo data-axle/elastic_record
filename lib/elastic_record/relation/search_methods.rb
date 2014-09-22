@@ -92,18 +92,13 @@ module ElasticRecord
         clone.facet! facet_or_name, options
       end
 
-      def aggregate!(name_or_aggregation, options = nil)
-        if name_or_aggregation.is_a?(String)
-          self.aggregation_values << {name_or_aggregation => options}
-        else
-          self.aggregation_values << aggregation
-        end
-
+      def aggregate!(aggregation)
+        self.aggregation_values += [aggregation]
         self
       end
 
-      def aggregate(name, aggregation)
-        clone.aggregate! name_or_node, options
+      def aggregate(aggregation)
+        clone.aggregate! aggregation
       end
 
       def order!(*args) # :nodoc:
