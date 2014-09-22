@@ -92,17 +92,17 @@ module ElasticRecord
         clone.facet! facet_or_name, options
       end
 
-      def aggregate!(name_or_facet, options = {})
-        # if name_or_facet.is_a?(String)
-          # self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]
-        # else
-          self.aggregation_values += [name_or_node]
-        # end
+      def aggregate!(name_or_aggregation, options = nil)
+        if name_or_aggregation.is_a?(String)
+          self.aggregation_values << {name_or_aggregation => options}
+        else
+          self.aggregation_values << aggregation
+        end
 
         self
       end
 
-      def aggregate(name_or_node, options = {})
+      def aggregate(name, aggregation)
         clone.aggregate! name_or_node, options
       end
 
@@ -238,6 +238,10 @@ module ElasticRecord
           if offset
             Arelastic::Searches::From.new(offset)
           end
+        end
+
+        def build_aggregations(aggregations)
+          Arelastic::Searches::Aggregations.new(aggregations) unless aggregations.empty?
         end
 
         def build_facets(facets)
