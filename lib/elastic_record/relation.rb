@@ -26,6 +26,10 @@ module ElasticRecord
       search_results['facets']
     end
 
+    def aggregations
+      search_results['aggregations']
+    end
+
     def explain(id)
       klass.elastic_index.explain(id, as_elastic)
     end

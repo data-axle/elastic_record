@@ -13,6 +13,10 @@ module ElasticRecord
         {}
       end
 
+      def aggregations
+        {}
+      end
+
       def as_elastic
         Arelastic::Filters::Not.new(Arelastic::Queries::MatchAll.new).as_elastic
       end

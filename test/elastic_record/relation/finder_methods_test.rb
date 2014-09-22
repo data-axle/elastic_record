@@ -53,6 +53,19 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
     assert_equal 1, Widget.elastic_relation.filter('color' => 'red').all.size
   end
 
+  def test_find_by
+    Widget.elastic_index.bulk_add [
+      Widget.new(color: 'red', id: '05'),
+      Widget.new(color: 'blue', id: '10'),
+    ]
+
+    assert_equal '05', Widget.elastic_relation.find_by(color: 'red').id
+    assert_equal '05', Widget.elastic_relation.find_by!(color: 'red').id
+    assert_raises ActiveRecord::RecordNotFound do
+      Widget.elastic_relation.find_by!(color: 'green')
+    end
+  end
+
   private
 
     def create_widgets

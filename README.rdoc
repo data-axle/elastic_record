@@ -7,7 +7,7 @@ ElasticRecord is an elasticsearch ORM.
 == Setup
 
 The usual Gemfile addition:
-  
+
   gem 'elastic_record'
 
 
@@ -73,17 +73,17 @@ To change the 'size' and 'from' values of a query, use offset and limit:
 
   search.limit(40).offset(80)   # Creates a query with {size: 40, from: 80}
 
-=== Facets
+=== Aggregations
 
-Since term facets are the most common, they are the easiest to add to a query:
+Aggregations are added with the aggregate method:
 
-  search.facet('colors')
+  search.aggregate('popular_colors' => {'terms' => {'field' => 'color'}})
 
-It is important to note that adding facets to a query is different than retrieving the results of the query:
+It is important to note that adding aggregations to a query is different than retrieving the results of the query:
 
-  search = search.facet('colors').facet('size')
-  search.facets
-  #=> {"colors" => ..., "size" => ...}
+  search = search.aggregate('popular_colors' => {'terms' => {'field' => 'color'}})
+  search.aggregations
+  #=> {"popular_colors" => {"buckets" => ...}}
 
 === Getting Results
 

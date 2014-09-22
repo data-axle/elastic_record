@@ -92,6 +92,15 @@ module ElasticRecord
         clone.facet! facet_or_name, options
       end
 
+      def aggregate!(aggregation)
+        self.aggregation_values += [aggregation]
+        self
+      end
+
+      def aggregate(aggregation)
+        clone.aggregate! aggregation
+      end
+
       def order!(*args) # :nodoc:
         self.order_values += args.flatten
         self
@@ -141,6 +150,7 @@ module ElasticRecord
             build_limit(limit_value),
             build_offset(offset_value),
             build_facets(facet_values),
+            build_aggregations(aggregation_values),
             build_orders(order_values)
           ].compact
 
@@ -223,6 +233,10 @@ module ElasticRecord
           if offset
             Arelastic::Searches::From.new(offset)
           end
+        end
+
+        def build_aggregations(aggregations)
+          Arelastic::Searches::Aggregations.new(aggregations) unless aggregations.empty?
         end
 
         def build_facets(facets)

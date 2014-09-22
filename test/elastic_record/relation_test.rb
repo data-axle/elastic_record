@@ -15,6 +15,15 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_equal 2, facets['popular_colors']['total']
   end
 
+  def test_aggregations
+    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+
+    aggregations = Widget.elastic_relation.aggregate('popular_colors' => {'terms' => {'field' => 'color'}}).aggregations # Widget.arelastic.facet['popular_colors'].terms('color')).facets
+
+    assert_equal 2, aggregations['popular_colors']['buckets'].size
+    assert_equal %w(red blue).to_set, aggregations['popular_colors']['buckets'].map { |bucket| bucket['key'] }.to_set
+  end
+
   def test_explain
     create_widgets [Widget.new(id: 10, color: 'blue')]
 
