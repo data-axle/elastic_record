@@ -22,7 +22,21 @@ module ElasticRecord
         self.servers = settings['servers']
 
         if settings['options']
-          # Deprecated route
+          warn("**************************************",
+            "elasticsearch.yml/:options is deprecated. For example, the following:",
+            "development:",
+            "  servers: 127.0.0.1:9200",
+            "  options:",
+            "    timeout: 10",
+            "    retries: 2",
+            "",
+            "becomes:",
+            "",
+            "development:",
+            "  servers: 127.0.0.1:9200",
+            "  timeout: 10",
+            "  retries: 2",
+            "**************************************")
           self.connection_options = settings['options']
         else
           self.connection_options = settings
