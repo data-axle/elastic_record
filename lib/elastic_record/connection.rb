@@ -68,12 +68,17 @@ module ElasticRecord
     }
     def new_request(method, path, body)
       request = METHODS[method].new(path)
-      request.basic_auth(options[:username], options[:password]) if options[:username] && options[:password]
+      request.basic_auth(options[:username], options[:password]) if options[:username].present?
       request.body = body
       request
     end
 
     private
+
+      def username
+        options[:username].presence
+      end
+
       def next_server
         if @shuffled_servers.nil?
           @shuffled_servers = servers.shuffle
