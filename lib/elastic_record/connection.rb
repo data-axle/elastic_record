@@ -75,10 +75,6 @@ module ElasticRecord
 
     private
 
-      def username
-        options[:username].presence
-      end
-
       def next_server
         if @shuffled_servers.nil?
           @shuffled_servers = servers.shuffle
