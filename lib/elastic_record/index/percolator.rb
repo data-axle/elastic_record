@@ -31,7 +31,7 @@ module ElasticRecord
         end
       end
 
-      def reset_percolator
+      def reset_percolators
         delete(percolator_index_name) if exists?(percolator_index_name)
         create(percolator_index_name)
       end
