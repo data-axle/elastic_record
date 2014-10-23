@@ -11,7 +11,24 @@ class ElasticRecord::ConfigTest < MiniTest::Unit::TestCase
     assert_equal [Warehouse, Widget], ElasticRecord::Config.models
   end
 
-  def test_settings
-    
+  def test_servers
+    with_servers ['abc.com', 'xyz.com'] do
+      assert_equal ['abc.com', 'xyz.com'], ElasticRecord::Config.servers
+    end
+
+    with_servers 'abc.com,xyz.com' do
+      assert_equal ['abc.com', 'xyz.com'], ElasticRecord::Config.servers
+    end
   end
+
+
+  private
+
+    def with_servers(values)
+      original = ElasticRecord::Config.servers
+      ElasticRecord::Config.servers = values
+      yield
+    ensure
+      ElasticRecord::Config.servers = original
+    end
 end

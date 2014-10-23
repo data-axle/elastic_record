@@ -2,8 +2,6 @@ require 'active_support/core_ext/class/attribute'
 
 module ElasticRecord
   class Config
-    class_attribute :servers
-
     class_attribute :connection_options
     self.connection_options = {}
 
@@ -16,6 +14,17 @@ module ElasticRecord
     class << self
       def models
         @models ||= model_names.map { |model_name| model_name.constantize }
+      end
+
+      def servers
+        @servers
+      end
+
+      def servers=(values)
+        unless values.is_a?(Array)
+          values = values.split(',')
+        end
+        @servers = values
       end
 
       def settings=(settings)
