@@ -22,6 +22,9 @@ module ElasticRecord
           _source: {
             enabled: false
           },
+          _all: {
+            enabled: false
+          },
           properties: {
             created_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"},
             updated_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"}
