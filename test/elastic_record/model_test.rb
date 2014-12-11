@@ -7,7 +7,7 @@ class ElasticRecord::ModelTest < MiniTest::Test
   def test_elastic_connection
     connection = Widget.elastic_connection
 
-    assert_equal [ElasticRecord::Config.servers], connection.servers
+    assert_equal ElasticRecord::Config.servers, connection.servers
     assert_equal ElasticRecord::Config.connection_options, connection.options
   end
 
