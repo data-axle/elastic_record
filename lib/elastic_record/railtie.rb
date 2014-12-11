@@ -13,7 +13,7 @@ module ElasticRecord
         if config = config[Rails.env]
           ElasticRecord::Config.settings = config
         else
-          raise "Missing environment #{Rails.env} in superstore.yml"
+          raise "Missing environment #{Rails.env} in elasticsearch.yml"
         end
       end
     end
