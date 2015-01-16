@@ -1,8 +1,8 @@
 services:
   - elasticsearch
 before_script:
-  - bin/rake app:db:create
-  - bin/rake app:index:reset
+  - bundle exec rake app:db:create
+  - bundle exec rake app:index:reset
 rvm:
   - 2.1.2
 env:
