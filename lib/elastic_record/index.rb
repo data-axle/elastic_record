@@ -41,6 +41,7 @@ module ElasticRecord
 
     attr_accessor :model
     attr_accessor :disabled
+    attr_accessor :has_percolator
 
     def initialize(model)
       @model = model
@@ -81,8 +82,10 @@ module ElasticRecord
     end
 
     private
+
       def new_index_name
         "#{alias_name}_#{(Time.now.to_f * 100).to_i}"
       end
+
   end
 end

@@ -1,0 +1,15 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  reconnect: false
+  database: elastic_record_development
+  pool: 5
+  username: root
+  password:
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: elastic_record_test
+  username: root
+  password:

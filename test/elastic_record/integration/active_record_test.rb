@@ -1,17 +1,7 @@
 require 'helper'
 
-require 'active_record'
-
 require 'mysql2'
 require 'pg'
-
-class Project < ActiveRecord::Base
-  include ElasticRecord::Model
-
-  self.elastic_index.mapping[:properties].update(
-    name: { type: 'string', index: 'not_analyzed' }
-  )
-end
 
 module ElasticRecord
   module ActiveRecordIntegration
@@ -20,7 +10,7 @@ module ElasticRecord
       ActiveRecord::Tasks::DatabaseTasks.create config
       ActiveRecord::Base.establish_connection config
 
-      quietly do
+      ActiveRecord::Migration.suppress_messages do
         ActiveRecord::Migration.create_table :projects do |t|
           t.string :name, null: false
         end

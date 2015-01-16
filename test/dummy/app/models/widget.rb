@@ -5,6 +5,8 @@ class Widget
 
   define_attributes [:name, :color, :warehouse_id]
 
+  self.elastic_index.has_percolator = true
+
   self.elastic_index.mapping[:properties].update(
     name: {
       type: 'multi_field',
