@@ -1,17 +1,7 @@
 require 'helper'
 
-require 'active_record'
-
 require 'mysql2'
 require 'pg'
-
-class Project < ActiveRecord::Base
-  include ElasticRecord::Model
-
-  self.elastic_index.mapping[:properties].update(
-    name: { type: 'string', index: 'not_analyzed' }
-  )
-end
 
 module ElasticRecord
   module ActiveRecordIntegration
