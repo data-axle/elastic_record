@@ -1,5 +1,7 @@
 services:
   - elasticsearch
+before_script:
+  - bin/rake app:index:reset
 rvm:
   - 2.1.2
 env:
