@@ -2,9 +2,6 @@ module ElasticRecord
   class Index
     module Percolator
       def create_percolator(name, elastic_query)
-        # unless exists? percolator_name
-        #   create percolator_name
-        # end
         connection.json_put "/#{percolator_name}/.percolator/#{name}", elastic_query
       end
 
