@@ -9,6 +9,10 @@ module ElasticRecord
       def property(name, options)
         index.mapping[:properties][name.to_sym] = options
       end
+
+      def has_percolator!
+        index.has_percolator = true
+      end
     end
   end
 end

@@ -1,0 +1,930 @@
+(51.6ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(2.8ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(2.3ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(4.2ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(2.6ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(5.1ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.8ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator
+(24.6ms) DELETE 127.0.0.1:9200/widgets_percolator
+(2.2ms) HEAD 127.0.0.1:9200/widgets_percolator
+(24.6ms) PUT 127.0.0.1:9200/widgets_percolator '{"settings":{}}'
+(15.5ms) PUT 127.0.0.1:9200/widgets_percolator/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(5.1ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(2.3ms) DELETE 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.3ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.1ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.2ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(2.9ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.2ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(4.3ms) PUT 127.0.0.1:9200/widgets/widget/5 '{"color":"red"}'
+(8.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(6.1ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(4.1ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(9.2ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(4.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(10.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(4.9ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(6.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.8ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(4.0ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.7ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"facets":{"popular_colors":{"terms":{"field":"color"}}}}'
+(3.4ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(6.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.5ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"aggs":{"popular_colors":{"terms":{"field":"color"}}}}'
+(4.1ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/widget/10
+(3.2ms) PUT 127.0.0.1:9200/widgets/widget/10 '{"color":"green"}'
+(2.1ms) GET 127.0.0.1:9200/widgets/widget/10
+(1.8ms) DELETE 127.0.0.1:9200/widgets/widget/10
+(1.3ms) GET 127.0.0.1:9200/widgets/widget/10
+(6.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/10
+(2.3ms) PUT 127.0.0.1:9200/widgets/widget/10 '{"color":"green"}'
+(1.6ms) GET 127.0.0.1:9200/widgets/widget/10
+(6.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/5
+-----------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_request_notification
+-----------------------------------------------------------
+----------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_initializes_runtime
+----------------------------------------------------------
+--------------------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_request_notification_escaping
+--------------------------------------------------------------------
+(3.4ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(33.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.3ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.3ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzI5NDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5MzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5NTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.3ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(9.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"constant_score":{"filter":{"terms":{"color":["red","blue"]}}}}}'
+(1.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czoyOw%3D%3D
+(1.2ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzI5OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czoyOw%3D%3D
+(5.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(6.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(3.4ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":20}}
+{"color":"yellow"}
+{"index":{"_index":"widgets","_type":"widget","_id":25}}
+{"color":"violet"}
+{"index":{"_index":"widgets","_type":"widget","_id":30}}
+{"color":"indigo"}
+{"index":{"_index":"widgets","_type":"widget","_id":35}}
+{"color":"orange"}
+{"index":{"_index":"widgets","_type":"widget","_id":40}}
+{"color":"black"}
+'
+(14.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.8ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=1 '{"query":{"match_all":{}}}'
+(1.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(1.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMwODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMwOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(4.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.7ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.2ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.2ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.0ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMxMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMxMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(6.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMxOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.9ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMxOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMxODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=2 '{"query":{"match_all":{}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.3ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMyNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzMyNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzMyNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(15.7ms) DELETE 127.0.0.1:9200/widgets_142144727689
+(27.7ms) PUT 127.0.0.1:9200/widgets_142144752970 '{"settings":{}}'
+(17.5ms) PUT 127.0.0.1:9200/widgets_142144752970/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.7ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144752970","alias":"widgets"}}]}'
+(3.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+'
+(1.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(20.9ms) DELETE 127.0.0.1:9200/widgets_142144752970
+(35.2ms) PUT 127.0.0.1:9200/widgets_142144752978 '{"settings":{}}'
+(17.6ms) PUT 127.0.0.1:9200/widgets_142144752978/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.5ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.2ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144752978","alias":"widgets"}}]}'
+(3.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"abc"}}
+{"color":"red"}
+'
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.7ms) GET 127.0.0.1:9200/widgets/widget/xyz
+(1.5ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(15.2ms) DELETE 127.0.0.1:9200/widgets_142144752978
+(22.9ms) PUT 127.0.0.1:9200/widgets_142144752986 '{"settings":{}}'
+(17.5ms) PUT 127.0.0.1:9200/widgets_142144752986/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.5ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.4ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144752986","alias":"widgets"}}]}'
+(8.1ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+{"index":{"_index":"widgets","_type":"widget","_id":"3"}}
+{"color":{"bad":"stuff"}}
+'
+(1.5ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(18.0ms) DELETE 127.0.0.1:9200/widgets_142144752986
+(24.0ms) PUT 127.0.0.1:9200/widgets_142144752994 '{"settings":{}}'
+(15.9ms) PUT 127.0.0.1:9200/widgets_142144752994/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.2ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(2.9ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144752994","alias":"widgets"}}]}'
+(3.1ms) PUT 127.0.0.1:9200/widgets/widget/abc '{"color":"red"}'
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/xyz
+(1.4ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(16.0ms) DELETE 127.0.0.1:9200/widgets_142144752994
+(27.3ms) PUT 127.0.0.1:9200/widgets_142144753001 '{"settings":{}}'
+(18.4ms) PUT 127.0.0.1:9200/widgets_142144753001/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.2ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144753001","alias":"widgets"}}]}'
+(2.8ms) PUT 127.0.0.1:9200/widgets/widget/abc '{"color":"red"}'
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.8ms) DELETE 127.0.0.1:9200/widgets/widget/abc
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/abc
+(2.0ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(17.6ms) DELETE 127.0.0.1:9200/widgets_142144753001
+(28.1ms) PUT 127.0.0.1:9200/widgets_142144753009 '{"settings":{}}'
+(17.2ms) PUT 127.0.0.1:9200/widgets_142144753009/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.8ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144753009","alias":"widgets"}}]}'
+(3.3ms) PUT 127.0.0.1:9200/widgets/widget/5 '{"color":"red"}'
+(1.7ms) GET 127.0.0.1:9200/widgets/widget/5
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/7
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(15.4ms) DELETE 127.0.0.1:9200/widgets_142144753009
+(25.1ms) PUT 127.0.0.1:9200/widgets_142144753017 '{"settings":{}}'
+(16.5ms) PUT 127.0.0.1:9200/widgets_142144753017/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.5ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.7ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144753017","alias":"widgets"}}]}'
+(4.2ms) PUT 127.0.0.1:9200/widgets/widget/bob '{"name":"bob"}'
+(2.8ms) PUT 127.0.0.1:9200/widgets/widget/joe '{"name":"joe"}'
+(19.3ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"query_string":{"query":"name.analyzed:bob"}}}'
+(2.6ms) GET 127.0.0.1:9200/widgets/widget/bob
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/joe
+(5.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(40.9ms) DELETE 127.0.0.1:9200/widgets_142144753017
+(27.0ms) PUT 127.0.0.1:9200/widgets_142144753030 '{"settings":{}}'
+(18.9ms) PUT 127.0.0.1:9200/widgets_142144753030/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.9ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144753030","alias":"widgets"}}]}'
+(3.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+{"delete":{"_index":"widgets","_type":"widget","_id":"3"}}
+'
+(4.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(9.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(5.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"desc"}]}'
+(1.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"desc"}]}'
+(1.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"asc"}]}'
+(7.1ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(5.2ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(6.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.6ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":["color"]}'
+(3.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.4ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1,"sort":["color"]}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}},"size":1,"sort":["color"]}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(8.3ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(6.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(4.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["05","10"]}}}}}'
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(6.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"terms":{"color":["red","blue"]}},{"ids":{"values":["05","10"]}}]}}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["15","20"]}}}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"terms":{"color":["purple","gold"]}},{"ids":{"values":["05","10"]}}]}}}}'
+(5.4ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":["color"]}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(2.5ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(6.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["05"]}}}},"size":1}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"term":{"color":"red"}},{"ids":{"values":["05"]}}]}}},"size":1}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"term":{"color":"blue"}},{"ids":{"values":["05"]}}]}}},"size":1}'
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(6.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(2.4ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(1.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(2.5ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(1.1ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(5.5ms) PUT 127.0.0.1:9200/widgets/widget/_warmer/green '{"query":{"match_all":{}}}'
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(1.3ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(1.5ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.3ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(24.3ms) PUT 127.0.0.1:9200/widgets_142144753062 '{"settings":{}}'
+(19.7ms) PUT 127.0.0.1:9200/widgets_142144753062/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.7ms) GET 127.0.0.1:9200/widgets_142144753062/widget/_mapping
+(7.6ms) DELETE 127.0.0.1:9200/widgets_142144753062/widget
+(1.5ms) GET 127.0.0.1:9200/widgets_142144753062/widget/_mapping
+(0.2ms) HEAD 127.0.0.1:9200/success
+(0.3ms) HEAD 127.0.0.1:9200/failure
+(0.2ms) GET 127.0.0.1:9200/error
+(0.3ms) GET 127.0.0.1:9200/error
+(0.2ms) GET 127.0.0.1:9200/error
+(0.2ms) GET 127.0.0.1:9200/error
+(0.2ms) DELETE 127.0.0.1:9200/test
+(0.2ms) GET 127.0.0.1:9200/test
+(0.2ms) POST 127.0.0.1:9200/test ''
+(0.2ms) PUT 127.0.0.1:9200/test ''
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.9ms) DELETE 127.0.0.1:9200/widgets_percolator/.percolator/green
+(3.0ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}}}'
+(1.6ms) GET 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.9ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(4.6ms) DELETE 127.0.0.1:9200/widgets/_warmer/green
+(4.1ms) PUT 127.0.0.1:9200/widgets/widget/_warmer/green '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(2.0ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.8ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.8ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.7ms) DELETE 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.7ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.2ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.1ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(2.1ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.1ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(2.2ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator
+(12.5ms) DELETE 127.0.0.1:9200/widgets_percolator
+(1.6ms) HEAD 127.0.0.1:9200/widgets_percolator
+(27.3ms) PUT 127.0.0.1:9200/widgets_percolator '{"settings":{}}'
+(20.3ms) PUT 127.0.0.1:9200/widgets_percolator/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(2.0ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(12.6ms) DELETE 127.0.0.1:9200/felons*
+(28.9ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(19.0ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.8ms) HEAD 127.0.0.1:9200/felons_foo
+(1.8ms) HEAD 127.0.0.1:9200/felons_bar
+(12.9ms) DELETE 127.0.0.1:9200/felons*
+(37.4ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(17.8ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.9ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.7ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(4.0ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(1.9ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.5ms) GET 127.0.0.1:9200/felons_foo/_alias
+(10.8ms) DELETE 127.0.0.1:9200/felons*
+(25.2ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(18.3ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.7ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(4.1ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(1.8ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.4ms) GET 127.0.0.1:9200/felons_foo/_alias
+(1.9ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(2.0ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.8ms) GET 127.0.0.1:9200/felons_foo/_alias
+(11.5ms) DELETE 127.0.0.1:9200/felons*
+(2.0ms) HEAD 127.0.0.1:9200/felons_foo
+(27.0ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(18.4ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) HEAD 127.0.0.1:9200/felons_foo
+(13.6ms) DELETE 127.0.0.1:9200/felons*
+(27.2ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(18.1ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(2.9ms) HEAD 127.0.0.1:9200/felons_foo/felon
+(1.7ms) HEAD 127.0.0.1:9200/felons_bar/felon
+(3.1ms) PUT 127.0.0.1:9200/widgets/widget/10 '{"color":"green"}'
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/10
+(1.9ms) DELETE 127.0.0.1:9200/widgets/widget/10
+(1.2ms) GET 127.0.0.1:9200/widgets/widget/10
+(6.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/10
+(2.2ms) PUT 127.0.0.1:9200/widgets/widget/10 '{"color":"green"}'
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/10
+(8.5ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/5
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/10
+(1.4ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(10.5ms) DELETE 127.0.0.1:9200/widgets_142144753030
+(28.6ms) PUT 127.0.0.1:9200/widgets_142144758394 '{"settings":{}}'
+(15.3ms) PUT 127.0.0.1:9200/widgets_142144758394/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.3ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.4ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758394","alias":"widgets"}}]}'
+(4.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+{"index":{"_index":"widgets","_type":"widget","_id":"3"}}
+{"color":{"bad":"stuff"}}
+'
+(1.7ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(16.6ms) DELETE 127.0.0.1:9200/widgets_142144758394
+(35.4ms) PUT 127.0.0.1:9200/widgets_142144758401 '{"settings":{}}'
+(25.7ms) PUT 127.0.0.1:9200/widgets_142144758401/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.8ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758401","alias":"widgets"}}]}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"abc"}}
+{"color":"red"}
+'
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.2ms) GET 127.0.0.1:9200/widgets/widget/xyz
+(1.3ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(10.1ms) DELETE 127.0.0.1:9200/widgets_142144758401
+(23.9ms) PUT 127.0.0.1:9200/widgets_142144758410 '{"settings":{}}'
+(18.4ms) PUT 127.0.0.1:9200/widgets_142144758410/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.5ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758410","alias":"widgets"}}]}'
+(2.9ms) PUT 127.0.0.1:9200/widgets/widget/abc '{"color":"red"}'
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/xyz
+(1.3ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(9.4ms) DELETE 127.0.0.1:9200/widgets_142144758410
+(22.5ms) PUT 127.0.0.1:9200/widgets_142144758416 '{"settings":{}}'
+(15.8ms) PUT 127.0.0.1:9200/widgets_142144758416/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.8ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(3.9ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758416","alias":"widgets"}}]}'
+(3.1ms) PUT 127.0.0.1:9200/widgets/widget/abc '{"color":"red"}'
+(1.6ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.5ms) DELETE 127.0.0.1:9200/widgets/widget/abc
+(1.2ms) GET 127.0.0.1:9200/widgets/widget/abc
+(1.4ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(11.4ms) DELETE 127.0.0.1:9200/widgets_142144758416
+(24.7ms) PUT 127.0.0.1:9200/widgets_142144758423 '{"settings":{}}'
+(18.5ms) PUT 127.0.0.1:9200/widgets_142144758423/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.2ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758423","alias":"widgets"}}]}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+{"delete":{"_index":"widgets","_type":"widget","_id":"3"}}
+'
+(1.8ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(12.0ms) DELETE 127.0.0.1:9200/widgets_142144758423
+(27.4ms) PUT 127.0.0.1:9200/widgets_142144758430 '{"settings":{}}'
+(17.1ms) PUT 127.0.0.1:9200/widgets_142144758430/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.3ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758430","alias":"widgets"}}]}'
+(3.6ms) PUT 127.0.0.1:9200/widgets/widget/bob '{"name":"bob"}'
+(2.0ms) PUT 127.0.0.1:9200/widgets/widget/joe '{"name":"joe"}'
+(10.5ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"query_string":{"query":"name.analyzed:bob"}}}'
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/bob
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/joe
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(10.9ms) DELETE 127.0.0.1:9200/widgets_142144758430
+(26.5ms) PUT 127.0.0.1:9200/widgets_142144758439 '{"settings":{}}'
+(17.5ms) PUT 127.0.0.1:9200/widgets_142144758439/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.8ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.2ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758439","alias":"widgets"}}]}'
+(3.8ms) PUT 127.0.0.1:9200/widgets/widget/5 '{"color":"red"}'
+(1.7ms) GET 127.0.0.1:9200/widgets/widget/5
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/7
+(1.6ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(10.6ms) DELETE 127.0.0.1:9200/widgets_142144758439
+(32.0ms) PUT 127.0.0.1:9200/widgets_142144758446 '{"settings":{}}'
+(17.7ms) PUT 127.0.0.1:9200/widgets_142144758446/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.8ms) GET 127.0.0.1:9200/widgets/_mapping/widget/
+(4.3ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"widgets_142144758446","alias":"widgets"}}]}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"5"}}
+{"color":"green"}
+'
+(1.4ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(1.2ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(4.4ms) PUT 127.0.0.1:9200/widgets/widget/_warmer/green '{"query":{"match_all":{}}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(1.5ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(8.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(8.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(4.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.3ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(3.8ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}}}'
+(1.9ms) GET 127.0.0.1:9200/widgets_percolator/.percolator/green
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(1.6ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(3.2ms) DELETE 127.0.0.1:9200/widgets/_warmer/green
+(3.9ms) PUT 127.0.0.1:9200/widgets/widget/_warmer/green '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}}}'
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_warmer/green
+(2.1ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.4ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUwMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUwMjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUwNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(2.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(8.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"constant_score":{"filter":{"terms":{"color":["red","blue"]}}}}}'
+(2.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUxMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czoyOw%3D%3D
+(1.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.0ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUxMzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUxNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czoyOw%3D%3D
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.1ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUyNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUyNDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUyODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(2.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.1ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.3ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzUzNTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUzNjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUzNzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUzODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzUzOTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(2.9ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=2 '{"query":{"match_all":{}}}'
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU0NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1MDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU0NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU0OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1MDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.4ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(7.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=100 '{"query":{"match_all":{}}}'
+(1.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU1NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU2MDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU2MTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.9ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU1NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU1OTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU2MDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU2MTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czozOw%3D%3D
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(4.4ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+{"index":{"_index":"widgets","_type":"widget","_id":15}}
+{"color":"green"}
+'
+(3.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":20}}
+{"color":"yellow"}
+{"index":{"_index":"widgets","_type":"widget","_id":25}}
+{"color":"violet"}
+{"index":{"_index":"widgets","_type":"widget","_id":30}}
+{"color":"indigo"}
+{"index":{"_index":"widgets","_type":"widget","_id":35}}
+{"color":"orange"}
+{"index":{"_index":"widgets","_type":"widget","_id":40}}
+{"color":"black"}
+'
+(14.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.8ms) GET 127.0.0.1:9200/widgets/widget/_search?scroll=5m&search_type=scan&size=1 '{"query":{"match_all":{}}}'
+(2.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU3NDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(1.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU3NDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(1.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/_search/scroll?scroll=5m&scroll_id=c2Nhbjs1OzU3NDpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NTpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NjpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3NzpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzU3ODpKYWp6a1FRa1RjT3JtVWl6NXpCM3ZROzE7dG90YWxfaGl0czo4Ow%3D%3D
+(4.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(24.1ms) PUT 127.0.0.1:9200/widgets_142144758491 '{"settings":{}}'
+(16.0ms) PUT 127.0.0.1:9200/widgets_142144758491/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(2.0ms) GET 127.0.0.1:9200/widgets_142144758491/widget/_mapping
+(6.3ms) DELETE 127.0.0.1:9200/widgets_142144758491/widget
+(1.8ms) GET 127.0.0.1:9200/widgets_142144758491/widget/_mapping
+(2.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(8.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(5.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"facets":{"popular_colors":{"terms":{"field":"color"}}}}'
+(3.4ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(5.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(9.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.3ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.7ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(13.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.5ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(1.8ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"magenta"}}}}}'
+(2.9ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.3ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(2.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.9ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.2ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.7ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":5}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":10}}
+{"color":"blue"}
+'
+(7.4ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(4.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"aggs":{"popular_colors":{"terms":{"field":"color"}}}}'
+(8.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(9.7ms) DELETE 127.0.0.1:9200/felons*
+(22.7ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(16.7ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.5ms) HEAD 127.0.0.1:9200/felons_foo/felon
+(1.1ms) HEAD 127.0.0.1:9200/felons_bar/felon
+(9.0ms) DELETE 127.0.0.1:9200/felons*
+(27.3ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(18.9ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(2.0ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.7ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(3.4ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(1.6ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.4ms) GET 127.0.0.1:9200/felons_foo/_alias
+(10.0ms) DELETE 127.0.0.1:9200/felons*
+(24.0ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(17.8ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.7ms) HEAD 127.0.0.1:9200/felons_foo
+(1.7ms) HEAD 127.0.0.1:9200/felons_bar
+(12.0ms) DELETE 127.0.0.1:9200/felons*
+(24.6ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(18.1ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.6ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(3.7ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(2.0ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.5ms) GET 127.0.0.1:9200/felons_foo/_alias
+(1.5ms) POST 127.0.0.1:9200/_aliases '{"actions":[{"add":{"index":"felons_foo","alias":"felons"}}]}'
+(1.3ms) GET 127.0.0.1:9200/felons/_mapping/felon/
+(1.3ms) GET 127.0.0.1:9200/felons_foo/_alias
+(9.7ms) DELETE 127.0.0.1:9200/felons*
+(1.4ms) HEAD 127.0.0.1:9200/felons_foo
+(23.6ms) PUT 127.0.0.1:9200/felons_foo '{"settings":{}}'
+(16.4ms) PUT 127.0.0.1:9200/felons_foo/felon/_mapping '{"felon":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.7ms) HEAD 127.0.0.1:9200/felons_foo
+(3.1ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":["color"]}'
+(2.2ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(2.8ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(4.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":["color"]}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1,"sort":["color"]}'
+(2.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}},"size":1,"sort":["color"]}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.0ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(2.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.8ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["05","10"]}}}}}'
+(1.9ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"terms":{"color":["red","blue"]}},{"ids":{"values":["05","10"]}}]}}}}'
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["15","20"]}}}}}'
+(1.7ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"terms":{"color":["purple","gold"]}},{"ids":{"values":["05","10"]}}]}}}}'
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(3.1ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"ids":{"values":["05"]}}}},"size":1}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.4ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"term":{"color":"red"}},{"ids":{"values":["05"]}}]}}},"size":1}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"and":[{"term":{"color":"blue"}},{"ids":{"values":["05"]}}]}}},"size":1}'
+(2.6ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.3ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"desc"}]}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.8ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"desc"}]}'
+(1.8ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.7ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}},"size":1,"sort":[{"color":"asc"}]}'
+(2.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.6ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(2.0ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(8.0ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1}'
+(1.5ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.6ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}},"size":1}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.2ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"green"}}}},"size":1}'
+(2.7ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(2.5ms) POST 127.0.0.1:9200/_bulk? '{"index":{"_index":"widgets","_type":"widget","_id":"05"}}
+{"color":"red"}
+{"index":{"_index":"widgets","_type":"widget","_id":"10"}}
+{"color":"blue"}
+'
+(7.2ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(1.6ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(2.5ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"red"}}}}}'
+(3.0ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'
+(0.3ms) GET 127.0.0.1:9200/error
+(0.3ms) GET 127.0.0.1:9200/error
+(0.2ms) GET 127.0.0.1:9200/error
+(0.2ms) HEAD 127.0.0.1:9200/success
+(0.2ms) HEAD 127.0.0.1:9200/failure
+(0.2ms) DELETE 127.0.0.1:9200/test
+(0.2ms) GET 127.0.0.1:9200/test
+(0.2ms) POST 127.0.0.1:9200/test ''
+(0.2ms) PUT 127.0.0.1:9200/test ''
+(0.2ms) GET 127.0.0.1:9200/error
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.6ms) DELETE 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(3.6ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/blue
+(2.3ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) DELETE 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(2.9ms) PUT 127.0.0.1:9200/widgets_percolator/.percolator/green '{"query":{"match":{"color":"green"}}}'
+(1.4ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(1.2ms) HEAD 127.0.0.1:9200/widgets_percolator
+(11.7ms) DELETE 127.0.0.1:9200/widgets_percolator
+(1.5ms) HEAD 127.0.0.1:9200/widgets_percolator
+(21.2ms) PUT 127.0.0.1:9200/widgets_percolator '{"settings":{}}'
+(25.7ms) PUT 127.0.0.1:9200/widgets_percolator/widget/_mapping '{"widget":{"_source":{"enabled":false},"_all":{"enabled":false},"properties":{"created_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"updated_at":{"type":"date","index":"not_analyzed","format":"dateOptionalTime"},"name":{"type":"multi_field","fields":{"name":{"type":"string","index":"not_analyzed"},"analyzed":{"type":"string","index":"analyzed"}}},"color":{"type":"string","index":"not_analyzed"},"warehouse_id":{"type":"string","index":"not_analyzed"}},"dynamic_templates":[{"no_string_analyzing":{"match":"*","match_mapping_type":"string","mapping":{"type":"string","index":"not_analyzed"}}}]}}'
+(1.7ms) HEAD 127.0.0.1:9200/widgets_percolator/.percolator/green
+(2.1ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+(1.9ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"constant_score":{"filter":{"term":{"color":"blue"}}}}}'
+-----------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_request_notification
+-----------------------------------------------------------
+----------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_initializes_runtime
+----------------------------------------------------------
+--------------------------------------------------------------------
+ElasticRecord::LogSubscriberTest: test_request_notification_escaping
+--------------------------------------------------------------------
+(2.6ms) PUT 127.0.0.1:9200/widgets/widget/5 '{"color":"red"}'
+(7.1ms) POST 127.0.0.1:9200/widgets/_refresh ''
+(3.3ms) GET 127.0.0.1:9200/widgets/widget/_search '{"query":{"match_all":{}}}'
+(3.0ms) DELETE 127.0.0.1:9200/widgets/widget/_query '{"query":{"match_all":{}}}'

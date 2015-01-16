@@ -14,16 +14,28 @@ namespace :index do
   desc "Create index for CLASS or all models."
   task create: :environment do
     ElasticRecord::Task.get_models.each do |model|
-      index_name = model.elastic_index.create_and_deploy
+      index = model.elastic_index
+      index_name = index.create_and_deploy
       puts "Created #{model.name} index (#{index_name})"
+
+      if index.has_percolator
+        index_name = index.create_percolator_index
+        puts "Created #{model.name} percolator index (#{index_name})"
+      end
     end
   end
 
   desc "Drop index for CLASS or all models."
   task drop: :environment do
     ElasticRecord::Task.get_models.each do |model|
-      model.elastic_index.delete_all
+      index = model.elastic_index
+      index.delete_all
       puts "Dropped #{model.name} index"
+
+      if index.has_percolator
+        index_name = index.delete_percolator_index
+        puts "Dropped #{model.name} percolator index (#{index.percolator_name})"
+      end
     end
   end
 
