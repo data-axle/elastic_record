@@ -21,7 +21,7 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Test
 
     result = model.elastic_relation.filter('foo' => 'bar').do_it
 
-    expected = {"query" => {"constant_score" => {"filter" => {"term" => {"foo" => "bar"}}}}}
+    expected = {"query" => {"filtered" => {"filter" => {"term" => {"foo" => "bar"}}}}}
     assert_equal expected, result 
   end
 end

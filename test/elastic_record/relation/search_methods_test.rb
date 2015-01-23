@@ -12,7 +12,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!(Widget.arelastic['faz'].in ['baz', 'fum'])
 
     expected = {
-      "constant_score" => {
+      "filtered" => {
         "filter" => {
           "and" => [
             {"term"   => {"foo" => "bar"}},
@@ -29,7 +29,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!(Widget.arelastic['faz'].in 3..5)
 
     expected = {
-      "constant_score" => {
+      "filtered" => {
         "filter" => {
           "range" => {
             "faz" => {"gte"=>3, "lte"=>5}
@@ -45,7 +45,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!("prefix" => {"name" => "Jo"})
 
     expected = {
-      "constant_score" => {
+      "filtered" => {
         "filter" => {
           "prefix" => {
             "name" => "Jo"

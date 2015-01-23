@@ -160,12 +160,10 @@ module ElasticRecord
         def build_query_and_filter(query, filters)
           query = build_query(query)
           filter = build_filter(filters)
-          if query && filter
-            arelastic.query.filtered(query, filter)
+          if filter
+            arelastic.query.filtered(filter: filter, query: query)
           elsif query
             Arelastic::Searches::Query.new(query)
-          elsif filter
-            arelastic.query.constant_score(Arelastic::Searches::Filter.new(filter))
           else
             arelastic.query.match_all
           end
