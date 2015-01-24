@@ -1,10 +1,11 @@
+rvm: 2.1.2
+sudo: false
+cache: bundler
 services:
   - elasticsearch
 before_script:
   - bundle exec rake app:db:create
   - bundle exec rake app:index:reset
-rvm:
-  - 2.1.2
 env:
   - "GEM=ar:mysql2"
   - "GEM=ar:postgresql"
