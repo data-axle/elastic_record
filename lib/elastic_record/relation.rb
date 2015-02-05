@@ -72,7 +72,10 @@ module ElasticRecord
       end
 
       def search_results
-        @search_results ||= klass.elastic_index.search(as_elastic)
+        @search_results ||= begin
+          options = search_type_value ? {search_type: search_type_value} : {}
+          klass.elastic_index.search(as_elastic, options)
+        end
       end
 
       def load_hits(ids)

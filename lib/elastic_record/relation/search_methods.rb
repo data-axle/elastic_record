@@ -78,6 +78,15 @@ module ElasticRecord
         end
       end
 
+      def search_type!(type)
+        self.search_type_value = type
+        self
+      end
+
+      def search_type(type)
+        clone.search_type! type
+      end
+
       def facet!(name_or_facet, options = {})
         if name_or_facet.is_a?(String)
           self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]

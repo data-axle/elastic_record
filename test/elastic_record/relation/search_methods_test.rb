@@ -171,6 +171,15 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal expected, relation.as_elastic['sort']
   end
 
+  def test_search_type
+    relation.search_type! :count
+
+    Widget.elastic_index.index_record Widget.new(color: 'red')
+
+    assert_equal 1, relation.count
+    assert_equal [], relation.to_ids
+  end
+
   def test_reverse_order
     relation.order! 'foo' => {'missing' => '_last'}
     relation.order! 'bar' => 'desc'
