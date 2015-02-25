@@ -29,7 +29,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     assert_equal expected, connection.json_put("/test")
   end
 
-  def test_json_request_with_error_status
+  def test_json_request_with_valid_error_status
     response_json = {'error' => 'Doing it wrong'}
     FakeWeb.register_uri(:get, %r[/error], status: ["404", "Not Found"], body: ActiveSupport::JSON.encode(response_json))
 
@@ -40,7 +40,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     assert_equal 'Doing it wrong', error.message
   end
 
-  def test_execute_retries
+  def test_retry_server_exceptions
     responses = [
       {exception: Errno::ECONNREFUSED},
       {status: ["200", "OK"], body: ActiveSupport::JSON.encode('hello' => 'world')}
@@ -49,6 +49,30 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
       FakeWeb.register_uri :get, %r[/error], responses
       assert_raises(Errno::ECONNREFUSED) { connection.json_get("/error") }
+    end
+
+    ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|
+      FakeWeb.register_uri :get, %r[/error], responses
+      json = connection.json_get("/error")
+      assert_equal({'hello' => 'world'}, json)
+    end
+  end
+
+  def test_retry_server_500_errors
+    responses = [
+      {status: ["500", "OK"], body: {'error' => 'temporarily_unavailable'}.to_json},
+      {status: ["200", "OK"], body: {'hello' => 'world'}.to_json}
+    ]
+
+    ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
+      FakeWeb.register_uri :get, %r[/error], responses
+
+      error = assert_raises ElasticRecord::ConnectionError do
+        connection.json_get("/error")
+      end
+
+      assert_equal '500', error.status_code
+      assert_equal '{"error":"temporarily_unavailable"}', error.message
     end
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|

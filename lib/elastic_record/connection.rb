@@ -17,7 +17,7 @@ module ElasticRecord
     end
 
     def head(path)
-      http_request(:head, path).code
+      http_request_with_retry(:head, path).code
     end
 
     def json_get(path, json = nil)
@@ -38,24 +38,32 @@ module ElasticRecord
 
     def json_request(method, path, json)
       body = json.is_a?(Hash) ? ActiveSupport::JSON.encode(json) : json
-      response = http_request(method, path, body)
+      response = http_request_with_retry(method, path, body)
 
       json = ActiveSupport::JSON.decode response.body
-      raise ConnectionError.new(json['error']) if json['error']
+      raise ConnectionError.new(response.code, json['error']) if json['error']
 
       json
     end
 
-    def http_request(method, path, body = nil)
+    def http_request_with_retry(*args)
       with_retry do
-        request = new_request(method, path, body)
-        http = new_http
+        response = http_request(*args)
 
-        ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
-          payload[:http]      = http
-          payload[:request]   = request
-          payload[:response]  = http.request(request)
-        end
+        raise ConnectionError.new(response.code, response.body) if response.code.to_i >= 500
+
+        response
+      end
+    end
+
+    def http_request(method, path, body = nil)
+      request = new_request(method, path, body)
+      http = new_http
+
+      ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
+        payload[:http]      = http
+        payload[:request]   = request
+        payload[:response]  = http.request(request)
       end
     end
 
