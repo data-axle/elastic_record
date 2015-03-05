@@ -16,25 +16,25 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   # end
 
   def test_request_notification
-    FakeWeb.register_uri(:any, %r[/test], status: ["200", "OK"], body: ActiveSupport::JSON.encode('the' => 'response'))
+    FakeWeb.register_uri(:any, %r[/test], status: ["200", "OK"], body: Oj.dump('the' => 'response'))
     Widget.elastic_connection.json_get "/widgets", {'foo' => 'bar'}
 
     wait
 
     assert_equal 1, @logger.logged(:debug).size
     assert_match /GET (.*)widgets/, @logger.logged(:debug)[0]
-    assert_match %r['#{ActiveSupport::JSON.encode('foo' => 'bar')}'], @logger.logged(:debug)[0]
+    assert_match %r['#{Oj.dump('foo' => 'bar')}'], @logger.logged(:debug)[0]
   end
 
   def test_request_notification_escaping
-    FakeWeb.register_uri(:any, %r[/widgets?v=%DB], status: ["200", "OK"], body: ActiveSupport::JSON.encode('the' => 'response', 'has %DB' => 'odd %DB stuff'))
+    FakeWeb.register_uri(:any, %r[/widgets?v=%DB], status: ["200", "OK"], body: Oj.dump('the' => 'response', 'has %DB' => 'odd %DB stuff'))
     Widget.elastic_connection.json_get "/widgets?v=%DB", {'foo' => 'bar', 'escape %DB ' => 'request %DB'}
 
     wait
 
     assert_equal 1, @logger.logged(:debug).size
     assert_match /GET (.*)widgets/, @logger.logged(:debug)[0]
-    assert_match %r['#{ActiveSupport::JSON.encode('foo' => 'bar', 'escape %DB ' => 'request %DB')}'], @logger.logged(:debug)[0]
+    assert_match %r['#{Oj.dump('foo' => 'bar', 'escape %DB ' => 'request %DB')}'], @logger.logged(:debug)[0]
   end
 
   def test_initializes_runtime

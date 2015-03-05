@@ -1,4 +1,5 @@
 require 'net/http'
+require 'oj'
 
 module ElasticRecord
   class Connection
@@ -37,10 +38,10 @@ module ElasticRecord
     end
 
     def json_request(method, path, json)
-      body = json.is_a?(Hash) ? ActiveSupport::JSON.encode(json) : json
+      body = json.is_a?(Hash) ? Oj.dump(json, :mode => :compat) : json
       response = http_request_with_retry(method, path, body)
 
-      json = ActiveSupport::JSON.decode response.body
+      json = Oj.compat_load(response.body)
       raise ConnectionError.new(response.code, json['error']) if json['error']
 
       json
