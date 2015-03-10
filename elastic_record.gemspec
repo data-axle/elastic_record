@@ -20,5 +20,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'arelastic', '>= 0.7.0'
   s.add_dependency 'activemodel'
-  s.add_dependency 'oj'
 end

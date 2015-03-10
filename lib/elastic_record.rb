@@ -17,6 +17,14 @@ module ElasticRecord
     def configure
       yield(ElasticRecord::Config)
     end
+
+    def json_parser
+      @@json_parser ||= :active_support
+    end
+
+    def json_parser=(value)
+      @@json_parser = value
+    end
   end
 end
 
