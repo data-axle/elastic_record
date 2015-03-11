@@ -64,7 +64,7 @@ module ElasticRecord
         yield
 
         if current_bulk_batch.any?
-          body = current_bulk_batch.map { |action| "#{Oj.dump(action, :mode => :compat)}\n" }.join
+          body = current_bulk_batch.map { |action| "#{connection.json_encode(action)}\n" }.join
           results = connection.json_post("/_bulk?#{options.to_query}", body)
           verify_bulk_results(results)
         end

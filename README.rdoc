@@ -136,6 +136,13 @@ Create the index:
 
   rake index:create
 
+There is a gem-wide configuration setting to use the Oj gem for JSON (de)serialization, instead of
+ActiveSupport::JSON. In the appropriate location, require the Oj gem and set:
+
+  ElasticRecord.json_parser = :oj
+
+To return to the default parser, set the variable to :active_support.
+
 == Index Administration
 
 Core and Index APIs can be accessed with Product.elastic_index. Some examples include:
