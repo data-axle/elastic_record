@@ -2,9 +2,10 @@ require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Test
   def test_count
+    original_count = Widget.elastic_relation.count
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
-    assert_equal 2, Widget.elastic_relation.count
+    assert_equal 2, Widget.elastic_relation.count - original_count
   end
 
   def test_facets
