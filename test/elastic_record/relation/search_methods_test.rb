@@ -87,52 +87,6 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal expected, relation.as_elastic['query']
   end
 
-  def test_facet_with_arelastic
-    relation.facet!(Widget.arelastic.facet['popular_tags'].histogram('field' => 'field_name', 'interval' => 100))
-
-    expected = {
-      "popular_tags" => {
-        "histogram" =>
-        {
-          "field" => "field_name",
-          "interval" => 100
-        }
-      }
-    }
-
-    assert_equal expected, relation.as_elastic['facets']
-  end
-
-  def test_facet_bang_with_string
-    relation.facet!('tags', 'size' => 10)
-
-    expected = {
-      "tags" => {
-        "terms" => {
-          "field" => "tags",
-          "size"  => 10
-        }
-      }
-    }
-
-    assert_equal expected, relation.as_elastic['facets']
-  end
-
-  def test_facet_with_string
-    faceted = relation.facet('tags', 'size' => 10)
-
-    expected = {
-      "tags" => {
-        "terms" => {
-          "field" => "tags",
-          "size"  => 10
-        }
-      }
-    }
-
-    assert_equal expected, faceted.as_elastic['facets']
-  end
-
   def test_aggregation_with_bang
     relation.aggregate!("tags" => {"terms" => {"field" => "tags"}})
 

@@ -22,10 +22,6 @@ module ElasticRecord
       search_results['hits']['total']
     end
 
-    def facets
-      search_results['facets']
-    end
-
     def aggregations
       search_results['aggregations']
     end

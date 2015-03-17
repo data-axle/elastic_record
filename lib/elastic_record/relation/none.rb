@@ -9,10 +9,6 @@ module ElasticRecord
         0
       end
 
-      def facets
-        {}
-      end
-
       def aggregations
         {}
       end

@@ -87,20 +87,6 @@ module ElasticRecord
         clone.search_type! type
       end
 
-      def facet!(name_or_facet, options = {})
-        if name_or_facet.is_a?(String)
-          self.facet_values += [arelastic.facet[name_or_facet].terms(name_or_facet, options)]
-        else
-          self.facet_values += [name_or_facet]
-        end
-
-        self
-      end
-
-      def facet(facet_or_name, options = {})
-        clone.facet! facet_or_name, options
-      end
-
       def aggregate!(aggregation)
         self.aggregation_values += [aggregation]
         self
@@ -158,7 +144,6 @@ module ElasticRecord
             build_query_and_filter(query_value, filter_values),
             build_limit(limit_value),
             build_offset(offset_value),
-            build_facets(facet_values),
             build_aggregations(aggregation_values),
             build_orders(order_values)
           ].compact
@@ -244,10 +229,6 @@ module ElasticRecord
 
         def build_aggregations(aggregations)
           Arelastic::Searches::Aggregations.new(aggregations) unless aggregations.empty?
-        end
-
-        def build_facets(facets)
-          Arelastic::Searches::Facets.new(facets) unless facets.empty?
         end
 
         def build_orders(orders)

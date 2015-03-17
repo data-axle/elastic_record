@@ -8,14 +8,6 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_equal 2, Widget.elastic_relation.count - original_count
   end
 
-  def test_facets
-    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
-
-    facets = Widget.elastic_relation.facet(Widget.arelastic.facet['popular_colors'].terms('color')).facets
-
-    assert_equal 2, facets['popular_colors']['total']
-  end
-
   def test_aggregations
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
