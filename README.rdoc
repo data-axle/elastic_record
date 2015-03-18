@@ -139,7 +139,7 @@ Create the index:
 There is a gem-wide configuration setting to use the Oj gem for JSON (de)serialization, instead of
 ActiveSupport::JSON. In the appropriate location, require the Oj gem and set:
 
-  ElasticRecord.json_parser = :oj
+  ElasticRecord::JSON.parser = :oj
 
 To return to the default parser, set the variable to :active_support.
 

@@ -8,6 +8,7 @@ module ElasticRecord
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
   autoload :Index, 'elastic_record/index'
+  autoload :JSON, 'elastic_record/json'
   autoload :Lucene, 'elastic_record/lucene'
   autoload :Model, 'elastic_record/model'
   autoload :Relation, 'elastic_record/relation'
@@ -16,14 +17,6 @@ module ElasticRecord
   class << self
     def configure
       yield(ElasticRecord::Config)
-    end
-
-    def json_parser
-      @@json_parser ||= :active_support
-    end
-
-    def json_parser=(value)
-      @@json_parser = value
     end
   end
 end

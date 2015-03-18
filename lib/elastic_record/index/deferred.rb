@@ -42,10 +42,8 @@ module ElasticRecord
 
         private
           READ_METHODS = [:json_get, :head]
-          SERIALIZE_METHODS = [:json_encode, :json_decode]
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
-            return index.real_connection.send(method, *args, &block) if SERIALIZE_METHODS.include?(method)
 
             if READ_METHODS.include?(method)
               flush!

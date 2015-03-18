@@ -37,29 +37,13 @@ module ElasticRecord
     end
 
     def json_request(method, path, json)
-      body = json.is_a?(Hash) ? json_encode(json) : json
+      body = json.is_a?(Hash) ? ElasticRecord::JSON.encode(json) : json
       response = http_request_with_retry(method, path, body)
 
-      json = json_decode(response.body)
+      json = ElasticRecord::JSON.decode(response.body)
       raise ConnectionError.new(response.code, json['error']) if json['error']
 
       json
-    end
-
-    def json_encode(data)
-      if ElasticRecord.json_parser == :oj
-        Oj.dump(data, mode: :compat)
-      else
-        ActiveSupport::JSON.encode(data)
-      end
-    end
-
-    def json_decode(json)
-      if ElasticRecord.json_parser == :oj
-        Oj.compat_load(json)
-      else
-        ActiveSupport::JSON.decode(json)
-      end
     end
 
     def http_request_with_retry(*args)
