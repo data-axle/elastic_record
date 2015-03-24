@@ -53,8 +53,16 @@ module ElasticRecord
       @mapping = mapping.deep_dup
     end
 
+    def alias_name=(name)
+      @alias_name = name
+    end
+
     def alias_name
       @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
+    end
+
+    def type=(name)
+      @type = name
     end
 
     def type
