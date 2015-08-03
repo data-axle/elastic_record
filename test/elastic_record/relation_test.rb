@@ -42,6 +42,19 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert array.first.is_a?(Widget)
   end
 
+  def test_delete_all
+    project_red = Project.create! name: 'Red'
+    project_blue = Project.create! name: 'Blue'
+
+    Project.elastic_relation.filter(name: 'Red').delete_all
+
+    assert_nil Project.find_by(id: project_red.id)
+    assert_equal 0, Project.elastic_relation.filter(name: 'Red').count
+
+    refute_nil Project.find_by(id: project_blue.id)
+    assert_equal 1, Project.elastic_relation.filter(name: 'Blue').count
+  end
+
   def test_equal
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
