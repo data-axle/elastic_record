@@ -23,14 +23,6 @@ module ElasticRecord
         end
       end
 
-      def open(index_name)
-        connection.json_post("/#{index_name}/_open")
-      end
-
-      def close(index_name)
-        connection.json_post("/#{index_name}/_close")
-      end
-
       def exists?(index_name)
         connection.head("/#{index_name}") == '200'
       end
