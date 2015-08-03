@@ -44,7 +44,7 @@ module ElasticRecord
     end
 
     def delete_all
-      find_ids_in_batches { |ids| p klass.delete(ids) }
+      find_ids_in_batches { |ids| klass.delete(ids) }
       klass.elastic_index.delete_by_query(as_elastic)
     end
 
