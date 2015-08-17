@@ -92,7 +92,7 @@ module ElasticRecord
     private
 
       def new_index_name
-        "#{alias_name}_#{(Time.now.to_f * 100).to_i}"
+        "#{alias_name}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}"
       end
 
   end
