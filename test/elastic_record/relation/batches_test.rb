@@ -71,6 +71,15 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
     assert_equal 3, scan_search.request_more_ids.size
   end
 
+  def test_each_should_not_be_used
+    results = []
+    Widget.elastic_relation.each do |widget|
+      results << widget.id
+    end
+
+    assert_equal ['5', '10', '15'].to_set, results.to_set
+  end
+
   private
     def create_widgets
       Widget.elastic_index.bulk_add [

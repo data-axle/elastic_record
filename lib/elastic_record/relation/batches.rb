@@ -25,6 +25,12 @@ module ElasticRecord
     end
 
     module Batches
+      # Delegates to Array, but should not be used as it only enumerates the first 10 records.
+      def each(&block)
+        warn "warning: #{self.class.name}#each is deprecated and should not be used.  Did you mean #find_each?"
+        super
+      end
+
       def find_each(options = {})
         find_in_batches(options) do |records|
           records.each { |record| yield record }
