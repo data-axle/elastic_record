@@ -213,9 +213,7 @@ module ElasticRecord
         end
 
         def build_filter_nodes(filters)
-          nodes = []
-
-          filters.each do |filter|
+          filters.each_with_object([]) do |filter, nodes|
             if filter.is_a?(Arelastic::Filters::Filter)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
@@ -235,8 +233,6 @@ module ElasticRecord
               end
             end
           end
-
-          nodes
         end
 
         def build_limit(limit)
