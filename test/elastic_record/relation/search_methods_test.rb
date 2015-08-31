@@ -57,6 +57,43 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_filter_with_negation
+    scope = relation.filter.not("prefix" => {"name" => "Jo"})
+
+    expected = {
+      "filtered" => {
+        "filter" => {
+          "not" => {
+            "prefix" => {
+              "name" => "Jo"
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected, scope.as_elastic['query']
+  end
+
+  def test_filter_with_nested
+    scope = relation.filter.nested("contacts", "prefix" => {"contacts.name" => "Jo"})
+
+    expected = {
+      "filtered" => {
+        "filter" => {
+          "nested" => {
+            "path" => "contacts",
+            "prefix" => {
+              "contacts.name" => "Jo"
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected, scope.as_elastic['query']
+  end
+
   def test_query_with_only_query
     relation.query!('foo')
 

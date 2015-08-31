@@ -1,6 +1,33 @@
 module ElasticRecord
   class Relation
     module SearchMethods
+      class FilterChain
+        def initialize(scope)
+          @scope = scope
+        end
+
+        def not(*filters)
+          add_filter_nodes_to_scope(filters) do |filter_node|
+            Arelastic::Filters::Not.new(filter_node)
+          end
+        end
+
+        def nested(path, *filters)
+          add_filter_nodes_to_scope(filters) do |filter_node|
+            Arelastic::Filters::Nested.new(path, filter_node)
+          end
+        end
+
+        def add_filter_nodes_to_scope(filters)
+          filter_value = @scope.send(:build_filter_nodes, filters).map do |filter_node|
+            yield filter_node
+          end
+
+          @scope.filter_values += filter_value
+          @scope
+        end
+      end
+
       Relation::MULTI_VALUE_METHODS.each do |name|
         define_method "#{name}_values" do
           @values[name] || []
@@ -35,8 +62,12 @@ module ElasticRecord
         self
       end
 
-      def filter(*args)
-        clone.filter!(*args)
+      def filter(opts = :chain, *rest)
+        if opts == :chain
+          FilterChain.new(clone)
+        else
+          clone.filter!(opts, *rest)
+        end
       end
 
       def find_by(*args)
@@ -172,9 +203,17 @@ module ElasticRecord
         end
 
         def build_filter(filters)
-          nodes = []
+          nodes = build_filter_nodes(filters)
 
-          filters.map do |filter|
+          if nodes.size == 1
+            nodes.first
+          elsif nodes.size > 1
+            Arelastic::Filters::And.new(nodes)
+          end
+        end
+
+        def build_filter_nodes(filters)
+          filters.each_with_object([]) do |filter, nodes|
             if filter.is_a?(Arelastic::Filters::Filter)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
@@ -194,26 +233,7 @@ module ElasticRecord
               end
             end
           end
-
-          if nodes.size == 1
-            nodes.first
-          elsif nodes.size > 1
-            Arelastic::Filters::And.new(nodes)
-          end
         end
-
-        # def normalize_value(value)
-        #   case value
-        #   when true
-        #     "T"
-        #   when false
-        #     "F"
-        #   when Time
-        #     value.iso8601
-        #   else
-        #     value
-        #   end
-        # end
 
         def build_limit(limit)
           if limit
