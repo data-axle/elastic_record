@@ -71,9 +71,22 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
     assert_equal 3, scan_search.request_more_ids.size
   end
 
-  def test_each_should_not_be_used
+  def test_each_should_not_be_used_without_limit
+    mock = Minitest::Mock.new
+    mock.expect(:call, nil, [String])
+    ActiveSupport::Deprecation.stub(:warn, mock) do
+      results = []
+      Widget.elastic_relation.each do |widget|
+        results << widget.id
+      end
+
+      assert_equal ['5', '10', '15'].to_set, results.to_set
+    end
+
+    mock.verify
+
     results = []
-    Widget.elastic_relation.each do |widget|
+    Widget.elastic_relation.limit(3).each do |widget|
       results << widget.id
     end
 

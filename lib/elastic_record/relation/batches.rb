@@ -25,10 +25,10 @@ module ElasticRecord
     end
 
     module Batches
-      # Delegates to Array, but should not be used as it only enumerates the first 10 records.
+      EACH_WITHOUT_LIMIT_WARNING = "#{self.name}#each should not be used without a limit.  Did you mean #find_each ?"
       def each(&block)
-        warn "warning: #{self.class.name}#each is deprecated and should not be used.  Did you mean #find_each?"
-        super
+        ActiveSupport::Deprecation.warn EACH_WITHOUT_LIMIT_WARNING if self.limit_value.nil?
+        super # Array
       end
 
       def find_each(options = {})
