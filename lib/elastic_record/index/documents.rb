@@ -3,26 +3,32 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     module Documents
-      def index_record(record, index_name = nil)
+      def index_record(record, index_name: nil)
         return if disabled
 
-        index_document(record.send(record.class.primary_key), record.as_search, index_name)
+        index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
       end
 
-      def index_document(id, document, index_name = nil)
+      def index_document(id, document, parent: nil, index_name: nil)
         return if disabled
 
         index_name ||= alias_name
 
         if batch = current_bulk_batch
-          batch << { index: { _index: index_name, _type: type, _id: id } }
+          instructions = { _index: index_name, _type: type, _id: id }
+          instructions[:parent] = parent if parent
+
+          batch << { index: instructions }
           batch << document
         else
-          connection.json_put "/#{index_name}/#{type}/#{id}", document
+          path = "/#{index_name}/#{type}/#{id}"
+          path << "?parent=#{parent}" if parent
+
+          connection.json_put path, document
         end
       end
 
-      def delete_document(id, index_name = nil)
+      def delete_document(id, index_name: nil)
         index_name ||= alias_name
 
         if batch = current_bulk_batch
@@ -72,12 +78,12 @@ module ElasticRecord
         connection.bulk_stack.pop
       end
 
-      def bulk_add(batch, index_name = nil)
+      def bulk_add(batch, index_name: nil)
         index_name ||= alias_name
 
         bulk do
           batch.each do |record|
-            index_record(record, index_name)
+            index_record(record, index_name: index_name)
           end
         end
       end
