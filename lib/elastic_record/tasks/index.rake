@@ -63,7 +63,7 @@ namespace :index do
 
       puts "  Reindexing into #{index_name}"
       model.find_in_batches(batch_size: 100) do |records|
-        model.elastic_index.bulk_add(records, index_name)
+        model.elastic_index.bulk_add(records, index_name: index_name)
       end
 
       puts "  Deploying index..."
