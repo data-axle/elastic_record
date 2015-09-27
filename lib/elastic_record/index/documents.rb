@@ -17,12 +17,14 @@ module ElasticRecord
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: type, _id: id }
           instructions[:parent] = parent if parent
+
           batch << { index: instructions }
           batch << document
         else
           path = "/#{index_name}/#{type}/#{id}"
           path << "?parent=#{parent}" if parent
-          connection.json_put parent, document
+
+          connection.json_put path, document
         end
       end
 
