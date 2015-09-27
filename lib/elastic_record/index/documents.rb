@@ -9,16 +9,20 @@ module ElasticRecord
         index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
       end
 
-      def index_document(id, document, parent_id: nil, index_name: nil)
+      def index_document(id, document, parent: nil, index_name: nil)
         return if disabled
 
         index_name ||= alias_name
 
         if batch = current_bulk_batch
-          batch << { index: { _index: index_name, _type: type, _id: id } }
+          instructions = { _index: index_name, _type: type, _id: id }
+          instructions[:parent] = parent if parent
+          batch << { index: instructions }
           batch << document
         else
-          connection.json_put "/#{index_name}/#{type}/#{id}", document
+          path = "/#{index_name}/#{type}/#{id}"
+          path << "?parent=#{parent}" if parent
+          connection.json_put parent, document
         end
       end
 
