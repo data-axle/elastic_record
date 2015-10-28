@@ -8,5 +8,7 @@ gem 'rake'
 
 gem 'oj'
 
-gem 'mysql2'
+# ActiveRecord does not work with mysql2 >= 0.4
+# See: https://github.com/brianmario/mysql2/issues/675
+gem 'mysql2', '~> 0.3.20'
 gem 'pg'
