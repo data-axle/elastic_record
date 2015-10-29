@@ -2,7 +2,7 @@
 {<img src="https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0" />}[http://travis-ci.org/data-axle/elastic_record]
 {<img src="https://codeclimate.com/github/data-axle/elastic_record.png" />}[https://codeclimate.com/github/data-axle/elastic_record]
 
-ElasticRecord is an elasticsearch ORM.
+ElasticRecord is an Elasticsearch ORM.
 
 == Setup
 
@@ -16,6 +16,49 @@ Include ElasticRecord into your model:
   class Product < ActiveRecord::Base
     include ElasticRecord::Model
   end
+
+== Gem Configuration
+
+There are global configuration options for ElasticRecord that should be initialized before any
+models are declared.
+
+=== Connection Options (Required)
+
+There are two ways to set up which server(s) to connect to:
+
+* servers, via code:
+    ElasticRecord.configure do |config|
+      config.servers = %w(es1.example.com:9200 es2.example.com:9200)
+    end
+
+* connection_options, via code or a YAML file at config/elasticsearch.yml if you are using Rails.
+  For example, the YAML format:
+
+      development:
+        servers: es1.example.com:9200,es2.example.com:9200
+        timeout: 10
+        retries: 2
+
+=== Index Management
+
+If you need to manage multiple indexes via the rake tasks, you will need to declare them explicitly:
+
+  ElasticRecord.configure do |config|
+    config.model_names = %w(Product Order Location)
+  end
+
+=== JSON Adapter
+
+There is a gem-wide configuration setting to use the Oj gem for JSON (de)serialization, instead of
+ActiveSupport::JSON. In the appropriate location, require the Oj gem and set:
+
+  ElasticRecord::JSON.parser = :oj
+
+To return to the default parser, set the variable to :active_support.
+
+=== Other Settings
+
+* scroll_keep_alive - the amount of time a scroll exists
 
 == Searching
 
@@ -111,7 +154,7 @@ Class methods can be executed within scopes:
   # Increase the price of all red products by $10.
   Product.filter(color: 'red').increase_prices
 
-== Configuration
+== Index Configuration
 
 While elastic search automatically maps fields, you may wish to override the defaults:
 
@@ -135,20 +178,6 @@ You can also directly access Product.elastic_index.mapping and Product.elastic_i
 Create the index:
 
   rake index:create CLASS=Product
-
-If you need to create multiple indexes via the rake task, you will need to set the models in the
-global ElasticRecord configuration:
-
-  ElasticRecord.configure do |config|
-    config.model_names = %w(Product Order Location)
-  end
-
-There is a gem-wide configuration setting to use the Oj gem for JSON (de)serialization, instead of
-ActiveSupport::JSON. In the appropriate location, require the Oj gem and set:
-
-  ElasticRecord::JSON.parser = :oj
-
-To return to the default parser, set the variable to :active_support.
 
 == Index Administration
 
