@@ -49,8 +49,8 @@ If you need to manage multiple indexes via the rake tasks, you will need to decl
 
 === JSON Adapter
 
-There is a gem-wide configuration setting to use the Oj gem for JSON (de)serialization, instead of
-ActiveSupport::JSON. In the appropriate location, require the Oj gem and set:
+By default, ElasticRecord uses ActiveSupport::JSON to (de)serialize Elasticsearch payloads. There
+is also optional support for using the Oj gem. To use Oj, ensure that oj is required and set:
 
   ElasticRecord::JSON.parser = :oj
 
