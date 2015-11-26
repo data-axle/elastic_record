@@ -17,27 +17,24 @@ Include ElasticRecord into your model:
     include ElasticRecord::Model
   end
 
-== Gem Configuration
-
-There are global configuration options for ElasticRecord that should be initialized before any
-models are declared.
-
-=== Connection Options (Required)
+=== Configuration
 
 There are two ways to set up which server(s) to connect to:
 
-* servers, via code:
-    ElasticRecord.configure do |config|
-      config.servers = %w(es1.example.com:9200 es2.example.com:9200)
-    end
+* In config/initializers/elastic_search.rb:
+```ruby
+ElasticRecord.configure do |config|
+  config.servers = "es1.example.com:9200"
+end
+```
 
-* connection_options, either via code or a YAML file at config/elasticsearch.yml if you are using Rails.
-  For example, using the YAML format:
-
-      development:
-        servers: es1.example.com:9200,es2.example.com:9200
-        timeout: 10
-        retries: 2
+* With config/elasticsearch.yml:
+```yaml
+development:
+  servers: es1.example.com:9200,es2.example.com:9200
+  timeout: 10
+  retries: 2
+```
 
 === Index Management
 
@@ -46,15 +43,6 @@ If you need to manage multiple indexes via the rake tasks, you will need to decl
   ElasticRecord.configure do |config|
     config.model_names = %w(Product Order Location)
   end
-
-=== JSON Adapter
-
-By default, ElasticRecord uses ActiveSupport::JSON to (de)serialize Elasticsearch payloads. There
-is also optional support for using the Oj gem. To use Oj, ensure that oj is required and set:
-
-  ElasticRecord::JSON.parser = :oj
-
-To return to the default parser, set the variable to :active_support.
 
 == Searching
 
@@ -183,3 +171,12 @@ Core and Index APIs can be accessed with Product.elastic_index. Some examples in
   Product.elastic_index.reset              # Delete related indexes and deploy a new one
   Product.elastic_index.refresh            # Call the refresh API
   Product.elastic_index.get_mapping        # Get the index mapping defined by elastic search
+
+== JSON Adapter
+
+By default, ElasticRecord uses ActiveSupport::JSON to serialize Elasticsearch payloads. There
+is optional support for using the Oj gem. To use Oj, ensure that oj is required and set:
+```ruby
+  ElasticRecord::JSON.parser = :oj
+```
+To return to the default parser, set the variable to :active_support.
