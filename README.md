@@ -1,6 +1,6 @@
 # ElasticRecord #
-{<img src="https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0" />}[http://travis-ci.org/data-axle/elastic_record]
-{<img src="https://codeclimate.com/github/data-axle/elastic_record.png" />}[https://codeclimate.com/github/data-axle/elastic_record]
+[![Build Status](https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0)](http://travis-ci.org/data-axle/elastic_record)
+[![Code Climate](https://codeclimate.com/github/data-axle/elastic_record.png)](https://codeclimate.com/github/data-axle/elastic_record)
 
 ElasticRecord is an Elasticsearch ORM.
 
@@ -36,8 +36,9 @@ development:
 ## Search API ##
 
 ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
-
-  search = Product.elastic_search
+```ruby
+search = Product.elastic_search
+```
 
 ### Filtering ###
 
