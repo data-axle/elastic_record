@@ -29,6 +29,7 @@ module ElasticRecord
       end
 
       def delete_document(id, index_name: nil)
+        raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
         if batch = current_bulk_batch
