@@ -56,10 +56,6 @@ is also optional support for using the Oj gem. To use Oj, ensure that oj is requ
 
 To return to the default parser, set the variable to :active_support.
 
-=== Other Settings
-
-* scroll_keep_alive - the amount of time a scroll exists
-
 == Searching
 
 ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
