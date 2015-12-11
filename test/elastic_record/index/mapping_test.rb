@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Index::MappingTest < MiniTest::Test
   def test_delete_mapping
-    index_name = index.create
+    index_name = index.create("widgets_#{SecureRandom.random_number(100_000_000_000_000)}")
     refute_nil index.get_mapping(index_name)['widget']
 
     index.delete_mapping(index_name)
