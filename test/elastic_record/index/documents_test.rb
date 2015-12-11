@@ -36,7 +36,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.delete_document('abc')
     refute index.record_exists?('abc')
 
-    assert_raise RuntimeError do
+    assert_raises RuntimeError do
       index.delete_document('')
     end      
   end

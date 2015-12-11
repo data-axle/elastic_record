@@ -13,7 +13,6 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
   def test_default_mapping
     mapping = index.mapping
 
-    refute_nil mapping[:_source]
     refute_nil mapping[:properties]
   end
 
