@@ -28,12 +28,14 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_to_ids
+    Widget.elastic_index.delete_all
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
     assert_equal ['5', '10'].to_set, Widget.elastic_relation.to_ids.to_set
   end
 
   def test_to_a
+    Widget.elastic_index.delete_all
     create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
     array = Widget.elastic_relation.to_a
