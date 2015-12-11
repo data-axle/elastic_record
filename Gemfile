@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem 'dotenv-rails'
 gem 'fakeweb'
 gem 'oj'
 gem 'mysql2'

@@ -4,7 +4,8 @@ cache: bundler
 services:
   - elasticsearch
 before_script:
-  - bundle exec rake app:db:create
+  - cp test/dummy/.env.example test/dummy/.env
+  - bundle exec rake app:db:setup
   - bundle exec rake app:index:reset
 env:
   - "GEM=ar:mysql2"
