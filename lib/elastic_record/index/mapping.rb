@@ -26,6 +26,9 @@ module ElasticRecord
             created_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"},
             updated_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"}
           },
+          _all: {
+            enabled: false
+          },
           dynamic_templates: [
             {
               no_string_analyzing: {
