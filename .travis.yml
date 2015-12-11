@@ -7,6 +7,3 @@ before_script:
   - cp test/dummy/.env.example test/dummy/.env
   - bundle exec rake app:db:setup
   - bundle exec rake app:index:reset
-env:
-  - "GEM=ar:mysql2"
-  - "GEM=ar:postgresql"
