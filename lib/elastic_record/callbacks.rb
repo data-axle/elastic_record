@@ -25,9 +25,9 @@ module ElasticRecord
         if value.present? || value == false
           json[field] = case mapping[:type]
             when :object
-              value.as_search
+              value.as_search.presence
             when :nested
-              value.map(&:as_search)
+              value.map(&:as_search).presence
             else
               value
             end
