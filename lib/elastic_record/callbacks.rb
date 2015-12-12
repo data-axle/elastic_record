@@ -19,18 +19,20 @@ module ElasticRecord
       json = {}
 
       elastic_index.mapping[:properties].each do |field, mapping|
-        next if !respond_to?(field)
-        value = send(field)
+        value = try field
+        next if value.nil?
+
+        search_value = case mapping[:type]
+          when :object
+            value.as_search
+          when :nested
+            value.map(&:as_search)
+          else
+            value
+          end
 
         if value.present? || value == false
-          json[field] = case mapping[:type]
-            when :object
-              value.as_search.presence
-            when :nested
-              value.map(&:as_search).presence
-            else
-              value
-            end
+          json[field] = search_value
         end
       end
 
