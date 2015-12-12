@@ -22,17 +22,15 @@ module ElasticRecord
         value = try field
         next if value.nil?
 
-        search_value = case mapping[:type]
-          when :object
-            value.as_search
-          when :nested
-            value.map(&:as_search)
-          else
-            value
-          end
+        case mapping[:type]
+        when :object
+          value = value.as_search
+        when :nested
+          value = value.map(&:as_search)
+        end
 
         if value.present? || value == false
-          json[field] = search_value
+          json[field] = value
         end
       end
 
