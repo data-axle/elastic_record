@@ -14,20 +14,11 @@ module ElasticRecord
       end
     end
 
-
     def as_search
       json = {}
 
       elastic_index.mapping[:properties].each do |field, mapping|
-        value = try field
-        next if value.nil?
-
-        case mapping[:type]
-        when :object
-          value = value.as_search
-        when :nested
-          value = value.map(&:as_search)
-        end
+        value = elastic_search_value field, mapping
 
         if value.present? || value == false
           json[field] = value
@@ -37,6 +28,20 @@ module ElasticRecord
       amend_as_search(json) if respond_to?(:amend_as_search)
 
       json
+    end
+
+    def elastic_search_value(field, mapping)
+      value = try field
+      return if value.nil?
+
+      case mapping[:type]
+      when :object
+        value.as_search
+      when :nested
+        value.map(&:as_search)
+      else
+        value
+      end
     end
   end
 end
