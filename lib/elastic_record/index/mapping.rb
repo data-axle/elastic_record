@@ -23,8 +23,6 @@ module ElasticRecord
       def mapping
         @mapping ||= {
           properties: {
-            created_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"},
-            updated_at: {type: "date", index: "not_analyzed", format: "dateOptionalTime"}
           },
           _all: {
             enabled: false
