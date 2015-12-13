@@ -30,6 +30,16 @@ module ElasticRecord
       json
     end
 
+    def as_update_document
+      json = {}
+
+      changed.each do |field|
+        json[field] = elastic_search_value field
+      end
+
+      json
+    end
+
     def elastic_search_value(field, mapping)
       value = try field
       return if value.nil?
