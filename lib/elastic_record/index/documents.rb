@@ -4,11 +4,15 @@ module ElasticRecord
   class Index
     module Documents
       def index_record(record, index_name: alias_name)
-        index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
+        unless disabled
+          index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
+        end
       end
 
-      def update_record(record, index_name: nil)
-        update_document(record.send(record.class.primary_key), record.as_partial_update_document, index_name: index_name)
+      def update_record(record, index_name: alias_name)
+        unless disabled
+          update_document(record.send(record.class.primary_key), record.as_partial_update_document, index_name: index_name)
+        end
       end
 
       def index_document(id, document, parent: nil, index_name: alias_name)
@@ -45,6 +49,7 @@ module ElasticRecord
 
       def delete_document(id, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
+        index_name ||= alias_name
 
         if batch = current_bulk_batch
           batch << { delete: { _index: index_name, _type: type, _id: id } }
