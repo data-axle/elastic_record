@@ -4,7 +4,7 @@ module TestModel
   included do
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
-    define_model_callbacks :save, :destroy
+    define_model_callbacks :save, :update, :create, :destroy
 
     include ActiveModel::Dirty
     include ActiveModel::Validations
@@ -71,7 +71,8 @@ module TestModel
 
   def save
     @persisted = true
-    run_callbacks :save
+    callback_method = new_record? ? :create : :update
+    run_callbacks callback_method
   end
 
   def destroy

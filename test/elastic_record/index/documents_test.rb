@@ -29,6 +29,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     refute index.record_exists?('xyz')
   end
 
+  def test_update_document
+    index.index_document('abc', warehouse_id: '5', color: 'red')
+    index.update_document('abc', color: 'blue')
+
+    expected = {'warehouse_id' => '5', 'color' => 'blue'}
+    assert_equal expected, index.get('abc')['_source']
+  end
+
   def test_delete_document
     index.index_document('abc', color: 'red')
     assert index.record_exists?('abc')
@@ -65,11 +73,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     index.bulk do
       index.index_document '5', color: 'green'
+      index.update_document '5', color: 'blue'
       index.delete_document '3'
 
       expected = [
         {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
         {color: "green"},
+        {update: {_index: "widgets", _type: "widget", _id: "5", _retry_on_conflict: 3}},
+        {doc: {color: "blue"}, doc_as_upsert: true},
         {delete: {_index: index.alias_name, _type: "widget", _id: "3"}}
       ]
       assert_equal expected, index.current_bulk_batch

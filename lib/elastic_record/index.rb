@@ -40,7 +40,9 @@ module ElasticRecord
     include Deferred
 
     attr_accessor :model
+
     attr_accessor :has_percolator
+    attr_accessor :partial_updates
 
     def initialize(model)
       @model = model

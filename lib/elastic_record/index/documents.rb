@@ -7,6 +7,10 @@ module ElasticRecord
         index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
       end
 
+      def update_record(record, index_name: nil)
+        update_document(record.send(record.class.primary_key), record.as_partial_update_document, index_name: index_name)
+      end
+
       def index_document(id, document, parent: nil, index_name: alias_name)
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: type, _id: id }
@@ -19,6 +23,23 @@ module ElasticRecord
           path << "?parent=#{parent}" if parent
 
           connection.json_put path, document
+        end
+      end
+
+      def update_document(id, document, parent: nil, index_name: alias_name)
+        params = {doc: document, doc_as_upsert: true}
+
+        if batch = current_bulk_batch
+          instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
+          instructions[:parent] = parent if parent
+
+          batch << { update: instructions }
+          batch << params
+        else
+          path = "/#{index_name}/#{type}/#{id}/_update"
+          path << "?parent=#{parent}" if parent
+
+          connection.json_post path, params
         end
       end
 
