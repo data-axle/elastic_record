@@ -40,12 +40,10 @@ module ElasticRecord
     include Deferred
 
     attr_accessor :model
-    attr_accessor :disabled
     attr_accessor :has_percolator
 
     def initialize(model)
       @model = model
-      @disabled = false
     end
 
     def initialize_copy(other)
@@ -67,14 +65,6 @@ module ElasticRecord
 
     def type
       @type ||= model.base_class.name.demodulize.underscore
-    end
-
-    def disable!
-      @disabled = true
-    end
-
-    def enable!
-      @disabled = false
     end
 
     def real_connection

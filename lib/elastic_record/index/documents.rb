@@ -3,17 +3,11 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     module Documents
-      def index_record(record, index_name: nil)
-        return if disabled
-
+      def index_record(record, index_name: alias_name)
         index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
       end
 
-      def index_document(id, document, parent: nil, index_name: nil)
-        return if disabled
-
-        index_name ||= alias_name
-
+      def index_document(id, document, parent: nil, index_name: alias_name)
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: type, _id: id }
           instructions[:parent] = parent if parent
@@ -28,9 +22,8 @@ module ElasticRecord
         end
       end
 
-      def delete_document(id, index_name: nil)
+      def delete_document(id, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
-        index_name ||= alias_name
 
         if batch = current_bulk_batch
           batch << { delete: { _index: index_name, _type: type, _id: id } }
@@ -79,7 +72,7 @@ module ElasticRecord
         connection.bulk_stack.pop
       end
 
-      def bulk_add(batch, index_name: nil)
+      def bulk_add(batch, index_name: alias_name)
         index_name ||= alias_name
 
         bulk do
