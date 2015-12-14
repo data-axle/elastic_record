@@ -29,6 +29,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     refute index.record_exists?('xyz')
   end
 
+  def test_update_document
+    index.index_document('abc', warehouse_id: '5', color: 'red')
+    index.update_document('abc', color: 'blue')
+
+    expected = {'warehouse_id' => '5', 'color' => 'blue'}
+    assert_equal expected, index.get('abc')['_source']
+  end
+
   def test_delete_document
     index.index_document('abc', color: 'red')
     assert index.record_exists?('abc')
