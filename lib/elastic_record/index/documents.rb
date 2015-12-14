@@ -73,8 +73,6 @@ module ElasticRecord
       end
 
       def bulk_add(batch, index_name: alias_name)
-        index_name ||= alias_name
-
         bulk do
           batch.each do |record|
             index_record(record, index_name: index_name)
