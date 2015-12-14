@@ -8,17 +8,17 @@ class Widget
   self.elastic_index.has_percolator = true
 
   self.elastic_index.mapping[:properties].update(
-    name: {
+    'name' => {
       type: 'multi_field',
       fields: {
         name: {type: 'string', index: 'not_analyzed'},
         analyzed: {type: 'string', index: 'analyzed'}
       }
     },
-    color: {
+    'color' => {
       type: 'string', index: 'not_analyzed'
     },
-    warehouse_id: {
+    'warehouse_id' => {
       type: 'string', index: 'not_analyzed'
     }
   )

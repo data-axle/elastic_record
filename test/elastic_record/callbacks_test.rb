@@ -32,7 +32,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
 
   def test_as_search
     Widget.new(id: '10', color: 'green').tap do |widget|
-      assert_equal({color: "green"}, widget.as_search)
+      assert_equal({"color" => "green"}, widget.as_search)
     end
 
     Widget.new(id: '10', color: '').tap do |widget|
@@ -40,7 +40,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
     end
 
     Widget.new(id: '10', color: false).tap do |widget|
-      assert_equal({color: false}, widget.as_search)
+      assert_equal({"color" => false}, widget.as_search)
     end
   end
 
@@ -86,7 +86,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
     define_attributes [:height]
 
     self.elastic_index.mapping[:properties].update(
-      height: {
+      'height' => {
         type: 'string', index: 'not_analyzed'
       }
     )

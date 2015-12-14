@@ -4,8 +4,12 @@ module ElasticRecord
       return unless base.respond_to?(:after_save) &&  base.respond_to?(:after_destroy)
 
       base.class_eval do
-        after_save if: :changed? do
+        after_create do
           self.class.elastic_index.index_record self
+        end
+
+        after_update if: :changed? do
+          self.class.elastic_index.update_document(send(self.class.primary_key), as_partial_update_document)
         end
 
         after_destroy do
@@ -30,11 +34,12 @@ module ElasticRecord
       json
     end
 
-    def as_update_document
+    def as_partial_update_document
       json = {}
 
+      property_mapping = elastic_index.mapping[:properties]
       changed.each do |field|
-        json[field] = elastic_search_value field
+        json[field] = elastic_search_value field, property_mapping[field]
       end
 
       json
