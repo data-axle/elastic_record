@@ -9,7 +9,8 @@ module ElasticRecord
         end
 
         after_update if: :changed? do
-          self.class.elastic_index.update_record self
+          method = self.class.elastic_index.partial_updates ? :update_record : :index_record
+          self.class.elastic_index.send(method, self)
         end
 
         after_destroy do
@@ -37,10 +38,14 @@ module ElasticRecord
     def as_partial_update_document
       json = {}
 
-      property_mapping = elastic_index.mapping[:properties]
+      mappings = elastic_index.mapping[:properties]
       changed.each do |field|
-        json[field] = elastic_search_value field, property_mapping[field]
+        if field_mapping = mappings[field]
+          json[field] = elastic_search_value field, field_mapping
+        end
       end
+
+      amend_partial_update_document(json) if respond_to?(:partial_update_document)
 
       json
     end
@@ -61,6 +66,9 @@ module ElasticRecord
       if value.present? || value == false
         value
       end
+
+    rescue
+      raise "Field not found for #{field.inspect}"
     end
   end
 end
