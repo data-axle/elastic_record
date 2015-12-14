@@ -2,8 +2,9 @@ require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Test
   def test_delegate_to_array
+    Widget.elastic_index.delete_all
     Widget.elastic_index.index_document('5', color: 'red')
-    
+
     records = []
     Widget.elastic_relation.each do |record|
       records << record
@@ -22,6 +23,6 @@ class ElasticRecord::Relation::DelegationTest < MiniTest::Test
     result = model.elastic_relation.filter('foo' => 'bar').do_it
 
     expected = {"query" => {"filtered" => {"filter" => {"term" => {"foo" => "bar"}}}}}
-    assert_equal expected, result 
+    assert_equal expected, result
   end
 end

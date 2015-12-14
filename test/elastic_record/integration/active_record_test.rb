@@ -48,7 +48,7 @@ class ElasticRecord::Mysql2Test < MiniTest::Test
     setup_project_database(
       'adapter'   => 'mysql2',
       'host'      => "localhost",
-      'database'  => 'elastic_record_test',
+      'database'  => 'elastic_record_subtest',
       'username'  => 'root'
     )
   end
@@ -63,8 +63,9 @@ class ElasticRecord::PostgresqlTest < MiniTest::Test
     setup_project_database(
       'adapter'   => 'postgresql',
       'encoding'  => 'unicode',
-      'database'  => 'content_system_development',
+      'database'  => 'elastic_record_subtest',
       'pool'      => 5,
+      'host'      => 'localhost',
       'username'  => 'postgres',
       'password'  => ''
     )
