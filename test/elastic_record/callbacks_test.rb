@@ -91,34 +91,4 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
     assert_equal({name: 'Jonny'}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
   end
-
-  class DisablingModel
-    include TestModel
-
-    attr_accessor :called_as_search
-
-    define_attributes [:height]
-
-    self.elastic_index.mapping[:properties].update(
-      'height' => {
-        type: 'string', index: 'not_analyzed'
-      }
-    )
-
-    def as_search
-      @called_as_search = true
-      super
-    end
-
-  end
-
-  def test_disabled_skip_document
-    DisablingModel.elastic_index.disable!
-
-    model = DisablingModel.new id: '5', height: '9 feets'
-    model.save
-
-    refute Widget.elastic_index.record_exists?(model.id)
-    refute model.called_as_search
-  end
 end

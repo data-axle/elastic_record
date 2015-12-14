@@ -13,19 +13,6 @@ class ElasticRecord::IndexTest < MiniTest::Test
     assert_equal 'widget', index.type
   end
 
-  def test_disable
-    index.disable!
-
-    assert index.disabled
-  end
-
-  def test_enable
-    index.disable!
-    index.enable!
-
-    refute index.disabled
-  end
-
   def test_configure
     context = nil
 
