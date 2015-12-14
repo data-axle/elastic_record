@@ -4,15 +4,11 @@ module ElasticRecord
   class Index
     module Documents
       def index_record(record, index_name: nil)
-        return if disabled
-
         index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
       end
 
       def update_record(record, index_name: nil)
-        return if disabled
-
-        update_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
+        update_document(record.send(record.class.primary_key), record.as_partial_update_document, index_name: index_name)
       end
 
       def index_document(id, document, parent: nil, index_name: nil)
@@ -45,7 +41,7 @@ module ElasticRecord
           instructions[:parent] = parent if parent
 
           batch << { update: instructions }
-          batch << document
+          batch << params
         else
           path = "/#{index_name}/#{type}/#{id}/_update"
           path << "?parent=#{parent}" if parent

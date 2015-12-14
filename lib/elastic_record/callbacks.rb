@@ -9,7 +9,7 @@ module ElasticRecord
         end
 
         after_update if: :changed? do
-          self.class.elastic_index.update_document(send(self.class.primary_key), as_partial_update_document)
+          self.class.elastic_index.update_record self
         end
 
         after_destroy do
@@ -24,7 +24,7 @@ module ElasticRecord
       elastic_index.mapping[:properties].each do |field, mapping|
         value = elastic_search_value field, mapping
 
-        if value.present? || value == false
+        unless value.nil?
           json[field] = value
         end
       end
@@ -49,12 +49,16 @@ module ElasticRecord
       value = try field
       return if value.nil?
 
-      case mapping[:type]
-      when :object
-        value.as_search
-      when :nested
-        value.map(&:as_search)
-      else
+      value = case mapping[:type]
+        when :object
+          value.as_search
+        when :nested
+          value.map(&:as_search)
+        else
+          value
+        end
+
+      if value.present? || value == false
         value
       end
     end
