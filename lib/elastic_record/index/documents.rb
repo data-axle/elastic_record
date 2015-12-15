@@ -40,8 +40,8 @@ module ElasticRecord
           batch << { update: instructions }
           batch << params
         else
-          path = "/#{index_name}/#{type}/#{id}/_update"
-          path << "?parent=#{parent}" if parent
+          path = "/#{index_name}/#{type}/#{id}/_update?retry_on_conflict=3"
+          path << "&parent=#{parent}" if parent
 
           connection.json_post path, params
         end
