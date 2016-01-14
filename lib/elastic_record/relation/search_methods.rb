@@ -258,7 +258,7 @@ module ElasticRecord
             if order.is_a?(Arelastic::Sorts::Sort)
               order
             else
-              Arelastic::Sorts::Sort.new(order)
+              Arelastic::Sorts::Field.new(order)
             end
           end
 
