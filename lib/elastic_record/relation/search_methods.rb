@@ -256,7 +256,6 @@ module ElasticRecord
 
           orders = orders.map do |order|
             if order.is_a?(Arelastic::Sorts::Sort)
-              p "GOT A REAL ORDER"
               order
             else
               Arelastic::Sorts::Field.new(order)
