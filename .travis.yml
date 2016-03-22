@@ -1,6 +1,12 @@
 rvm: 2.2.3
 sudo: false
 cache: bundler
+addons:
+  apt:
+    sources:
+    - elasticsearch-2.1
+    packages:
+    - elasticsearch
 services:
   - elasticsearch
 before_script:
