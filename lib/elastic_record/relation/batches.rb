@@ -14,7 +14,11 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {}, &block)
-        elastic_index.create_scan_search(as_elastic, options).each_slice(&block)
+        create_scan_search(options).each_slice(&block)
+      end
+
+      def create_scan_search(options)
+        elastic_index.create_scan_search(as_elastic, options)
       end
 
       def reindex
