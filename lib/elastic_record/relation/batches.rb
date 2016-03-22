@@ -38,28 +38,12 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {}, &block)
-        scan_search = create_scan_search(options)
-
-        while (hit_ids = scan_search.request_more_ids).any?
-          hit_ids.each_slice(scan_search.requested_batch_size, &block)
-        end
+        elastic_index.create_scan_search(options).each_slice(&block)
       end
 
       def reindex
         relation.find_in_batches do |batch|
           elastic_index.bulk_add(batch)
-        end
-      end
-
-      def create_scan_search(options = {})
-        options[:batch_size] ||= 100
-        options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
-
-        search_options = {search_type: 'scan', size: options[:batch_size], scroll: options[:keep_alive]}
-        json = klass.elastic_index.search(as_elastic, search_options)
-
-        ElasticRecord::Relation::ScanSearch.new(klass, json['_scroll_id'], options).tap do |scan_search|
-          scan_search.total_hits = json['hits']['total']
         end
       end
     end
