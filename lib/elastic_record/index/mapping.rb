@@ -16,10 +16,6 @@ module ElasticRecord
         end
       end
 
-      def delete_mapping(index_name = alias_name)
-        connection.json_delete "/#{index_name}/#{type}"
-      end
-
       def mapping
         @mapping ||= {
           properties: {
