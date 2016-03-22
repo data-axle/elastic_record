@@ -7,13 +7,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
-  def setup
-    super
-    index.disable_deferring!
-    index.reset
-    index.enable_deferring!
-  end
-
   def test_index_record
     record = Widget.new(id: '5', color: 'red')
 
@@ -101,30 +94,43 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert_nil index.current_bulk_batch
   end
 
-  # def test_bulk_error
-  #   index.bulk do
-  #     index.index_document '5', color: 'green'
-  #     index.index_document '3', color: {'bad' => 'stuff'}
-  #   end
-  #   refute index.record_exists?('3')
-  #   assert false, 'Expected ElasticRecord::BulkError'
-  # rescue => e
-  #   assert_match '[{"index"', e.message
-  # end
+  def test_bulk_error
+    without_deferring do
+      begin
+        index.bulk do
+          index.index_document '5', color: 'green'
+          index.index_document '3', color: {'bad' => 'stuff'}
+        end
+        refute index.record_exists?('3')
+        assert false, 'Expected ElasticRecord::BulkError'
+      rescue => e
+        assert_match '[{"index"', e.message
+      end
+    end
+  end
 
-  # def test_bulk_inheritence
-  #   index.bulk do
-  #     InheritedWidget.elastic_index.index_document '5', color: 'green'
-  #
-  #     expected = [
-  #       {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
-  #       {color: "green"}
-  #     ]
-  #     assert_equal expected, index.current_bulk_batch
-  #   end
-  # end
+  def test_bulk_inheritence
+    without_deferring do
+      index.bulk do
+        InheritedWidget.elastic_index.index_document '5', color: 'green'
+
+        expected = [
+          {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
+          {color: "green"}
+        ]
+        assert_equal expected, index.current_bulk_batch
+      end
+    end
+  end
 
   private
+
+    def without_deferring
+      index.disable_deferring!
+      yield
+      index.reset
+      index.enable_deferring!
+    end
 
     def index
       @index ||= Widget.elastic_index
