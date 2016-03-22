@@ -7,7 +7,7 @@ before_install:
 - sudo add-apt-repository "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
 - sudo apt-get update
 - sudo apt-get install elasticsearch
-- sudo service elasticsearch start
+- sudo service elasticsearch start; sleep 5
 - curl localhost:9200
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
