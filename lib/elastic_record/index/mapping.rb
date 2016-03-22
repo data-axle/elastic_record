@@ -30,8 +30,7 @@ module ElasticRecord
                 match_mapping_type: "string",
                 mapping: {
                   type: "string",
-                  index: "not_analyzed",
-                  doc_values: true
+                  index: "not_analyzed"
                 }
               }
             }
