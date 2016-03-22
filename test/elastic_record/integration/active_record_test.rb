@@ -66,7 +66,6 @@ class ElasticRecord::PostgresqlTest < MiniTest::Test
       'database'  => 'elastic_record_subtest',
       'pool'      => 5,
       'host'      => 'localhost',
-      'username'  => 'postgres',
       'password'  => ''
     )
   end
