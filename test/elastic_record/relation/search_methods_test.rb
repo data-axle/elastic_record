@@ -83,8 +83,10 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
         "filter" => {
           "nested" => {
             "path" => "contacts",
-            "prefix" => {
-              "contacts.name" => "Jo"
+            "filter" => {
+              "prefix" => {
+                "contacts.name" => "Jo"
+              }
             }
           }
         }
