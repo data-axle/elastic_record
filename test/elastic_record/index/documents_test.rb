@@ -59,6 +59,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert index.record_exists?('joe')
   end
 
+  def test_create_scan_search
+    scan_search = index.create_scan_search
+
+    assert_equal 3, scan_search.total_hits
+    refute_nil scan_search.scroll_id
+    assert_equal 3, scan_search.request_more_ids.size
+  end
+
   def test_bulk_add
     record = Widget.new(id: 'abc', color: 'red')
 

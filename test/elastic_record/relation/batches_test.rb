@@ -63,14 +63,6 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
     assert_equal ['5', '10', '15', '20', '25', '30', '35', '40'].to_set, results.flatten.to_set
   end
 
-  def test_create_scan_search
-    scan_search = Widget.elastic_relation.create_scan_search
-
-    assert_equal 3, scan_search.total_hits
-    refute_nil scan_search.scroll_id
-    assert_equal 3, scan_search.request_more_ids.size
-  end
-
   private
     def create_widgets
       Widget.elastic_index.delete_all
