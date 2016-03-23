@@ -3,12 +3,12 @@ sudo: false
 cache:
 - bundler
 - apt
+services:
+- elasticsearch
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
-services:
-- elasticsearch
 addons:
   apt:
     sources:
