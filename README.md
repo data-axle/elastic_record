@@ -63,7 +63,7 @@ An Arelastic object can also be passed in, working similarily to Arel:
 search.filter(Product.arelastic[:name].prefix("Sca"))
 
 # Name does not start with 'Sca'
-search.filter(Product.arelastic[:name].prefix("Sca").negated)
+search.filter(Product.arelastic[:name].prefix("Sca").negate)
 
 # Size is greater than 5
 search.filter(Product.arelastic[:size].gt(5))

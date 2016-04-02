@@ -77,12 +77,14 @@ module ElasticRecord
         end
       end
 
-      def delete_document(id, index_name: alias_name)
+      def delete_document(id,  parent: nil, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
         if batch = current_bulk_batch
-          batch << { delete: { _index: index_name, _type: type, _id: id } }
+          instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
+          instructions[:parent] = parent if parent
+          batch << instructions
         else
           connection.json_delete "/#{index_name}/#{type}/#{id}"
         end
