@@ -29,27 +29,7 @@ module ElasticRecord
 
       def settings=(settings)
         self.servers = settings['servers']
-
-        if settings['options']
-          warn("**************************************",
-            "elasticsearch.yml/:options is deprecated. For example, the following:",
-            "development:",
-            "  servers: 127.0.0.1:9200",
-            "  options:",
-            "    timeout: 10",
-            "    retries: 2",
-            "",
-            "becomes:",
-            "",
-            "development:",
-            "  servers: 127.0.0.1:9200",
-            "  timeout: 10",
-            "  retries: 2",
-            "**************************************")
-          self.connection_options = settings['options']
-        else
-          self.connection_options = settings
-        end
+        self.connection_options = settings
 
         if scroll_keep_alive = settings['scroll_keep_alive'].presence
           self.scroll_keep_alive = scroll_keep_alive
