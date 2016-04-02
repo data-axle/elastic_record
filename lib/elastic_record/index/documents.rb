@@ -47,7 +47,7 @@ module ElasticRecord
         end
       end
 
-      def delete_document(id, index_name: alias_name)
+      def delete_document(id,  parent: nil, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
