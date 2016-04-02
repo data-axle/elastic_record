@@ -56,7 +56,10 @@ module ElasticRecord
           instructions[:parent] = parent if parent
           batch << instructions
         else
-          connection.json_delete "/#{index_name}/#{type}/#{id}"
+          path = "/#{index_name}/#{type}/#{id}"
+          path << "&parent=#{parent}" if parent
+
+          connection.json_delete path
         end
       end
 
