@@ -1,17 +1,15 @@
 rvm: 2.2.3
-sudo: false
-cache:
-- bundler
-- apt
-services:
-- elasticsearch
+cache: bundler
+rvm: 2.3.0
+sudo: required
+dist: trusty
+before_install:
+- wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+- sudo add-apt-repository "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
+- sudo apt-get update && sudo apt-get install elasticsearch
+- sudo service elasticsearch start; sleep 10
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
+- curl localhost:9200
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
-addons:
-  apt:
-    sources:
-    - elasticsearch-2.1
-    packages:
-    - elasticsearch
