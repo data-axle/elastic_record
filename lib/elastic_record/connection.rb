@@ -78,6 +78,7 @@ module ElasticRecord
       request = METHODS[method].new(path)
       request.basic_auth(options[:username], options[:password]) if options[:username].present?
       request.body = body
+      request.content_type = 'application/json'
       request
     end
 
