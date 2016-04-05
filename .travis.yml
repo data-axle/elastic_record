@@ -3,9 +3,8 @@ cache: bundler
 sudo: required
 dist: trusty
 before_install:
-- wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-- sudo add-apt-repository "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
-- sudo apt-get update && sudo apt-get install elasticsearch
+- wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.2.2/elasticsearch-2.2.2.deb
+- sudo dpkg -i elasticsearch-2.2.2.deb
 - sudo service elasticsearch start; sleep 10
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
