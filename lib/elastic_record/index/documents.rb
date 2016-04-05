@@ -84,7 +84,7 @@ module ElasticRecord
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
-          batch << instructions
+          batch << { delete: instructions }
         else
           connection.json_delete "/#{index_name}/#{type}/#{id}"
         end
