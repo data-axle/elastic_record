@@ -9,11 +9,12 @@ module ElasticRecord
     def initialize(servers, options = {})
       self.servers = Array(servers)
 
+      @shuffled_servers       = nil
       self.current_server     = next_server
       self.request_count      = 0
       self.max_request_count  = 100
       self.options            = options.symbolize_keys
-      self.bulk_stack        = []
+      self.bulk_stack         = []
     end
 
     def head(path)
@@ -78,6 +79,7 @@ module ElasticRecord
       request = METHODS[method].new(path)
       request.basic_auth(options[:username], options[:password]) if options[:username].present?
       request.body = body
+      request.content_type = 'application/json'
       request
     end
 

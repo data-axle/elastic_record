@@ -16,10 +16,6 @@ module ElasticRecord
         end
       end
 
-      def delete_mapping(index_name = alias_name)
-        connection.json_delete "/#{index_name}/#{type}"
-      end
-
       def mapping
         @mapping ||= {
           properties: {
@@ -34,8 +30,7 @@ module ElasticRecord
                 match_mapping_type: "string",
                 mapping: {
                   type: "string",
-                  index: "not_analyzed",
-                  doc_values: true
+                  index: "not_analyzed"
                 }
               }
             }

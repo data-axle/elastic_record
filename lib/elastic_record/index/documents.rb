@@ -2,6 +2,36 @@ require 'active_support/core_ext/object/to_query'
 
 module ElasticRecord
   class Index
+    class ScanSearch
+      attr_reader :scroll_id
+      attr_accessor :total_hits
+
+      def initialize(elastic_index, scroll_id, options = {})
+        @elastic_index  = elastic_index
+        @scroll_id      = scroll_id
+        @options        = options
+      end
+
+      def each_slice(&block)
+        while (hit_ids = request_more_ids).any?
+          hit_ids.each_slice(requested_batch_size, &block)
+        end
+      end
+
+      def request_more_ids
+        json = @elastic_index.scroll(@scroll_id, keep_alive)
+        json['hits']['hits'].map { |hit| hit['_id'] }
+      end
+
+      def keep_alive
+        @options[:keep_alive] || (raise "Must provide a :keep_alive option")
+      end
+
+      def requested_batch_size
+        @options[:batch_size]
+      end
+    end
+
     module Documents
       def index_record(record, index_name: alias_name)
         unless disabled
@@ -54,7 +84,7 @@ module ElasticRecord
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
-          batch << instructions
+          batch << { delete: instructions }
         else
           path = "/#{index_name}/#{type}/#{id}"
           path << "&parent=#{parent}" if parent
@@ -64,7 +94,13 @@ module ElasticRecord
       end
 
       def delete_by_query(query)
-        connection.json_delete "/#{alias_name}/#{type}/_query", query
+        scan_search = create_scan_search query
+
+        scan_search.each_slice do |ids|
+          bulk do
+            ids.each { |id| delete_document(id) }
+          end
+        end
       end
 
       def record_exists?(id)
@@ -82,6 +118,18 @@ module ElasticRecord
 
       def explain(id, elastic_query)
         get "_explain", elastic_query
+      end
+
+      def create_scan_search(elastic_query, options = {})
+        options[:batch_size] ||= 100
+        options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
+
+        search_options = {search_type: 'scan', size: options[:batch_size], scroll: options[:keep_alive]}
+        json = search(elastic_query, search_options)
+
+        ScanSearch.new(self, json['_scroll_id'], options).tap do |scan_search|
+          scan_search.total_hits = json['hits']['total']
+        end
       end
 
       def scroll(scroll_id, scroll_keep_alive)

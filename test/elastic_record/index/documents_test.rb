@@ -7,12 +7,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
-  def setup
-    super
-    index.disable_deferring!
-    index.reset
-  end
-
   def test_index_record
     record = Widget.new(id: '5', color: 'red')
 
@@ -46,7 +40,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     assert_raises RuntimeError do
       index.delete_document('')
-    end      
+    end
   end
 
   def test_delete_by_query
@@ -57,6 +51,17 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     refute index.record_exists?('bob')
     assert index.record_exists?('joe')
+  end
+
+  def test_create_scan_search
+    index.index_document('bob', name: 'bob')
+    index.index_document('joe', name: 'joe')
+
+    scan_search = index.create_scan_search('query' => {query_string: {query: 'name.analyzed:bob'}})
+
+    assert_equal 1, scan_search.total_hits
+    refute_nil scan_search.scroll_id
+    assert_equal 1, scan_search.request_more_ids.size
   end
 
   def test_bulk_add
@@ -81,7 +86,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
         {color: "green"},
         {update: {_index: "widgets", _type: "widget", _id: "5", _retry_on_conflict: 3}},
         {doc: {color: "blue"}, doc_as_upsert: true},
-        {delete: {_index: index.alias_name, _type: "widget", _id: "3"}}
+        {delete: {_index: index.alias_name, _type: "widget", _id: "3", _retry_on_conflict: 3}}
       ]
       assert_equal expected, index.current_bulk_batch
     end
@@ -90,28 +95,42 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk_error
-    index.bulk do
-      index.index_document '5', color: 'green'
-      index.index_document '3', color: {'bad' => 'stuff'}
+    without_deferring do
+      begin
+        index.bulk do
+          index.index_document '5', color: 'green'
+          index.index_document '3', color: {'bad' => 'stuff'}
+        end
+        refute index.record_exists?('3')
+        assert false, 'Expected ElasticRecord::BulkError'
+      rescue => e
+        assert_match '[{"index"', e.message
+      end
     end
-    assert false, 'Expected ElasticRecord::BulkError'
-  rescue => e
-    assert_match '[{"index"', e.message
   end
 
   def test_bulk_inheritence
-    index.bulk do
-      InheritedWidget.elastic_index.index_document '5', color: 'green'
+    without_deferring do
+      index.bulk do
+        InheritedWidget.elastic_index.index_document '5', color: 'green'
 
-      expected = [
-        {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
-        {color: "green"}
-      ]
-      assert_equal expected, index.current_bulk_batch
+        expected = [
+          {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
+          {color: "green"}
+        ]
+        assert_equal expected, index.current_bulk_batch
+      end
     end
   end
 
   private
+
+    def without_deferring
+      index.disable_deferring!
+      yield
+      index.reset
+      index.enable_deferring!
+    end
 
     def index
       @index ||= Widget.elastic_index

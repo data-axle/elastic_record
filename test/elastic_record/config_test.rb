@@ -21,7 +21,6 @@ class ElasticRecord::ConfigTest < MiniTest::Test
     end
   end
 
-
   private
 
     def with_servers(values)

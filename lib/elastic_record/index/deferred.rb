@@ -16,6 +16,7 @@ module ElasticRecord
         def initialize(index)
           self.index = index
           self.bulk_stack = []
+          @deferring_enabled = false
           reset!
         end
 
