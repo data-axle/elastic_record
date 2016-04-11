@@ -16,7 +16,7 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   # end
 
   def test_request_notification
-    stub_request(:any, "#{Widget.elastic_connection.servers.first}/test").to_return(status: 200, body: Oj.dump('the' => 'response'))
+    stub_request(:any, '/test').to_return(status: 200, body: Oj.dump('the' => 'response'))
     Widget.elastic_connection.json_get "/widgets", {'foo' => 'bar'}
 
     wait
