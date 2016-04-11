@@ -1,15 +1,16 @@
 ENV["RAILS_ENV"] = "test"
 
-require File.expand_path("../../test/dummy/config/environment.rb",  __FILE__)
+require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
 
 require 'minitest/autorun'
+require 'webmock/minitest'
 
-FakeWeb.allow_net_connect = %r[^https?://127.0.0.1]
+WebMock.disable_net_connect!(allow_localhost: true)
 
 module MiniTest
   class Test
     def setup
-      FakeWeb.clean_registry
+      WebMock.reset!
 
       ElasticRecord::Config.models.each do |model|
         model.elastic_index.enable_deferring!

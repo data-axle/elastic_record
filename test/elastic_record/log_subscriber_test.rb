@@ -16,7 +16,7 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   # end
 
   def test_request_notification
-    FakeWeb.register_uri(:any, %r[/test], status: ["200", "OK"], body: Oj.dump('the' => 'response'))
+    stub_request(:any, '/test').to_return(status: 200, body: Oj.dump('the' => 'response'))
     Widget.elastic_connection.json_get "/widgets", {'foo' => 'bar'}
 
     wait
@@ -27,7 +27,7 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   end
 
   def test_request_notification_escaping
-    FakeWeb.register_uri(:any, %r[/widgets?v=%DB], status: ["200", "OK"], body: Oj.dump('the' => 'response', 'has %DB' => 'odd %DB stuff'))
+    stub_request(:any, "#{Widget.elastic_connection.servers.first}/widgets?v=%DB").to_return(status: 200, body: Oj.dump('the' => 'response', 'has %DB' => 'odd %DB stuff'))
     Widget.elastic_connection.json_get "/widgets?v=%DB", {'foo' => 'bar', 'escape %DB ' => 'request %DB'}
 
     wait
