@@ -36,6 +36,7 @@ development:
 ## Search API ##
 
 ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
+
 ```ruby
 search = Product.elastic_search
 ```
@@ -208,7 +209,9 @@ Product.elastic_index.get_mapping        # Get the index mapping defined by elas
 
 By default, ElasticRecord uses ActiveSupport::JSON to serialize Elasticsearch payloads. There
 is optional support for using the Oj gem. To use Oj, ensure that oj is required and set:
+
 ```ruby
   ElasticRecord::JSON.parser = :oj
 ```
+
 To return to the default parser, set the variable to :active_support.
