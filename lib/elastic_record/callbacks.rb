@@ -60,7 +60,11 @@ module ElasticRecord
         when :nested
           value.map(&:as_search)
         else
-          value
+          if value.respond_to?(:as_search)
+            value.as_search
+          else
+            value
+          end
         end
 
       if value.present? || value == false
