@@ -214,7 +214,7 @@ module ElasticRecord
 
         def build_filter_nodes(filters)
           filters.each_with_object([]) do |filter, nodes|
-            if filter.is_a?(Arelastic::Filters::Filter)
+            if filter.is_a?(Arelastic::Nodes::Node)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
               nodes << Arelastic::Filters::HasChild.new(filter.elastic_index.type, filter.as_elastic['query'])
