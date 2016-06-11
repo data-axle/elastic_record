@@ -63,13 +63,13 @@ module ElasticRecord
       klass.current_elastic_search = previous
     end
 
+    def search_hits
+      search_results['hits']['hits']
+    end
+
     private
       def reset
         @search_results = @records = nil
-      end
-
-      def search_hits
-        search_results['hits']['hits']
       end
 
       def search_results
