@@ -109,6 +109,16 @@ module ElasticRecord
         end
       end
 
+      def search_options!(options)
+        self.search_options_value ||= {}
+        self.search_options_value.merge! options
+        self
+      end
+
+      def search_options(options)
+        clone.search_options!(options)
+      end
+
       def search_type!(type)
         self.search_type_value = type
         self
@@ -176,7 +186,8 @@ module ElasticRecord
             build_limit(limit_value),
             build_offset(offset_value),
             build_aggregations(aggregation_values),
-            build_orders(order_values)
+            build_orders(order_values),
+            search_options_value
           ].compact
 
           Arelastic::Nodes::HashGroup.new searches
@@ -271,6 +282,7 @@ module ElasticRecord
             order.reverse
           end
         end
+
     end
   end
 end

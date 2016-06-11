@@ -164,6 +164,13 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal expected, relation.as_elastic['sort']
   end
 
+  def test_search_options
+    relation.search_options! version: true
+
+    expected = {version: true}
+    assert_equal true, relation.as_elastic[:version]
+  end
+
   def test_search_type
     relation.search_type! :count
 
