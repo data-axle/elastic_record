@@ -19,12 +19,15 @@ module ElasticRecord
       end
 
       def request_more_hits
-        json = @elastic_index.scroll(@scroll_id, keep_alive)
-        json['hits']['hits']
+        request_next_scroll['hits']['hits']
       end
 
       def request_more_ids
         request_more_hits.map { |hit| hit['_id'] }
+      end
+
+      def request_next_scroll
+        @elastic_index.scroll(@scroll_id, keep_alive)
       end
 
       def keep_alive
