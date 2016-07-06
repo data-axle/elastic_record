@@ -24,6 +24,7 @@ module ElasticRecord
           if writes_made
             begin
               index.disable_deferring!
+              index.refresh
               index.delete_by_query query: {match_all: {}}
             ensure
               index.enable_deferring!
