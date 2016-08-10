@@ -6,6 +6,6 @@ gem 'dotenv-rails'
 gem 'oj'
 gem 'mysql2'
 gem 'pg'
-gem 'rails', '~> 4.2.0'
+gem 'rails'
 gem 'rake', '~> 10.5.0'
 gem 'webmock', require: false
