@@ -19,7 +19,7 @@ module ElasticRecord
 
       def encode(data)
         if ElasticRecord::JSON.parser == :oj
-          Oj.dump(data, mode: :compat)
+          Oj.dump(data, mode: :compat, use_as_json: true)
         else
           ActiveSupport::JSON.encode(data)
         end
