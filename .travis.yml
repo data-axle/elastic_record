@@ -1,16 +1,20 @@
 rvm: 2.3.1
 cache: bundler
+# Not using Trusty containers because of:
+# https://github.com/travis-ci/travis-ci/issues/6842
 sudo: required
 dist: trusty
-before_install:
-- wget https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/deb/elasticsearch/2.2.2/elasticsearch-2.2.2.deb
-- sudo dpkg -i elasticsearch-2.2.2.deb
-- sudo service elasticsearch start
-- sudo apt-get install --yes mysql-server
+addons:
+  apt:
+    sources:
+    - elasticsearch-2.x
+    packages:
+    - elasticsearch
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
 - curl localhost:9200
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
 services:
+- elasticsearch
 - postgresql
