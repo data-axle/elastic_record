@@ -1,4 +1,6 @@
-rvm: 2.3.1
+rvm:
+- 2.3.1
+- 2.4.0
 cache: bundler
 # Not using Trusty containers because of:
 # https://github.com/travis-ci/travis-ci/issues/6842
