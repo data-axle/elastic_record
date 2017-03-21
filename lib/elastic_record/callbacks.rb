@@ -45,7 +45,7 @@ module ElasticRecord
         end
       end
 
-      amend_partial_update_document(json) if respond_to?(:partial_update_document)
+      amend_partial_update_document(json) if respond_to?(:amend_partial_update_document)
 
       json
     end
