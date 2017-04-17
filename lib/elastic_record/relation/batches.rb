@@ -1,6 +1,12 @@
 module ElasticRecord
   class Relation
     module Batches
+      EACH_WITHOUT_LIMIT_WARNING = "#{self.name}#each should not be used without a limit.  Did you mean #find_each ?"
+      def each(&block)
+        ActiveSupport::Deprecation.warn EACH_WITHOUT_LIMIT_WARNING if self.limit_value.nil?
+        super # Array
+      end
+
       def find_each(options = {})
         find_in_batches(options) do |records|
           records.each { |record| yield record }
