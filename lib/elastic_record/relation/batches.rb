@@ -9,7 +9,7 @@ module ElasticRecord
 
       def find_in_batches(options = {})
         find_ids_in_batches(options) do |ids|
-          yield klass.find(ids)
+          yield klass.where(id: ids)
         end
       end
 
