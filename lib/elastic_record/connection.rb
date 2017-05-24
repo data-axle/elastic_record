@@ -103,9 +103,13 @@ module ElasticRecord
           self.request_count = 0
         end
 
-        host, port = current_server.split ':'
+        uri = URI(current_server)
+        unless uri.host
+          uri = URI("http://#{current_server}")
+        end
 
-        http = Net::HTTP.new(host, port)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme == 'https'
         if options[:timeout]
           http.read_timeout = options[:timeout].to_i
         end
