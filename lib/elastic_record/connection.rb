@@ -103,8 +103,8 @@ module ElasticRecord
           self.request_count = 0
         end
 
-        uri = URI(current_server)
-        unless uri.host
+        uri = URI(current_server) rescue nil
+        unless uri&.host
           uri = URI("http://#{current_server}")
         end
 
