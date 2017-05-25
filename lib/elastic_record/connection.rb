@@ -103,10 +103,8 @@ module ElasticRecord
           self.request_count = 0
         end
 
-        uri = URI(current_server) rescue nil
-        unless uri&.host
-          uri = URI("http://#{current_server}")
-        end
+        server = current_server.start_with?('http') ? current_server : "http://#{current_server}"
+        uri = URI(server)
 
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = uri.scheme == 'https'
