@@ -1,6 +1,19 @@
 module ElasticRecord
   class Index
     module Manage
+      def reindex
+        old_index_name = alias_name
+        index_name = create_and_deploy
+        connection.json_post '/_reindex', {
+          "source" => {
+            "index" => old_index_name
+          },
+          "dest" => {
+            "index" => index_name
+          }
+        }
+      end
+
       def create_and_deploy(index_name = new_index_name)
         create(index_name)
         deploy(index_name)
