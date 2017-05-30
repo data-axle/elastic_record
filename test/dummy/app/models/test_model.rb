@@ -17,6 +17,10 @@ module TestModel
       ids.map { |id| new(id: id) }
     end
 
+    def where(query)
+      find query[:id]
+    end
+
     def primary_key
       'id'
     end
