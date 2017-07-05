@@ -2,7 +2,7 @@ require 'active_support/core_ext/object/to_query'
 
 module ElasticRecord
   class Index
-    class ScanSearch
+    class ScrollSearch
       attr_reader :scroll_id
       attr_accessor :total_hits
 
@@ -101,9 +101,9 @@ module ElasticRecord
       end
 
       def delete_by_query(query)
-        scan_search = create_scan_search query
+        scroll_search = create_scroll_search query
 
-        scan_search.each_slice do |ids|
+        scroll_search.each_slice do |ids|
           bulk do
             ids.each { |id| delete_document(id) }
           end
@@ -127,15 +127,16 @@ module ElasticRecord
         get "_explain", elastic_query
       end
 
-      def create_scan_search(elastic_query, options = {})
+      def create_scroll_search(elastic_query, options = {})
         options[:batch_size] ||= 100
         options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
+        elastic_query = elastic_query.merge('sort' => '_doc')
 
-        search_options = {search_type: 'scan', size: options[:batch_size], scroll: options[:keep_alive]}
+        search_options = {size: options[:batch_size], scroll: options[:keep_alive]}
         json = search(elastic_query, search_options)
 
-        ScanSearch.new(self, json['_scroll_id'], options).tap do |scan_search|
-          scan_search.total_hits = json['hits']['total']
+        ScrollSearch.new(self, json['_scroll_id'], options).tap do |scroll_search|
+          scroll_search.total_hits = json['hits']['total']
         end
       end
 

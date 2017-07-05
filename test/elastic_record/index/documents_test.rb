@@ -53,15 +53,15 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert index.record_exists?('joe')
   end
 
-  def test_create_scan_search
+  def test_create_scroll_search
     index.index_document('bob', name: 'bob')
     index.index_document('joe', name: 'joe')
 
-    scan_search = index.create_scan_search('query' => {query_string: {query: 'name.analyzed:bob'}})
+    scroll_search = index.create_scroll_search('query' => {query_string: {query: 'name.analyzed:bob'}})
 
-    assert_equal 1, scan_search.total_hits
-    refute_nil scan_search.scroll_id
-    assert_equal 1, scan_search.request_more_ids.size
+    assert_equal 1, scroll_search.total_hits
+    refute_nil scroll_search.scroll_id
+    assert_equal 1, scroll_search.request_more_ids.size
   end
 
   def test_bulk_add
