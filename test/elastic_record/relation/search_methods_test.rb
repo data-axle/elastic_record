@@ -12,7 +12,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!(Widget.arelastic['faz'].in ['baz', 'fum'])
 
     expected = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "and" => [
             {"term"   => {"foo" => "bar"}},
@@ -29,7 +29,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!(Widget.arelastic['faz'].in 3..5)
 
     expected = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "range" => {
             "faz" => {"gte"=>3, "lte"=>5}
@@ -45,7 +45,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!("prefix" => {"name" => "Jo"})
 
     expected = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "prefix" => {
             "name" => "Jo"
@@ -61,7 +61,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     scope = relation.filter.not("prefix" => {"name" => "Jo"})
 
     expected = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "not" => {
             "prefix" => {
@@ -79,7 +79,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     scope = relation.filter.nested("contacts", "prefix" => {"contacts.name" => "Jo"})
 
     expected = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "nested" => {
             "path" => "contacts",
@@ -109,8 +109,8 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     relation.filter!(Widget.arelastic['name'].prefix "mat")
 
     expected = {
-      "filtered" => {
-        "query" => {
+      "bool" => {
+        "must" => {
           "field" => {
             "name"=>"joe"
           },

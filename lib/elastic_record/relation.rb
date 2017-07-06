@@ -81,14 +81,6 @@ module ElasticRecord
 
       def load_hits(ids)
         scope = select_values.any? ? klass.select(select_values) : klass
-        if defined?(ActiveRecord::Base) && klass < ActiveRecord::Base
-          case klass.connection.adapter_name
-          when /Mysql/
-            scope = scope.order("FIELD(#{connection.quote_column_name(primary_key)}, #{ids.join(',')})")
-          when /Pos/
-            scope = scope.order(ids.map { |id| "ID=#{connection.quote(id)} DESC" }.join(','))
-          end
-        end
         scope.find(ids)
       end
   end

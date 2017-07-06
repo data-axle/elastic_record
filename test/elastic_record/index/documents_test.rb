@@ -47,7 +47,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.index_document('bob', name: 'bob')
     index.index_document('joe', name: 'joe')
 
-    index.delete_by_query('query' => {query_string: {query: 'name.analyzed:bob'}})
+    index.delete_by_query('query' => {query_string: {query: 'name:bob'}})
 
     refute index.record_exists?('bob')
     assert index.record_exists?('joe')
@@ -57,10 +57,9 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.index_document('bob', name: 'bob')
     index.index_document('joe', name: 'joe')
 
-    scroll_search = index.create_scroll_search('query' => {query_string: {query: 'name.analyzed:bob'}})
+    scroll_search = index.create_scroll_search('query' => {query_string: {query: 'name:bob'}})
 
     assert_equal 1, scroll_search.total_hits
-    refute_nil scroll_search.scroll_id
     assert_equal 1, scroll_search.request_more_ids.size
   end
 

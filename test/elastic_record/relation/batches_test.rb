@@ -67,7 +67,7 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
       Widget.elastic_index.bulk_add [
         Widget.new(id: 5, color: 'red'),
         Widget.new(id: 10, color: 'blue'),
-        Widget.new(id: 15, color: 'green'),
+        Widget.new(id: 15, color: 'green')
       ]
     end
 end

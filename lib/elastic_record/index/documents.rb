@@ -3,39 +3,53 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     class ScrollSearch
-      attr_reader :scroll_id
-      attr_accessor :total_hits
-
-      def initialize(elastic_index, scroll_id, options = {})
+      def initialize(elastic_index, elastic_query, options = {})
         @elastic_index  = elastic_index
-        @scroll_id      = scroll_id
+        @elastic_query  = elastic_query
         @options        = options
+        @latest_response  = nil
       end
 
       def each_slice(&block)
         while (hit_ids = request_more_ids).any?
-          hit_ids.each_slice(requested_batch_size, &block)
+          hit_ids.each_slice(batch_size, &block)
         end
-      end
-
-      def request_more_hits
-        request_next_scroll['hits']['hits']
       end
 
       def request_more_ids
         request_more_hits.map { |hit| hit['_id'] }
       end
 
+      def request_more_hits
+        request_next_scroll['hits']['hits']
+      end
+
       def request_next_scroll
-        @elastic_index.scroll(@scroll_id, keep_alive)
+        if @latest_response.nil?
+          @latest_response = initialize_search_response
+        else
+          @latest_response = @elastic_index.scroll(@latest_response['_scroll_id'], keep_alive)
+        end
+      end
+
+      def total_hits
+        initialize_search_response['hits']['total']
+      end
+
+      def initialize_search_response
+        @initialize_search_response ||= begin
+          search_options = {size: batch_size, scroll: keep_alive}
+          elastic_query = @elastic_query.merge('sort' => '_doc')
+          @elastic_index.search(elastic_query, search_options)
+        end
       end
 
       def keep_alive
         @options[:keep_alive] || (raise "Must provide a :keep_alive option")
       end
 
-      def requested_batch_size
-        @options[:batch_size]
+      def batch_size
+        @options[:batch_size] || (raise "Must provide a :batch_size option")
       end
     end
 
@@ -130,14 +144,8 @@ module ElasticRecord
       def create_scroll_search(elastic_query, options = {})
         options[:batch_size] ||= 100
         options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
-        elastic_query = elastic_query.merge('sort' => '_doc')
 
-        search_options = {size: options[:batch_size], scroll: options[:keep_alive]}
-        json = search(elastic_query, search_options)
-
-        ScrollSearch.new(self, json['_scroll_id'], options).tap do |scroll_search|
-          scroll_search.total_hits = json['hits']['total']
-        end
+        ScrollSearch.new(self, elastic_query, options)
       end
 
       def scroll(scroll_id, scroll_keep_alive)
