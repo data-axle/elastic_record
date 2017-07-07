@@ -9,3 +9,4 @@ gem 'pg'
 gem 'rails'
 gem 'rake', '~> 10.5.0'
 gem 'webmock', require: false
+gem 'arelastic', git: 'https://github.com/matthuhiggins/arelastic'
