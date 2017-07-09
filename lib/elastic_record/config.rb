@@ -31,8 +31,8 @@ module ElasticRecord
         self.servers = settings['servers']
         self.connection_options = settings
 
-        if scroll_keep_alive = settings['scroll_keep_alive'].presence
-          self.scroll_keep_alive = scroll_keep_alive
+        if settings['scroll_keep_alive'].present?
+          self.scroll_keep_alive = settings['scroll_keep_alive']
         end
       end
     end
