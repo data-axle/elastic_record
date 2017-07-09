@@ -75,7 +75,8 @@ module ElasticRecord
       def search_results
         @search_results ||= begin
           options = search_type_value ? {search_type: search_type_value} : {}
-          klass.elastic_index.search(as_elastic, options.update(fields: ''))
+
+          klass.elastic_index.search(as_elastic.update('_source' => false), options)
         end
       end
 
