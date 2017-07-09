@@ -1,3 +1,4 @@
+require 'elastic_record/index/analyze'
 require 'elastic_record/index/configurator'
 require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
@@ -7,12 +8,7 @@ require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
 require 'elastic_record/index/warmer'
 
-require 'active_support/version'
-if ActiveSupport::VERSION::STRING < '4'
-  require 'active_support/core_ext/hash/deep_dup'
-else
-  require 'active_support/core_ext/object/deep_dup'
-end
+require 'active_support/core_ext/object/deep_dup'
 
 module ElasticRecord
   # ElasticRecord::Index provides access to elastic search's API. It is accessed with
@@ -37,6 +33,7 @@ module ElasticRecord
     include Manage
     include Mapping, Settings
     include Percolator, Warmer
+    include Analyze
     include Deferred
 
     attr_accessor :model
