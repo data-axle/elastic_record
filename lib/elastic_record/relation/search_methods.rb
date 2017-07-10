@@ -120,8 +120,12 @@ module ElasticRecord
       end
 
       def search_type!(type)
-        self.search_type_value = type
-        self
+        if type == :count # TODO: Deprecate support
+          limit! 0
+        else
+          self.search_type_value = type
+          self
+        end
       end
 
       def search_type(type)
