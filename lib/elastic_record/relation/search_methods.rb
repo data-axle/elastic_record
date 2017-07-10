@@ -220,7 +220,7 @@ module ElasticRecord
           if nodes.size == 1
             nodes.first
           elsif nodes.size > 1
-            Arelastic::Filters::And.new(nodes)
+            Arelastic::Queries::Bool.new(must: nodes)
           end
         end
 
