@@ -8,13 +8,13 @@ module ElasticRecord
 
         def not(*filters)
           add_filter_nodes_to_scope(filters) do |filter_node|
-            Arelastic::Filters::Not.new(filter_node)
+            filter_node.negate
           end
         end
 
         def nested(path, *filters)
           add_filter_nodes_to_scope(filters) do |filter_node|
-            Arelastic::Filters::Nested.new(path, filter_node)
+            filter_node.nested(path)
           end
         end
 
