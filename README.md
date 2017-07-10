@@ -48,7 +48,7 @@ If a simple hash is passed into filter, a term or terms query is created:
 ```ruby
 search.filter(color: 'red')         # Creates a 'term' filter
 search.filter(color: %w(red blue))  # Creates a 'terms' filter
-search.filter(color: nil)           # Creates a 'missing' filter
+search.filter(color: nil)           # Creates a 'must not exist' filter
 ```
 
 If a hash containing hashes is passed into filter, it is used directly as a filter DSL expression:
