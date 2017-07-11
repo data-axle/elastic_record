@@ -233,7 +233,7 @@ module ElasticRecord
             if filter.is_a?(Arelastic::Nodes::Node)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
-              nodes << Arelastic::Filters::HasChild.new(filter.elastic_index.type, filter.as_elastic['query'])
+              nodes << Arelastic::Queries::HasChild.new(filter.elastic_index.type, filter.as_elastic['query'])
             else
               filter.each do |field, terms|
                 case terms
