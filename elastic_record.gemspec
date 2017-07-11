@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'elastic_record'
-  s.version = '4.0.0.pre'
+  s.version = '4.0.0'
   s.summary = 'An Elasticsearch querying ORM'
   s.description = 'Find your records with Elasticsearch'
 
@@ -18,6 +18,6 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test}/*`.split("\n")
 
-  s.add_dependency 'arelastic'
+  s.add_dependency 'arelastic', '>= 2.0.0'
   s.add_dependency 'activemodel'
 end
