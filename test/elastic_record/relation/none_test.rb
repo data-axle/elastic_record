@@ -9,7 +9,7 @@ class ElasticRecord::Relation::NoneTest < MiniTest::Test
     assert_equal [],    none.to_a
     assert_equal({},    none.aggregations)
 
-    expected_elastic = {"not" => {"match_all" => {}}}
+    expected_elastic = {"bool" => {"must_not" => {"match_all" => {}}}}
     assert_equal expected_elastic, none.as_elastic
   end
 end

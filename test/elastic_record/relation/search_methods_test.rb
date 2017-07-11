@@ -14,10 +14,12 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     expected = {
       "bool" => {
         "filter" => {
-          "and" => [
-            {"term"   => {"foo" => "bar"}},
-            {"terms"  => {"faz" => ["baz", "fum"]}}
-          ]
+          "bool" => {
+            "must" => [
+              {"term"   => {"foo" => "bar"}},
+              {"terms"  => {"faz" => ["baz", "fum"]}}
+            ]
+          }
         }
       }
     }
@@ -63,9 +65,11 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     expected = {
       "bool" => {
         "filter" => {
-          "not" => {
-            "prefix" => {
-              "name" => "Jo"
+          "bool" => {
+            "must_not" => {
+              "prefix" => {
+                "name" => "Jo"
+              }
             }
           }
         }
@@ -83,7 +87,7 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
         "filter" => {
           "nested" => {
             "path" => "contacts",
-            "filter" => {
+            "query" => {
               "prefix" => {
                 "contacts.name" => "Jo"
               }

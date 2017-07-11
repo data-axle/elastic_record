@@ -14,7 +14,7 @@ module ElasticRecord
       end
 
       def as_elastic
-        Arelastic::Filters::Not.new(Arelastic::Queries::MatchAll.new).as_elastic
+        Arelastic::Queries::MatchAll.new.negate.as_elastic
       end
     end
   end

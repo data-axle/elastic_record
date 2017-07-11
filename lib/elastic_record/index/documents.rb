@@ -2,12 +2,14 @@ require 'active_support/core_ext/object/to_query'
 
 module ElasticRecord
   class Index
-    class ScrollSearch
-      def initialize(elastic_index, elastic_query, options = {})
+    class ScrollEnumerator
+      attr_reader :keep_alive, :batch_size, :scroll_id
+      def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
         @elastic_index  = elastic_index
-        @elastic_query  = elastic_query
-        @options        = options
-        @latest_response  = nil
+        @search         = search
+        @scroll_id      = scroll_id
+        @keep_alive     = keep_alive
+        @batch_size     = batch_size
       end
 
       def each_slice(&block)
@@ -25,31 +27,26 @@ module ElasticRecord
       end
 
       def request_next_scroll
-        if @latest_response.nil?
-          @latest_response = initialize_search_response
+        if scroll_id.nil?
+          response = initial_search_response
         else
-          @latest_response = @elastic_index.scroll(@latest_response['_scroll_id'], keep_alive)
+          response = @elastic_index.scroll(scroll_id, keep_alive)
         end
+
+        @scroll_id = response['_scroll_id']
+        response
       end
 
       def total_hits
-        initialize_search_response['hits']['total']
+        initial_search_response['hits']['total']
       end
 
-      def initialize_search_response
-        @initialize_search_response ||= begin
+      def initial_search_response
+        @initial_search_response ||= begin
           search_options = {size: batch_size, scroll: keep_alive}
-          elastic_query = @elastic_query.merge('sort' => '_doc')
+          elastic_query = @search.merge('sort' => '_doc')
           @elastic_index.search(elastic_query, search_options)
         end
-      end
-
-      def keep_alive
-        @options[:keep_alive] || (raise "Must provide a :keep_alive option")
-      end
-
-      def batch_size
-        @options[:batch_size] || (raise "Must provide a :batch_size option")
       end
     end
 
@@ -115,9 +112,9 @@ module ElasticRecord
       end
 
       def delete_by_query(query)
-        scroll_search = create_scroll_search query
+        scroll_enumerator = build_scroll_enumerator search: query
 
-        scroll_search.each_slice do |ids|
+        scroll_enumerator.each_slice do |ids|
           bulk do
             ids.each { |id| delete_document(id) }
           end
@@ -141,11 +138,8 @@ module ElasticRecord
         get "_explain", elastic_query
       end
 
-      def create_scroll_search(elastic_query, options = {})
-        options[:batch_size] ||= 100
-        options[:keep_alive] ||= ElasticRecord::Config.scroll_keep_alive
-
-        ScrollSearch.new(self, elastic_query, options)
+      def build_scroll_enumerator(search: nil, scroll_id: nil, batch_size: 100, keep_alive: ElasticRecord::Config.scroll_keep_alive)
+        ScrollEnumerator.new(self, search: search, scroll_id: scroll_id, batch_size: batch_size, keep_alive: keep_alive)
       end
 
       def scroll(scroll_id, scroll_keep_alive)

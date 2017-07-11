@@ -14,11 +14,11 @@ module ElasticRecord
       end
 
       def find_ids_in_batches(options = {}, &block)
-        create_scroll_search(options).each_slice(&block)
+        build_scroll_enumerator(options).each_slice(&block)
       end
 
-      def create_scroll_search(options)
-        elastic_index.create_scroll_search(as_elastic, options)
+      def build_scroll_enumerator(options)
+        elastic_index.build_scroll_enumerator(search: as_elastic, **options)
       end
 
       def reindex
