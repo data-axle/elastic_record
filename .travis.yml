@@ -1,9 +1,6 @@
-rvm:
-- 2.4.1
+rvm: 2.4.1
 cache: bundler
-# Not using Trusty containers because of:
-# https://github.com/travis-ci/travis-ci/issues/6842
-sudo: required
+sudo: false
 dist: trusty
 addons:
   apt:
