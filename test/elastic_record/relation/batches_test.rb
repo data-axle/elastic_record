@@ -63,7 +63,6 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
 
   private
     def create_widgets
-      Widget.elastic_index.delete_all
       Widget.elastic_index.bulk_add [
         Widget.new(id: 5, color: 'red'),
         Widget.new(id: 10, color: 'blue'),

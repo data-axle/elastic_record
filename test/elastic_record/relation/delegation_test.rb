@@ -2,7 +2,6 @@ require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Test
   def test_delegate_to_array
-    Widget.elastic_index.delete_all
     Widget.elastic_index.index_document('5', color: 'red')
 
     records = []
