@@ -19,8 +19,8 @@ namespace :index do
       puts "Created #{model.name} index (#{index_name})"
 
       if index.has_percolator
-        index_name = index.create_percolator_index
-        puts "Created #{model.name} percolator index (#{index_name})"
+        index.create_percolator_index
+        puts "Created #{model.name} percolator index (#{index.percolator_index_name})"
       end
     end
   end
@@ -34,7 +34,7 @@ namespace :index do
 
       if index.has_percolator
         index.delete_percolator_index
-        puts "Dropped #{model.name} percolator index (#{index.percolator_name})"
+        puts "Dropped #{model.name} percolator index (#{index.percolator_index_name})"
       end
     end
   end

@@ -10,15 +10,6 @@ class ElasticRecord::Relation::AdminTest < MiniTest::Test
     assert_equal relation.as_elastic, index.get_percolator('green')
   end
 
-  def test_create_warmer
-    index.delete_warmer('green') if index.warmer_exists?('green')
-
-    relation = Widget.elastic_relation.filter('color' => 'green')
-    relation.create_warmer('green')
-
-    assert_equal relation.as_elastic, Widget.elastic_index.get_warmer('green')['source']
-  end
-
   private
 
     def index

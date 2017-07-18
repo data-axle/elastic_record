@@ -6,7 +6,6 @@ require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
-require 'elastic_record/index/warmer'
 
 require 'active_support/core_ext/object/deep_dup'
 
@@ -32,7 +31,7 @@ module ElasticRecord
     include Documents
     include Manage
     include Mapping, Settings
-    include Percolator, Warmer
+    include Percolator
     include Analyze
     include Deferred
 

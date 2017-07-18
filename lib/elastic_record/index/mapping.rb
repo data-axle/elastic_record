@@ -22,19 +22,7 @@ module ElasticRecord
           },
           _all: {
             enabled: false
-          },
-          dynamic_templates: [
-            {
-              no_string_analyzing: {
-                match: "*",
-                match_mapping_type: "string",
-                mapping: {
-                  type: "string",
-                  index: "not_analyzed"
-                }
-              }
-            }
-          ]
+          }
         }
       end
     end

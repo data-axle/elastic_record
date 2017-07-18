@@ -69,7 +69,6 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   private
 
     def create_widgets
-      Widget.elastic_index.delete_all
       Widget.elastic_index.bulk_add [
         Widget.new(color: 'red', id: '05'),
         Widget.new(color: 'blue', id: '10'),

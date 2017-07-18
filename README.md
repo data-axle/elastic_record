@@ -160,7 +160,7 @@ While elastic search automatically maps fields, you may wish to override the def
 ```ruby
 class Product < ActiveRecord::Base
   elastic_index.configure do
-    property :status, type: "string", index: "not_analyzed"
+    property :status, type: "keyword"
   end
 end
 ```
@@ -171,8 +171,8 @@ You can also directly access Product.elastic_index.mapping and Product.elastic_i
 class Product
   elastic_index.mapping = {
     properties: {
-      name: {type: "string", index: "analyzed"}
-      status: {type: "string", index: "not_analyzed"}
+      name: {type: "text"},
+      status: {type: "keyword"}
     }
   }
 end
