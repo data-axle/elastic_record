@@ -34,7 +34,7 @@ namespace :index do
 
       if index.has_percolator
         index.delete_percolator_index
-        puts "Dropped #{model.name} percolator index (#{index.percolator_name})"
+        puts "Dropped #{model.name} percolator index (#{index.percolator_index_name})"
       end
     end
   end

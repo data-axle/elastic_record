@@ -48,7 +48,7 @@ module ElasticRecord
       end
 
       def create_percolator_index
-        create(percolator_index_name) unless percolator_index_exists?
+        index.create(percolator_index_name) unless percolator_index_exists?
       end
     end
 
@@ -112,7 +112,8 @@ module ElasticRecord
 
     module Percolator
       delegate :create_percolator, :delete_percolator, :percolator_exists?, :get_percolator, :percolate,
-        :all_percolators, :create_percolator_index, :delete_percolator_index, to: :percolator_adapter
+        :all_percolators, :create_percolator_index, :delete_percolator_index, :percolator_index_name,
+        to: :percolator_adapter
 
       def percolator_adapter
         @percolator_adapter ||= percolator_adapter_class.new(self)
