@@ -9,17 +9,16 @@ class Widget
 
   self.elastic_index.mapping[:properties].update(
     'name' => {
-      type: 'string',
+      type: 'keyword',
       fields: {
-        name: {type: 'string', index: 'not_analyzed'},
-        analyzed: {type: 'string', index: 'analyzed'}
+        analyzed: {type: 'text'}
       }
     },
     'color' => {
-      type: 'string', index: 'not_analyzed'
+      type: 'keyword'
     },
     'warehouse_id' => {
-      type: 'string', index: 'not_analyzed'
+      type: 'keyword'
     }
   )
 

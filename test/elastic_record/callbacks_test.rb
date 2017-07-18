@@ -101,7 +101,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
 
     self.elastic_index.mapping[:properties].update(
       height: {
-        type: 'string', index: 'not_analyzed'
+        type: 'keyword'
       }
     )
 
