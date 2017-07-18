@@ -37,7 +37,7 @@ module ElasticRecord
       end
 
       def percolate(document)
-        hits = connection.json_get("/#{percolator_index_name}/#{type}/_percolate", 'doc' => document)['matches']
+        hits = connection.json_get("/#{percolator_index_name}/#{index.type}/_percolate", 'doc' => document)['matches']
         hits.map { |hits| hits['_id'] }
       end
 
