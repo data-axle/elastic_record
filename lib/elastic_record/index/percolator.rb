@@ -76,7 +76,7 @@ module ElasticRecord
             "percolate" => {
               "field"         => "query",
               "document_type" => "doctype",
-              "document"      => "document"
+              "document"      => document
             }
           }
         }
