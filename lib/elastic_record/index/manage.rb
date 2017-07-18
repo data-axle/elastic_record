@@ -32,7 +32,7 @@ module ElasticRecord
       end
 
       def type_exists?(index_name = alias_name)
-        connection.head("/#{index_name}/#{type}") == '200'
+        connection.head("/#{index_name}/_mapping/#{type}") == '200'
       end
 
       def deploy(index_name)
