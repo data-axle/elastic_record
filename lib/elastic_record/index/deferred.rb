@@ -34,30 +34,29 @@ module ElasticRecord
           self.writes_made = false
         end
 
-        def flush!
-          deferred_actions.each do |queued_action|
-            self.writes_made = true
-            queued_action.run(index.real_connection)
-          end
-          deferred_actions.clear
-        end
-
         private
           READ_METHODS = [:json_get, :head]
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
             if READ_METHODS.include?(method)
-              flush!
-              index.real_connection.json_post("/#{index.alias_name}/_refresh") if requires_refresh?(method, *args)
+              flush_deferred_actions!
+              if method == :json_get && args.first =~ /^\/(.*)\/_search/
+                index.real_connection.json_post("/#{$1.partition('/').first}/_refresh")
+              end
+
               index.real_connection.send(method, *args, &block)
             else
               deferred_actions << DeferredAction.new(method, args, block)
             end
           end
 
-          def requires_refresh?(method, *args)
-            method == :json_get && args.first =~ /_search/
+          def flush_deferred_actions!
+            deferred_actions.each do |queued_action|
+              self.writes_made = true
+              queued_action.run(index.real_connection)
+            end
+            deferred_actions.clear
           end
       end
 
