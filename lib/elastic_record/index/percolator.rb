@@ -86,8 +86,8 @@ module ElasticRecord
       end
 
       def all_percolators
-        if hits = connection.json_get("/#{percolator_index_name}/queries/_search?q=*&size=500")['hits']
-          hits['hits']['hits'].map { |hit| hit['_id'] }
+        if hits = connection.json_get("/#{percolator_index_name}/queries/_search?q=*&size=500")['hits']['hits']
+          hits.map { |hit| hit['_id'] }
         end
       end
 
