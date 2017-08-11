@@ -17,7 +17,7 @@ module ElasticRecord
         index.connection
       end
     end
-    
+
     class PercolatorAdapterV2 < PercolatorAdapter
       def create_percolator(name, elastic_query)
         connection.json_put "/#{percolator_index_name}/.percolator/#{name}", elastic_query
