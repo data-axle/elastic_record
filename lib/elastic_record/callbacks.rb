@@ -50,25 +50,26 @@ module ElasticRecord
       json
     end
 
-    def elastic_search_value(field, mapping)
-      value = try field
-      return if value.nil?
+    private
 
-      value = case mapping[:type]
-        when :object
-          value.as_search
-        when :nested
-          value.map(&:as_search)
-        else
+      def elastic_search_value(field, mapping)
+        value = try field
+        return if value.nil?
+
+        value = case mapping[:type]
+          when :object
+            value.as_search
+          when :nested
+            value.map(&:as_search)
+          else
+            value
+          end
+
+        if value.present? || value == false
           value
         end
-
-      if value.present? || value == false
-        value
+      rescue
+        raise "Field not found for #{field.inspect}"
       end
-
-    rescue
-      raise "Field not found for #{field.inspect}"
-    end
   end
 end
