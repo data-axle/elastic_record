@@ -95,8 +95,6 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
   class DisablingModel
     include TestModel
 
-    attr_accessor :called_as_search
-
     define_attributes [:height]
 
     self.elastic_index.mapping[:properties].update(
@@ -106,10 +104,9 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
     )
 
     def as_search
-      @called_as_search = true
+      raise StandardError.new("Should never be called!")
       super
     end
-
   end
 
   def test_disabled_skip_document
@@ -119,6 +116,5 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
     model.save
 
     refute Widget.elastic_index.record_exists?(model.id)
-    refute model.called_as_search
   end
 end
