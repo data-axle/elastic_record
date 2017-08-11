@@ -19,6 +19,8 @@ module ElasticRecord
       end
     end
 
+    # These methods should be moved into a different module.
+    ## as_document would be a better name
     def as_search
       json = {}
 
@@ -30,6 +32,7 @@ module ElasticRecord
         end
       end
 
+      # Unused, it seems.  Consider deleting.
       amend_as_search(json) if respond_to?(:amend_as_search)
 
       json
@@ -52,6 +55,7 @@ module ElasticRecord
 
     private
 
+      # elastic_document_value?
       def elastic_search_value(field, mapping)
         value = try field
         return if value.nil?
