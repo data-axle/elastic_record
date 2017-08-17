@@ -20,11 +20,6 @@ module ElasticRecord
         end
       end
 
-      # Why is this not in Searching?
-      def elastic_relation
-        ElasticRecord::Relation.new(self)
-      end
-
       def arelastic
         Arelastic::Builders::Search
       end
