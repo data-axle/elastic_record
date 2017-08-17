@@ -7,6 +7,7 @@ module ElasticRecord
   autoload :Callbacks, 'elastic_record/callbacks'
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
+  autoload :Doctype, 'elastic_record/doctype'
   autoload :Index, 'elastic_record/index'
   autoload :JSON, 'elastic_record/json'
   autoload :Lucene, 'elastic_record/lucene'
