@@ -1,23 +1,16 @@
 require 'helper'
 
 class ElasticRecord::Index::MappingTest < MiniTest::Test
-  def test_default_mapping
-    mapping = index.mapping
-
-    refute_nil mapping[:properties]
+  # TODO
+  def test_get_mapping
   end
 
-  def test_merge_mapping
-    index.mapping.clear
-    index.mapping[:properties] = {color: {type: 'string'}}
-
-    custom = {properties: {color: {type: 'integer'}}, other: 'stuff'}
-    index.mapping = custom
-
-    assert_equal custom, index.mapping
+  # TODO
+  def test_update_mapping
   end
 
   private
+
     def index
       @index ||= ElasticRecord::Index.new(Widget)
     end

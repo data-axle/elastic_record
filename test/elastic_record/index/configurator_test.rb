@@ -1,12 +1,7 @@
 require 'helper'
 
 class ElasticRecord::Index::ConfiguratorTest < MiniTest::Test
-  def test_property
-    configurator.property :am_i_cool, type: "boolean"
-
-    expected = {type: "boolean"}
-    assert_equal expected, configurator.index.mapping[:properties][:am_i_cool]
-  end
+  # TODO:  will probably end up going away entirely
 
   private
     def configurator

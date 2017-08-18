@@ -38,7 +38,7 @@ class ElasticRecord::AsSearchTest < MiniTest::Test
       end
     end
 
-    self.elastic_index.mapping[:properties].update(
+    self.doctype.mapping[:properties].update(
       author: {
         type: :object
       },

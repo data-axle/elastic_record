@@ -155,21 +155,12 @@ Product.filter(color: 'red').increase_prices
 
 ## Index Configuration
 
-While elastic search automatically maps fields, you may wish to override the defaults:
-
-```ruby
-class Product < ActiveRecord::Base
-  elastic_index.configure do
-    property :status, type: "keyword"
-  end
-end
-```
-
-You can also directly access Product.elastic_index.mapping and Product.elastic_index.settings:
+While elastic search automatically maps fields, you can also directly access Product.doctype.mapping
+and Product.elastic_index.settings:
 
 ```ruby
 class Product
-  elastic_index.mapping = {
+  doctype.mapping = {
     properties: {
       name: {type: "text"},
       status: {type: "keyword"}

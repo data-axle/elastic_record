@@ -3,7 +3,7 @@ module ElasticRecord
     def as_search
       json = {}
 
-      elastic_index.mapping[:properties].each do |field, mapping|
+      doctype.mapping[:properties].each do |field, mapping|
         value = elastic_search_value field, mapping
 
         unless value.nil?
@@ -17,7 +17,7 @@ module ElasticRecord
     def as_partial_update_document
       json = {}
 
-      mappings = elastic_index.mapping[:properties]
+      mappings = doctype.mapping[:properties]
       changed.each do |field|
         if field_mapping = mappings[field]
           json[field] = elastic_search_value field, field_mapping

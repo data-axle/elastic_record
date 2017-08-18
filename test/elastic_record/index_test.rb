@@ -5,12 +5,14 @@ class ElasticRecord::IndexTest < MiniTest::Test
     copied = index.dup
 
     refute_equal copied.settings.object_id, index.settings.object_id
-    refute_equal copied.mapping.object_id, index.mapping.object_id
   end
 
-  def test_model_name
+  def test_doctype
+    assert_equal 'widget', index.doctype.name
+  end
+
+  def test_alias_name
     assert_equal 'widgets', index.alias_name
-    assert_equal 'widget', index.type
   end
 
   def test_disable
@@ -37,7 +39,7 @@ class ElasticRecord::IndexTest < MiniTest::Test
   end
 
   private;
-  
+
     def index
       @index ||= ElasticRecord::Index.new(Widget)
     end

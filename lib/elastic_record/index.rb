@@ -25,7 +25,7 @@ module ElasticRecord
   #   Returns if the index exists
   # [get_mapping]
   #   Returns the mapping currently stored by elastic search.
-  # [put_mapping]
+  # [update_mapping]
   #   Update elastic search's mapping
   class Index
     include Documents
@@ -36,6 +36,7 @@ module ElasticRecord
     include Deferred
 
     attr_accessor :model
+    attr_accessor :doctype
 
     attr_accessor :disabled
     attr_accessor :has_percolator
@@ -43,12 +44,12 @@ module ElasticRecord
 
     def initialize(model)
       @model = model
+      @doctype = model.doctype
       @disabled = false
     end
 
     def initialize_copy(other)
       @settings = settings.deep_dup
-      @mapping = mapping.deep_dup
     end
 
     def alias_name=(name)
@@ -57,14 +58,6 @@ module ElasticRecord
 
     def alias_name
       @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
-    end
-
-    def type=(name)
-      @type = name
-    end
-
-    def type
-      @type ||= model.base_class.name.demodulize.underscore
     end
 
     def disable!
@@ -84,7 +77,7 @@ module ElasticRecord
     end
 
     def get(end_path, json = nil)
-      connection.json_get "/#{alias_name}/#{type}/#{end_path}", json
+      connection.json_get "/#{alias_name}/#{doctype.name}/#{end_path}", json
     end
 
     private

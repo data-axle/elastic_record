@@ -96,7 +96,7 @@ module ElasticRecord
 
         connection.json_put "/#{percolator_index_name}", {
           "mappings" => {
-            "doctype" => index.mapping,
+            "doctype" => index.doctype.mapping,
             "queries" => {
               "properties" => {
                 "query" => {

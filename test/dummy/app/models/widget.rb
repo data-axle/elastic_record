@@ -7,7 +7,7 @@ class Widget
 
   self.elastic_index.has_percolator = true
 
-  self.elastic_index.mapping[:properties].update(
+  self.doctype.mapping[:properties].update(
     'name' => {
       type: 'string', index: 'not_analyzed',
       fields: {

@@ -7,8 +7,9 @@ module ElasticRecord
         include Callbacks
         include AsSearch
 
-        class_attribute :elastic_connection
+        class_attribute :elastic_connection, :doctype
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
+        self.doctype = Doctype.new(base_class.name.demodulize.underscore)
       end
     end
 
@@ -40,6 +41,10 @@ module ElasticRecord
 
     def elastic_index
       self.class.elastic_index
+    end
+
+    def doctype
+      self.class.doctype
     end
   end
 end
