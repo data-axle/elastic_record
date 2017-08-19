@@ -1,10 +1,13 @@
 require 'helper'
 
 class ElasticRecord::PercolatorModelTest < MiniTest::Test
-  def test_elastic_connection
-    connection = Widget.elastic_connection
+  def test_doctype
+    assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
+  end
 
-    assert_equal ElasticRecord::Config.servers, connection.servers
-    assert_equal ElasticRecord::Config.connection_options.symbolize_keys, connection.options
+  def as_search
+  end
+
+  def test_percolate
   end
 end

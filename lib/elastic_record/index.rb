@@ -35,16 +35,17 @@ module ElasticRecord
     include Analyze
     include Deferred
 
-    attr_accessor :model
-    attr_accessor :doctype
+    attr_accessor :doctypes
 
     attr_accessor :disabled
     attr_accessor :has_percolator
+    attr_accessor :model
     attr_accessor :partial_updates
 
-    def initialize(model)
-      @model = model
-      @doctype = model.doctype
+    def initialize(models)
+      models = Array.wrap(models)
+      @model = models.first
+      @doctypes = models.map(&:doctype)
       @disabled = false
     end
 
@@ -68,6 +69,7 @@ module ElasticRecord
       @disabled = false
     end
 
+    # This is still kind of silly
     def real_connection
       model.elastic_connection
     end
@@ -77,6 +79,7 @@ module ElasticRecord
     end
 
     def get(end_path, json = nil)
+      doctype = doctypes.first
       connection.json_get "/#{alias_name}/#{doctype.name}/#{end_path}", json
     end
 
@@ -85,6 +88,5 @@ module ElasticRecord
       def new_index_name
         "#{alias_name}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}"
       end
-
   end
 end

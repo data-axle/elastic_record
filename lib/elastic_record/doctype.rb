@@ -9,6 +9,19 @@ module ElasticRecord
         enabled: false
       }
     }
+
+    PERCOLATOR_MAPPING = {
+      "properties" => {
+        "query" => {
+          "type" => "percolator"
+        }
+      }
+    }
+
+    def self.percolator_doctype
+      new('queries', PERCOLATOR_MAPPING)
+    end
+
     def initialize(name, mapping = DEFAULT_MAPPING.deep_dup)
       @name = name
       @mapping = mapping
@@ -16,6 +29,10 @@ module ElasticRecord
 
     def mapping=(custom_mapping)
       mapping.deep_merge!(custom_mapping)
+    end
+
+    def ==(other)
+      name == other.name && mapping == other.mapping
     end
   end
 end

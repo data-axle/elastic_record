@@ -5,8 +5,8 @@ module ElasticRecord
         connection.json_put "/#{index_name}/_mapping", mapping_body
       end
 
-      def get_mapping(index_name = alias_name, type = doctype.name)
-        json = connection.json_get "/#{index_name}/#{type}/_mapping"
+      def get_mapping(index_name = alias_name)
+        json = connection.json_get "/#{index_name}/_mapping"
 
         unless json.empty?
           json.values.first['mappings']
@@ -14,9 +14,9 @@ module ElasticRecord
       end
 
       def mapping_body
-        {
-          doctype.name => doctype.mapping
-        }
+        doctypes.each_with_object({}) do |doctype, result|
+          result[doctype.name] = doctype.mapping
+        end
       end
     end
   end
