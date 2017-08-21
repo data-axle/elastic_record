@@ -17,11 +17,6 @@ namespace :index do
       index = model.elastic_index
       index_name = index.create_and_deploy
       puts "Created #{model.name} index (#{index_name})"
-
-      if index.has_percolator
-        index.create_percolator_index
-        puts "Created #{model.name} percolator index (#{index.percolator_index_name})"
-      end
     end
   end
 
@@ -31,11 +26,6 @@ namespace :index do
       index = model.elastic_index
       index.delete_all
       puts "Dropped #{model.name} index"
-
-      if index.has_percolator
-        index.delete_percolator_index
-        puts "Dropped #{model.name} percolator index (#{index.percolator_index_name})"
-      end
     end
   end
 

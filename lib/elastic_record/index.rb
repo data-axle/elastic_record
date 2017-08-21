@@ -4,7 +4,6 @@ require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
-require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
 
 require 'active_support/core_ext/object/deep_dup'
@@ -31,14 +30,12 @@ module ElasticRecord
     include Documents
     include Manage
     include Mapping, Settings
-    include Percolator
     include Analyze
     include Deferred
 
     attr_accessor :doctypes
 
     attr_accessor :disabled
-    attr_accessor :has_percolator
     attr_accessor :model
     attr_accessor :partial_updates
 

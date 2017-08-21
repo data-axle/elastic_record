@@ -5,8 +5,6 @@ class Widget
 
   define_attributes [:name, :color, :warehouse_id]
 
-  self.elastic_index.has_percolator = true
-
   self.doctype.mapping[:properties].update(
     'name' => {
       type: 'string', index: 'not_analyzed',

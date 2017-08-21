@@ -6,10 +6,6 @@ module ElasticRecord
       def initialize(index)
         @index = index
       end
-
-      def has_percolator!
-        index.has_percolator = true
-      end
     end
   end
 end

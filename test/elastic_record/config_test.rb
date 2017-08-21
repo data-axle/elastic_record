@@ -8,7 +8,7 @@ class ElasticRecord::ConfigTest < MiniTest::Test
   def test_models
     ElasticRecord::Config.model_names = %w(Widget)
 
-    assert_equal [Warehouse, Widget, Project], ElasticRecord::Config.models
+    assert_equal [Warehouse, Widget, WidgetQuery, Project], ElasticRecord::Config.models
   end
 
   def test_servers
