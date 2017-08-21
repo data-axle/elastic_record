@@ -56,7 +56,7 @@ module ElasticRecord
           }
         }
 
-        hits = elastic_index.connection.json_get("/#{elastic_index.alias_name}/_search", query)['hits']['hits']
+        hits = elastic_index.search(query)['hits']['hits']
         ids = hits.map { |hits| hits['_id'] }
 
         where(id: ids)
