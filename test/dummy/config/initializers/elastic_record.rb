@@ -1,3 +1,3 @@
 ElasticRecord.configure do |config|
-  config.model_names = %w(Warehouse Widget Project)
+  config.model_names = %w(Warehouse Widget WidgetQuery Project)
 end

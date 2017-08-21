@@ -5,9 +5,44 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
     assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
   end
 
-  def as_search
+  def test_as_search
+    query = WidgetQuery.new(name: 'foo', color: 'red')
+
+    expected = {
+      "query" => {
+        "bool" => {
+          "filter" => {
+            "bool" => {
+              "must" => [
+                { "term" => { :name=>"foo" } },
+                { "term" => { :color => "red" } }
+              ]
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected, query.as_search
   end
 
-  def test_percolate
+  def test_percolate_when_no_hits
+    query = WidgetQuery.create(name: 'foo', color: 'red')
+    should_not_hit = Widget.new(name: 'bar', color: 'blue')
+
+    assert_empty WidgetQuery.percolate(should_not_hit)
   end
+
+  def test_percolate_when_hits
+    query = WidgetQuery.create(color: 'red')
+    should_hit = Widget.new(name: 'foo', color: 'red')
+
+    assert_equal [query], WidgetQuery.percolate(should_hit)
+  end
+
+  private
+
+    def index
+      @index ||= WidgetQuery.elastic_index
+    end
 end

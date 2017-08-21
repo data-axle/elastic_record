@@ -13,18 +13,23 @@ module ElasticRecord
   #   # Must be an ElasticRecord::Model
   #   target_model Widget
   #
-  #   # Must return an Arelastic::Search
-  #   def as_arelastic
+  #   # Must return an Elastic Search query
+  #   def as_search
+  #   end
+  #
+  #   # [optional] - To change how the target model is percolated
+  #   # Must return a Hash
+  #   def self.as_percolated_document(target_model)
   #   end
   # end
   module PercolatorModel
-    extend Model
-
     def self.included(base)
       base.class_eval do
         class_attribute :target_model
 
+        include Model
         extend ClassMethods
+        include InstanceMethods
       end
     end
 
@@ -39,14 +44,35 @@ module ElasticRecord
       def doctype
         @doctype ||= Doctype.percolator_doctype
       end
+
+      def percolate(other_model)
+        query = {
+          "query" => {
+            "percolate" => {
+              "field"         => "query",
+              "document_type" => target_model.doctype.name,
+              "document"      => as_percolated_document(other_model)
+            }
+          }
+        }
+
+        hits = elastic_index.connection.json_get("/#{elastic_index.alias_name}/_search", query)['hits']['hits']
+        ids = hits.map { |hits| hits['_id'] }
+
+        where(id: ids)
+      end
+
+      private
+
+        def as_percolated_document(model)
+          model.attributes
+        end
     end
 
-    def as_search
-      as_arelastic.as_elastic
-    end
-
-    def as_partial_update_document
-      as_search
+    module InstanceMethods
+      def as_partial_update_document
+        as_search
+      end
     end
   end
 end
