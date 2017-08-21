@@ -29,7 +29,7 @@ module ElasticRecord
         connection.head("/#{index_name}") == '200'
       end
 
-      def type_exists?(index_name = alias_name, type = doctypes.first.name)
+      def type_exists?(index_name = alias_name, type = model.doctype.name)
         connection.head("/#{index_name}/_mapping/#{type}") == '200'
       end
 
@@ -76,7 +76,7 @@ module ElasticRecord
       end
 
       def all_names
-        connection.json_get("/#{alias_name}/_mapping/#{doctypes.first.name}/").keys
+        connection.json_get("/#{alias_name}/_mapping/#{model.doctype.name}/").keys
       rescue
         # TODO: In ES 1.4, this returns empty rather than a 404
         []

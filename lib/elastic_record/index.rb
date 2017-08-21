@@ -75,9 +75,12 @@ module ElasticRecord
       Configurator.new(self).instance_eval(&block)
     end
 
-    def get(end_path, json = nil)
-      doctype = doctypes.first
-      connection.json_get "/#{alias_name}/#{doctype.name}/#{end_path}", json
+    def get(end_path, doctype = nil, json = nil)
+      path = "/#{alias_name}"
+      path += "/#{doctype.name}" if doctype
+      path += "/#{end_path}"
+
+      connection.json_get path, json
     end
 
     private
