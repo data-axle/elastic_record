@@ -55,7 +55,7 @@ module ElasticRecord
         unless disabled
           index_document(
             record.send(record.class.primary_key),
-            record.as_document,
+            record.as_search_document,
             doctype: record.doctype,
             index_name: index_name
           )

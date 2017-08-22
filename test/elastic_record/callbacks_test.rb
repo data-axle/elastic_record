@@ -21,7 +21,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
 
   def test_deleted_from_index
     widget = Widget.new id: '10', color: 'green'
-    Widget.elastic_index.index_document(widget.id, widget.as_document)
+    Widget.elastic_index.index_document(widget.id, widget.as_search_document)
 
     assert Widget.elastic_index.record_exists?(widget.id)
 
@@ -41,7 +41,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
       }
     )
 
-    def as_document
+    def as_search_document
       raise StandardError.new("Should never be called!")
       super
     end

@@ -1,6 +1,6 @@
 module ElasticRecord
   module AsDocument
-    def as_document
+    def as_search_document
       json = {}
 
       doctype.mapping[:properties].each do |field, mapping|
@@ -35,9 +35,9 @@ module ElasticRecord
 
       value = case mapping[:type]
               when :object
-                value.as_document
+                value.as_search_document
               when :nested
-                value.map(&:as_document)
+                value.map(&:as_search_document)
               else
                 value
               end
