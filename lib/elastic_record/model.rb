@@ -5,7 +5,7 @@ module ElasticRecord
         extend Searching
         extend ClassMethods
         include Callbacks
-        include AsSearch
+        include AsDocument
 
         class_attribute :elastic_connection
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)

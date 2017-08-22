@@ -1,17 +1,17 @@
 require 'helper'
 
-class ElasticRecord::AsSearchTest < MiniTest::Test
-  def test_as_search
+class ElasticRecord::AsDocumentTest < MiniTest::Test
+  def test_as_document
     Widget.new(id: '10', color: 'green').tap do |widget|
-      assert_equal({"color" => "green"}, widget.as_search)
+      assert_equal({"color" => "green"}, widget.as_document)
     end
 
     Widget.new(id: '10', color: '').tap do |widget|
-      assert_equal({}, widget.as_search)
+      assert_equal({}, widget.as_document)
     end
 
     Widget.new(id: '10', color: false).tap do |widget|
-      assert_equal({"color" => false}, widget.as_search)
+      assert_equal({"color" => false}, widget.as_document)
     end
   end
 
@@ -33,7 +33,7 @@ class ElasticRecord::AsSearchTest < MiniTest::Test
     include TestModel
 
     class Author
-      def as_search
+      def as_document
         {name: 'Jonny'}
       end
     end
@@ -56,8 +56,8 @@ class ElasticRecord::AsSearchTest < MiniTest::Test
     end
   end
 
-  def test_as_search_with_special_fields
-    doc = SpecialFieldsModel.new.as_search
+  def test_as_document_with_special_fields
+    doc = SpecialFieldsModel.new.as_document
 
     assert_equal({name: 'Jonny'}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])

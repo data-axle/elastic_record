@@ -1,27 +1,4 @@
 module ElasticRecord
-  # PercolatorModel are models that should be registered
-  # as elastic queries.
-  #
-  # Must specify the target type and how to represent itself
-  # as an Arelastic::Search
-  #
-  # E.x.
-  #
-  # class WidgetQuery
-  #   include ElasticRecord::PercolatorRecord
-  #
-  #   # Must be an ElasticRecord::Model
-  #   target_model Widget
-  #
-  #   # Must return an Elastic Search query
-  #   def as_search
-  #   end
-  #
-  #   # [optional] - To change how the target model is percolated
-  #   # Must return a Hash
-  #   def self.as_percolated_document(target_model)
-  #   end
-  # end
   module PercolatorModel
     def self.included(base)
       base.class_eval do

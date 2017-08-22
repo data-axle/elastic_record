@@ -5,7 +5,7 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
     assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
   end
 
-  def test_as_search
+  def test_as_document
     query = WidgetQuery.new(name: 'foo', color: 'red')
 
     expected = {
@@ -23,7 +23,7 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
       }
     }
 
-    assert_equal expected, query.as_search
+    assert_equal expected, query.as_document
   end
 
   def test_percolate_when_no_hits

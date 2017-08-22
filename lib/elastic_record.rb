@@ -3,7 +3,7 @@ require 'active_support/concern'
 require 'active_model'
 
 module ElasticRecord
-  autoload :AsSearch, 'elastic_record/as_search'
+  autoload :AsDocument, 'elastic_record/as_document'
   autoload :Callbacks, 'elastic_record/callbacks'
   autoload :Config, 'elastic_record/config'
   autoload :Connection, 'elastic_record/connection'
