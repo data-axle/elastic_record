@@ -28,17 +28,7 @@ class ElasticRecord::IndexTest < MiniTest::Test
     refute index.disabled
   end
 
-  def test_configure
-    context = nil
-
-    index.configure do
-      context = self
-    end
-
-    assert_kind_of ElasticRecord::Index::Configurator, context
-  end
-
-  private;
+  private
 
     def index
       @index ||= ElasticRecord::Index.new(Widget)

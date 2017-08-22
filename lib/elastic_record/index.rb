@@ -1,5 +1,4 @@
 require 'elastic_record/index/analyze'
-require 'elastic_record/index/configurator'
 require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
@@ -69,10 +68,6 @@ module ElasticRecord
     # This is still kind of silly
     def real_connection
       model.elastic_connection
-    end
-
-    def configure(&block)
-      Configurator.new(self).instance_eval(&block)
     end
 
     def get(end_path, doctype = nil, json = nil)
