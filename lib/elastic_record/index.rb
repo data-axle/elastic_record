@@ -65,7 +65,6 @@ module ElasticRecord
       @disabled = false
     end
 
-    # This is still kind of silly
     def real_connection
       model.elastic_connection
     end
