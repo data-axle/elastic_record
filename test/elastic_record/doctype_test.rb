@@ -7,6 +7,12 @@ class ElasticRecord::DoctypeTest < MiniTest::Test
     refute_nil doctype.mapping[:properties]
   end
 
+  def test_default_analysis
+    doctype = ElasticRecord::Doctype.new('widget')
+
+    assert_empty doctype.analysis
+  end
+
   def test_merge_mapping
     doctype = ElasticRecord::Doctype.new('widget')
     doctype.mapping[:properties] = {
