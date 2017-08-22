@@ -35,10 +35,7 @@ module ElasticRecord
 
     module ClassMethods
       def elastic_index
-        @elastic_index ||=
-          begin
-            index = ElasticRecord::Index.new([self, target_model])
-          end
+        @elastic_index ||= ElasticRecord::Index.new([self, target_model])
       end
 
       def doctype
