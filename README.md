@@ -153,6 +153,32 @@ end
 Product.filter(color: 'red').increase_prices
 ```
 
+## Percolators ##
+
+ElasticRecord supports representing query documents as a model.  Queries are then registered/unregistered
+as models are created or destroyed.
+
+First, include PercolatorModel into your model.  Specify a target model, and how the model should be indexed
+as an ElasticSearch query.
+
+```ruby
+class ProductQuery
+  include ElasticRecord::PercolatorModel
+
+  target_model Product
+
+  def as_search
+    Product.filter(status: status).as_elastic
+  end
+end
+```
+
+Then, target models can be percolated.
+
+```
+  matching_queries = ProductQuery.percolate(product)
+```
+
 ## Index Configuration
 
 While elastic search automatically maps fields, you can also directly access Product.doctype.mapping
