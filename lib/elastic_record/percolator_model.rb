@@ -29,13 +29,17 @@ module ElasticRecord
 
         include Model
         extend ClassMethods
-        include InstanceMethods
       end
     end
 
     module ClassMethods
       def elastic_index
-        @elastic_index ||= ElasticRecord::Index.new([self, target_model])
+        @elastic_index ||=
+          begin
+            index = ElasticRecord::Index.new([self, target_model])
+            index.partial_updates = false
+            index
+          end
       end
 
       def doctype
@@ -64,12 +68,6 @@ module ElasticRecord
         def as_percolated_document(model)
           model.attributes
         end
-    end
-
-    module InstanceMethods
-      def as_partial_update_document
-        as_search
-      end
     end
   end
 end
