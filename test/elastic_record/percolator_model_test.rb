@@ -1,6 +1,12 @@
 require 'helper'
 
 class ElasticRecord::PercolatorModelTest < MiniTest::Test
+  def test_elastic_index
+    assert_equal [WidgetQuery.doctype, Widget.doctype], index.doctypes
+    refute index.partial_updates
+    assert_equal({}, index.settings)
+  end
+
   def test_doctype
     assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
   end

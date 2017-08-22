@@ -15,6 +15,7 @@ module ElasticRecord
           begin
             index = ElasticRecord::Index.new([self, target_model])
             index.partial_updates = false
+            index.settings = target_model.elastic_index.settings.slice('analysis')
             index
           end
       end
