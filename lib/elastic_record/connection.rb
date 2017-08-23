@@ -76,7 +76,7 @@ module ElasticRecord
       delete: Net::HTTP::Delete
     }
     def new_request(method, path, body)
-      request = METHODS[method].new(path)
+      request = METHODS[method].new(path.starts_with?('/') ? path : "/#{path}")
       request.basic_auth(options[:username], options[:password]) if options[:username].present?
       request.body = body
       request.content_type = 'application/json'
