@@ -165,18 +165,23 @@ as an ElasticSearch query.
 class ProductQuery
   include ElasticRecord::PercolatorModel
 
-  target_model Product
+  self.percolates_model = Product
 
-  def as_search
+  def as_search_document
     Product.filter(status: status).as_elastic
+  end
+
+  # [optional] - To change how the percolated model is percolated.
+  def self.as_percolated_document(model_to_percolate)
   end
 end
 ```
 
-Then, target models can be percolated.
+Then, target models can be percolated to find matching queries.
 
 ```
-  matching_queries = ProductQuery.percolate(product)
+  product = Product.new(...)
+  product_queries = ProductQuery.percolate(product)
 ```
 
 ## Index Configuration
