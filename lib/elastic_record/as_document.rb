@@ -1,32 +1,23 @@
 module ElasticRecord
   module AsDocument
     def as_search_document
-      json = {}
-
-      doctype.mapping[:properties].each do |field, mapping|
+      doctype.mapping[:properties].each_with_object({}) do |(field, mapping), result|
         value = elastic_search_value field, mapping
 
         unless value.nil?
-          json[field] = value
+          result[field] = value
         end
       end
-
-      json
     end
 
     def as_partial_update_document
-      json = {}
-
       mappings = doctype.mapping[:properties]
-      changed.each do |field|
+
+      changed.each_with_object({}) do |field, result|
         if field_mapping = mappings[field]
-          json[field] = elastic_search_value field, field_mapping
+          result[field] = elastic_search_value field, field_mapping
         end
       end
-
-      amend_partial_update_document(json) if respond_to?(:amend_partial_update_document)
-
-      json
     end
 
     def elastic_search_value(field, mapping)
@@ -45,6 +36,6 @@ module ElasticRecord
       if value.present? || value == false
         value
       end
-      end
+    end
   end
 end
