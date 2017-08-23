@@ -2,7 +2,7 @@ module ElasticRecord
   module PercolatorModel
     def self.included(base)
       base.class_eval do
-        class_attribute :target_model
+        class_attribute :percolates_model
 
         include Model
         extend ClassMethods
@@ -13,7 +13,7 @@ module ElasticRecord
       def elastic_index
         @elastic_index ||=
           begin
-            index = ElasticRecord::Index.new([self, target_model])
+            index = ElasticRecord::Index.new([self, percolates_model])
             index.partial_updates = false
             index
           end
@@ -28,7 +28,7 @@ module ElasticRecord
           "query" => {
             "percolate" => {
               "field"         => "query",
-              "document_type" => target_model.doctype.name,
+              "document_type" => percolates_model.doctype.name,
               "document"      => as_percolated_document(other_model)
             }
           }
