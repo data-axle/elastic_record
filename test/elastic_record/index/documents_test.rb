@@ -1,10 +1,6 @@
 require 'helper'
 
 class ElasticRecord::Index::DocumentsTest < MiniTest::Test
-  def teardown
-    index.enable!
-  end
-
   class InheritedWidget < Widget
     def self.base_class
       Widget
@@ -18,14 +14,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     assert index.record_exists?('5')
     refute index.record_exists?('7')
-  end
-
-  def test_index_record_when_disabled
-    record = Widget.new(id: '5', color: 'red')
-    index.disable!
-
-    index.index_record(record)
-    refute index.record_exists?(record.id)
   end
 
   def test_index_document
