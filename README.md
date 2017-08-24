@@ -170,10 +170,6 @@ class ProductQuery
   def as_search_document
     Product.filter(status: status).as_elastic
   end
-
-  # [optional] - To change how the percolated model is percolated.
-  def self.as_percolated_document(model_to_percolate)
-  end
 end
 ```
 
