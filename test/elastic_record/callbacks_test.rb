@@ -46,14 +46,4 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
       super
     end
   end
-
-  # Does not belong in this test
-  def test_disabled_skip_document
-    DisablingModel.elastic_index.disable!
-
-    model = DisablingModel.new id: '5', height: '9 feets'
-    model.save
-
-    refute Widget.elastic_index.record_exists?(model.id)
-  end
 end
