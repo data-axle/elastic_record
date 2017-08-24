@@ -177,11 +177,11 @@ class ProductQuery
 end
 ```
 
-Then, target models can be percolated to find matching queries.
+Then, percolate documents to find matching queries.
 
 ```
-  product = Product.new(...)
-  product_queries = ProductQuery.percolate(product)
+  document =  { ... } # Product attributes
+  matching_product_queries = ProductQuery.percolate(document)
 ```
 
 ## Index Configuration

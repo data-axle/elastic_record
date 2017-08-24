@@ -34,14 +34,14 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
 
   def test_percolate_when_no_hits
     query = WidgetQuery.create(name: 'foo', color: 'red')
-    should_not_hit = Widget.new(name: 'bar', color: 'blue')
+    should_not_hit = { name: 'bar', color: 'blue' }
 
     assert_empty WidgetQuery.percolate(should_not_hit)
   end
 
   def test_percolate_when_hits
     query = WidgetQuery.create(color: 'red')
-    should_hit = Widget.new(name: 'foo', color: 'red')
+    should_hit = { name: 'foo', color: 'red' }
 
     assert_equal [query], WidgetQuery.percolate(should_hit)
   end

@@ -23,13 +23,13 @@ module ElasticRecord
         @doctype ||= Doctype.percolator_doctype
       end
 
-      def percolate(other_model)
+      def percolate(document)
         query = {
           "query" => {
             "percolate" => {
               "field"         => "query",
               "document_type" => percolates_model.doctype.name,
-              "document"      => as_percolated_document(other_model)
+              "document"      => document
             }
           }
         }
@@ -39,12 +39,6 @@ module ElasticRecord
 
         where(id: ids)
       end
-
-      private
-
-        def as_percolated_document(model)
-          model.attributes
-        end
     end
   end
 end
