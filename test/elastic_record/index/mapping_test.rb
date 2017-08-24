@@ -1,12 +1,22 @@
 require 'helper'
 
 class ElasticRecord::Index::MappingTest < MiniTest::Test
-  # TODO
   def test_get_mapping
-  end
+    expected = {
+      "widget" => {
+        "_all" => { "enabled" => false },
+        "properties" => {
+          "color" => { "type" => "keyword" },
+          "name" => {
+            "type" => "keyword",
+            "fields" => { "analyzed" => { "type" => "text" } }
+          },
+          "warehouse_id" => { "type" => "keyword" }
+        }
+      }
+    }
 
-  # TODO
-  def test_update_mapping
+    assert_equal expected, index.get_mapping
   end
 
   private
