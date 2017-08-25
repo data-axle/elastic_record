@@ -155,10 +155,9 @@ Product.filter(color: 'red').increase_prices
 
 ## Percolators ##
 
-ElasticRecord models that represent a query, with `ElasticRecord::PercolatorModel`. Percolate Queries are registered and unregistered as records are created and destroyed.
+ElasticRecord supports representing query documents as a model.  Queries are registered and unregistered as query models are created and destroyed.
 
-First, include PercolatorModel into your model.  Specify a target model and how the model should be indexed
-as an ElasticSearch query.
+First, include `ElasticRecord::PercolatorModel` into your model.  Specify the target model to percolate and how the model should be indexed as an ElasticSearch query.
 
 ```ruby
 class ProductQuery
