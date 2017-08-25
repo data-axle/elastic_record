@@ -181,7 +181,7 @@ Use the `percolate` method to find records with queries that match.
 
 ## Index Configuration
 
-While elastic search automatically maps fields, you can also directly access Product.doctype.mapping
+To avoid elasticsearch dynamically mapping fields, you can directly configure Product.doctype.mapping
 and Product.elastic_index.settings:
 
 ```ruby
