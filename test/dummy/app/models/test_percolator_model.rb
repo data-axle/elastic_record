@@ -1,8 +1,8 @@
-module TestModel
+module TestPercolatorModel
   extend ActiveSupport::Concern
 
   included do
     include MockModel
-    include ElasticRecord::Model
+    include ElasticRecord::PercolatorModel
   end
 end

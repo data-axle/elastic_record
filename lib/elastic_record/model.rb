@@ -5,6 +5,7 @@ module ElasticRecord
         extend Searching
         extend ClassMethods
         include Callbacks
+        include AsDocument
 
         class_attribute :elastic_connection
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
@@ -17,15 +18,20 @@ module ElasticRecord
 
         if child < child.base_class
           child.elastic_index = elastic_index.dup
+          child.doctype = doctype.dup
         end
-      end
-
-      def elastic_relation
-        ElasticRecord::Relation.new(self)
       end
 
       def arelastic
         Arelastic::Builders::Search
+      end
+
+      def doctype
+        @doctype ||= Doctype.new(base_class.name.demodulize.underscore)
+      end
+
+      def doctype=(new_doctype)
+        @doctype = new_doctype
       end
 
       def elastic_index
@@ -43,6 +49,10 @@ module ElasticRecord
 
     def elastic_index
       self.class.elastic_index
+    end
+
+    def doctype
+      self.class.doctype
     end
   end
 end

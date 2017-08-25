@@ -1,23 +1,26 @@
 require 'helper'
 
 class ElasticRecord::Index::MappingTest < MiniTest::Test
-  def test_default_mapping
-    mapping = index.mapping
+  def test_get_mapping
+    expected = {
+      "widget" => {
+        "_all" => { "enabled" => false },
+        "properties" => {
+          "color" => { "type" => "keyword" },
+          "name" => {
+            "type" => "keyword",
+            "fields" => { "analyzed" => { "type" => "text" } }
+          },
+          "warehouse_id" => { "type" => "keyword" }
+        }
+      }
+    }
 
-    refute_nil mapping[:properties]
-  end
-
-  def test_merge_mapping
-    index.mapping.clear
-    index.mapping[:properties] = {color: {type: 'string'}}
-
-    custom = {properties: {color: {type: 'integer'}}, other: 'stuff'}
-    index.mapping = custom
-
-    assert_equal custom, index.mapping
+    assert_equal expected, index.get_mapping
   end
 
   private
+
     def index
       @index ||= ElasticRecord::Index.new(Widget)
     end

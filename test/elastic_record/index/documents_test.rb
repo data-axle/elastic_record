@@ -28,7 +28,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.update_document('abc', color: 'blue')
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
-    assert_equal expected, index.get('abc')['_source']
+    assert_equal expected, index.get('abc', Widget.doctype)['_source']
   end
 
   def test_delete_document

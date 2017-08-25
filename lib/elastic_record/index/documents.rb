@@ -53,58 +53,68 @@ module ElasticRecord
     module Documents
       def index_record(record, index_name: alias_name)
         unless disabled
-          index_document(record.send(record.class.primary_key), record.as_search, index_name: index_name)
+          index_document(
+            record.send(record.class.primary_key),
+            record.as_search_document,
+            doctype: record.doctype,
+            index_name: index_name
+          )
         end
       end
 
       def update_record(record, index_name: alias_name)
         unless disabled
-          update_document(record.send(record.class.primary_key), record.as_partial_update_document, index_name: index_name)
+          update_document(
+            record.send(record.class.primary_key),
+            record.as_partial_update_document,
+            doctype: record.doctype,
+            index_name: index_name
+          )
         end
       end
 
-      def index_document(id, document, parent: nil, index_name: alias_name)
+      def index_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id }
+          instructions = { _index: index_name, _type: doctype.name, _id: id }
           instructions[:parent] = parent if parent
 
           batch << { index: instructions }
           batch << document
         else
-          path = "/#{index_name}/#{type}/#{id}"
+          path = "/#{index_name}/#{doctype.name}/#{id}"
           path << "?parent=#{parent}" if parent
 
           connection.json_put path, document
         end
       end
 
-      def update_document(id, document, parent: nil, index_name: alias_name)
+      def update_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
         params = {doc: document, doc_as_upsert: true}
 
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
+          instructions = { _index: index_name, _type: doctype.name, _id: id, _retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
 
           batch << { update: instructions }
           batch << params
         else
-          path = "/#{index_name}/#{type}/#{id}/_update?retry_on_conflict=3"
+          path = "/#{index_name}/#{doctype.name}/#{id}/_update?retry_on_conflict=3"
           path << "&parent=#{parent}" if parent
 
           connection.json_post path, params
         end
       end
 
-      def delete_document(id,  parent: nil, index_name: alias_name)
+      def delete_document(id, doctype: model.doctype, parent: nil, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id, _retry_on_conflict: 3 }
+          instructions = { _index: index_name, _type: doctype.name, _id: id, _retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
           batch << { delete: instructions }
         else
-          path = "/#{index_name}/#{type}/#{id}"
+          path = "/#{index_name}/#{doctype.name}/#{id}"
           path << "&parent=#{parent}" if parent
 
           connection.json_delete path
@@ -122,7 +132,7 @@ module ElasticRecord
       end
 
       def record_exists?(id)
-        get(id)['found']
+        get(id, model.doctype)['found']
       end
 
       def search(elastic_query, options = {})
@@ -131,7 +141,7 @@ module ElasticRecord
           url += "?#{options.to_query}"
         end
 
-        get url, elastic_query
+        get url, model.doctype, elastic_query
       end
 
       def explain(id, elastic_query)

@@ -1,10 +1,8 @@
 require 'elastic_record/index/analyze'
-require 'elastic_record/index/configurator'
 require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
-require 'elastic_record/index/percolator'
 require 'elastic_record/index/settings'
 
 require 'active_support/core_ext/object/deep_dup'
@@ -25,30 +23,30 @@ module ElasticRecord
   #   Returns if the index exists
   # [get_mapping]
   #   Returns the mapping currently stored by elastic search.
-  # [put_mapping]
+  # [update_mapping]
   #   Update elastic search's mapping
   class Index
     include Documents
     include Manage
     include Mapping, Settings
-    include Percolator
     include Analyze
     include Deferred
 
-    attr_accessor :model
+    attr_accessor :doctypes
 
     attr_accessor :disabled
-    attr_accessor :has_percolator
+    attr_accessor :model
     attr_accessor :partial_updates
 
-    def initialize(model)
-      @model = model
+    def initialize(models)
+      models = Array.wrap(models)
+      @model = models.first
+      @doctypes = models.map(&:doctype)
       @disabled = false
     end
 
     def initialize_copy(other)
       @settings = settings.deep_dup
-      @mapping = mapping.deep_dup
     end
 
     def alias_name=(name)
@@ -57,14 +55,6 @@ module ElasticRecord
 
     def alias_name
       @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
-    end
-
-    def type=(name)
-      @type = name
-    end
-
-    def type
-      @type ||= model.base_class.name.demodulize.underscore
     end
 
     def disable!
@@ -79,12 +69,12 @@ module ElasticRecord
       model.elastic_connection
     end
 
-    def configure(&block)
-      Configurator.new(self).instance_eval(&block)
-    end
+    def get(end_path, doctype = nil, json = nil)
+      path = "/#{alias_name}"
+      path += "/#{doctype.name}" if doctype
+      path += "/#{end_path}"
 
-    def get(end_path, json = nil)
-      connection.json_get "/#{alias_name}/#{type}/#{end_path}", json
+      connection.json_get path, json
     end
 
     private
@@ -92,6 +82,5 @@ module ElasticRecord
       def new_index_name
         "#{alias_name}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}"
       end
-
   end
 end

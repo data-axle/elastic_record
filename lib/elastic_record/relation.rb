@@ -1,5 +1,4 @@
 require 'elastic_record/relation/value_methods'
-require 'elastic_record/relation/admin'
 require 'elastic_record/relation/batches'
 require 'elastic_record/relation/delegation'
 require 'elastic_record/relation/finder_methods'
@@ -9,7 +8,7 @@ require 'elastic_record/relation/search_methods'
 
 module ElasticRecord
   class Relation
-    include Admin, Batches, Delegation, FinderMethods, Merging, SearchMethods
+    include Batches, Delegation, FinderMethods, Merging, SearchMethods
 
     attr_reader :klass, :values
 

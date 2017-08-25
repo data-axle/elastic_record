@@ -11,13 +11,6 @@ class ElasticRecord::ModelTest < MiniTest::Test
     assert_equal ElasticRecord::Config.connection_options.symbolize_keys, connection.options
   end
 
-  def test_elastic_relation
-    relation = Widget.elastic_relation
-
-    assert_equal Widget, relation.klass
-    assert_equal Widget.arelastic, relation.arelastic
-  end
-
   def test_elastic_index
     index = Widget.elastic_index
 
@@ -26,5 +19,6 @@ class ElasticRecord::ModelTest < MiniTest::Test
 
   def test_elastic_index_inheritence
     refute_equal Widget.elastic_index.object_id, InheritedModel.elastic_index.object_id
+    refute_equal Widget.doctype.object_id, InheritedModel.doctype.object_id
   end
 end

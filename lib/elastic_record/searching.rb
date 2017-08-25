@@ -1,5 +1,9 @@
 module ElasticRecord
   module Searching
+    def elastic_relation
+      ElasticRecord::Relation.new(self)
+    end
+
     def elastic_search
       if current_elastic_search
         current_elastic_search.clone

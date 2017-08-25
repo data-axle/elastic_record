@@ -153,23 +153,39 @@ end
 Product.filter(color: 'red').increase_prices
 ```
 
-## Index Configuration
+## Percolators ##
 
-While elastic search automatically maps fields, you may wish to override the defaults:
+ElasticRecord supports representing query documents as a model.  Queries are registered and unregistered as query models are created and destroyed.
+
+First, include `ElasticRecord::PercolatorModel` into your model.  Specify the target model to percolate and how the model should be indexed as an ElasticSearch query.
 
 ```ruby
-class Product < ActiveRecord::Base
-  elastic_index.configure do
-    property :status, type: "keyword"
+class ProductQuery
+  include ElasticRecord::PercolatorModel
+
+  self.percolates_model = Product
+
+  def as_search_document
+    Product.filter(status: status).as_elastic
   end
 end
 ```
 
-You can also directly access Product.elastic_index.mapping and Product.elastic_index.settings:
+Use the `percolate` method to find records with queries that match.
+
+```
+  product = Product.new(price: 5.99)
+  matching_product_queries = ProductQuery.percolate(product)
+```
+
+## Index Configuration
+
+To avoid elasticsearch dynamically mapping fields, you can directly configure Product.doctype.mapping
+and Product.elastic_index.settings:
 
 ```ruby
 class Product
-  elastic_index.mapping = {
+  doctype.mapping = {
     properties: {
       name: {type: "text"},
       status: {type: "keyword"}

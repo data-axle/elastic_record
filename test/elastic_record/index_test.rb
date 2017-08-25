@@ -5,12 +5,14 @@ class ElasticRecord::IndexTest < MiniTest::Test
     copied = index.dup
 
     refute_equal copied.settings.object_id, index.settings.object_id
-    refute_equal copied.mapping.object_id, index.mapping.object_id
   end
 
-  def test_model_name
+  def test_doctypes
+    assert_equal [Widget.doctype], index.doctypes
+  end
+
+  def test_alias_name
     assert_equal 'widgets', index.alias_name
-    assert_equal 'widget', index.type
   end
 
   def test_disable
@@ -26,18 +28,8 @@ class ElasticRecord::IndexTest < MiniTest::Test
     refute index.disabled
   end
 
-  def test_configure
-    context = nil
+  private
 
-    index.configure do
-      context = self
-    end
-
-    assert_kind_of ElasticRecord::Index::Configurator, context
-  end
-
-  private;
-  
     def index
       @index ||= ElasticRecord::Index.new(Widget)
     end
