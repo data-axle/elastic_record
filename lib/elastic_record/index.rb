@@ -31,7 +31,6 @@ module ElasticRecord
     include Mapping, Settings
     include Analyze
     include Deferred
-    include NameCache
 
     attr_accessor :doctypes
 
