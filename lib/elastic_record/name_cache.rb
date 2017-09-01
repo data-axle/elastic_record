@@ -3,8 +3,6 @@ module ElasticRecord
     extend ActiveSupport::Concern
 
     included do
-      private
-
       class_attribute :cached_index_name
       class_attribute :index_name_cache_time
       self.index_name_cache_time = 0
