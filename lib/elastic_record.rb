@@ -12,6 +12,7 @@ module ElasticRecord
   autoload :JSON, 'elastic_record/json'
   autoload :Lucene, 'elastic_record/lucene'
   autoload :Model, 'elastic_record/model'
+  autoload :NameCache, 'elastic_record/name_cache'
   autoload :PercolatorModel, 'elastic_record/percolator_model'
   autoload :Relation, 'elastic_record/relation'
   autoload :Searching, 'elastic_record/searching'
