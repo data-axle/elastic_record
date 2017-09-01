@@ -31,7 +31,8 @@ module ElasticRecord
               "document_type" => percolates_model.doctype.name,
               "document"      => document
             }
-          }
+          },
+          "size" => 1000
         }
 
         hits = elastic_index.search(query)['hits']['hits']
