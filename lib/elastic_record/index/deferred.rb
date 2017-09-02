@@ -2,14 +2,8 @@ module ElasticRecord
   class Index
     module Deferred
       class DeferredConnection
-        class DeferredAction < Struct.new(:method, :args, :block)
-          def run(index)
-            index.send(method, *args, &block)
-          end
-        end
 
         attr_accessor :index
-        attr_accessor :deferred_actions
         attr_accessor :writes_made
         attr_accessor :bulk_stack
 
@@ -21,16 +15,9 @@ module ElasticRecord
 
         def reset!
           if writes_made
-            begin
-              index.disable_deferring!
-              index.refresh
-              index.delete_by_query query: {match_all: {}}
-            ensure
-              index.enable_deferring!
-            end
+            index.delete_by_query query: {match_all: {}}
+            self.writes_made = false
           end
-          self.deferred_actions = []
-          self.writes_made = false
         end
 
         private
@@ -38,24 +25,11 @@ module ElasticRecord
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
-            if READ_METHODS.include?(method)
-              flush_deferred_actions!
-              if method == :json_get && args.first =~ /^\/(.*)\/_search/
-                index.real_connection.json_post("/#{$1.partition('/').first}/_refresh")
-              end
-
-              index.real_connection.send(method, *args, &block)
-            else
-              deferred_actions << DeferredAction.new(method, args, block)
-            end
-          end
-
-          def flush_deferred_actions!
-            deferred_actions.each do |queued_action|
+            if READ_METHODS.exclude?(method)
               self.writes_made = true
-              queued_action.run(index.real_connection)
             end
-            deferred_actions.clear
+
+            index.real_connection.send(method, *args, &block)
           end
       end
 

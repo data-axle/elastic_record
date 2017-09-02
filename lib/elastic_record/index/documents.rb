@@ -81,8 +81,8 @@ module ElasticRecord
           batch << { index: instructions }
           batch << document
         else
-          path = "/#{index_name}/#{doctype.name}/#{id}"
-          path << "?parent=#{parent}" if parent
+          path = "/#{index_name}/#{doctype.name}/#{id}?refresh"
+          # path << "?parent=#{parent}" if parent
 
           connection.json_put path, document
         end
@@ -98,7 +98,7 @@ module ElasticRecord
           batch << { update: instructions }
           batch << params
         else
-          path = "/#{index_name}/#{doctype.name}/#{id}/_update?retry_on_conflict=3"
+          path = "/#{index_name}/#{doctype.name}/#{id}/_update?refresh&retry_on_conflict=3"
           path << "&parent=#{parent}" if parent
 
           connection.json_post path, params
@@ -114,8 +114,8 @@ module ElasticRecord
           instructions[:parent] = parent if parent
           batch << { delete: instructions }
         else
-          path = "/#{index_name}/#{doctype.name}/#{id}"
-          path << "&parent=#{parent}" if parent
+          path = "/#{index_name}/#{doctype.name}/#{id}?refresh"
+          # path << "&parent=#{parent}" if parent
 
           connection.json_delete path
         end
@@ -164,7 +164,8 @@ module ElasticRecord
 
         if current_bulk_batch.any?
           body = current_bulk_batch.map { |action| "#{ElasticRecord::JSON.encode(action)}\n" }.join
-          results = connection.json_post("/_bulk?#{options.to_query}", body)
+          # results = connection.json_post("/_bulk?#{options.to_query}", body)
+          results = connection.json_post("/_bulk?refresh", body)
           verify_bulk_results(results)
         end
       ensure
