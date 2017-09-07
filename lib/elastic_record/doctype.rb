@@ -11,9 +11,9 @@ module ElasticRecord
     }
 
     PERCOLATOR_MAPPING = {
-      "properties" => {
-        "query" => {
-          "type" => "percolator"
+      properties: {
+        query: {
+          type: "percolator"
         }
       }
     }
