@@ -35,7 +35,7 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= load_hits(to_ids)
+      @records ||= load_hits
     end
 
     def to_ids
@@ -79,9 +79,9 @@ module ElasticRecord
         end
       end
 
-      def load_hits(ids)
+      def load_hits
         scope = select_values.any? ? klass.select(select_values) : klass
-        scope.find(ids)
+        scope.find(to_ids)
       end
   end
 end
