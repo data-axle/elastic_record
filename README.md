@@ -194,12 +194,12 @@ class Product
 end
 ```
 
-### Index documents From Source
+### Load Documents from Source
 
 To fetch documents without an additional request to a backing ActiveRecord database you can load the documents from `_source`.
 
 ```ruby
-Product.load_from_source do
+Product.elastic_index.load_from_source do
   Product.elastic_search.filter(name: "Pizza")
 end
 
