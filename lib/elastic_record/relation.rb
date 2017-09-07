@@ -85,7 +85,7 @@ module ElasticRecord
 
       def load_hits
         if klass.elastic_index.load_from_source
-           search_hits&.map { |hit| klass.new(hit['_source'].merge('id' => hit['_id'])) }
+           search_hits.map { |hit| klass.new(hit['_source'].merge('id' => hit['_id'])) }
         else
           scope = select_values.any? ? klass.select(select_values) : klass
           scope.find(to_ids)
