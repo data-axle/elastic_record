@@ -66,16 +66,6 @@ module ElasticRecord
       @disabled = false
     end
 
-    def load_from_source(&block)
-      if block_given?
-        @load_from_source = true
-        yield
-        @load_from_source = false
-      else
-        @load_from_source
-      end
-    end
-
     def real_connection
       model.elastic_connection
     end

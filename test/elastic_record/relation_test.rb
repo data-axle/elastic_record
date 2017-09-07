@@ -43,14 +43,16 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_to_a_from_source
-    Widget.elastic_index.load_from_source do
-      create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    Widget.elastic_index.load_from_source = true
 
-      array = Widget.elastic_relation.to_a
+    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
 
-      assert_equal 2, array.size
-      assert array.first.is_a?(Widget)
-    end
+    array = Widget.elastic_relation.to_a
+
+    assert_equal 2, array.size
+    assert array.first.is_a?(Widget)
+
+    Widget.elastic_index.load_from_source = false
   end
 
   def test_delete_all
