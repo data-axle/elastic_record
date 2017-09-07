@@ -51,9 +51,13 @@ namespace :index do
         index_name = model.elastic_index.create
       end
 
-      puts "  Reindexing into #{index_name}"
-      model.find_in_batches(batch_size: 100) do |records|
-        model.elastic_index.bulk_add(records, index_name: index_name)
+      if model.elastic_index.load_from_source
+        puts "  Reindexing into #{index_name} [skipped]"
+      else
+        puts "  Reindexing into #{index_name}"
+        model.find_in_batches(batch_size: 100) do |records|
+          model.elastic_index.bulk_add(records, index_name: index_name)
+        end
       end
 
       puts "  Deploying index..."
