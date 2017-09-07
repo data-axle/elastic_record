@@ -75,13 +75,21 @@ module ElasticRecord
         @search_results ||= begin
           options = search_type_value ? {search_type: search_type_value} : {}
 
-          klass.elastic_index.search(as_elastic.update('_source' => false), options)
+          if klass.elastic_index.load_from_source
+            klass.elastic_index.search(as_elastic, options)
+          else
+            klass.elastic_index.search(as_elastic.update('_source' => false), options)
+          end
         end
       end
 
       def load_hits
-        scope = select_values.any? ? klass.select(select_values) : klass
-        scope.find(to_ids)
+        if klass.elastic_index.load_from_source
+           search_hits&.map { |hit| klass.new(hit['_source'].merge('id' => hit['_id'])) }
+        else
+          scope = select_values.any? ? klass.select(select_values) : klass
+          scope.find(to_ids)
+        end
       end
   end
 end
