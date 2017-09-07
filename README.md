@@ -194,6 +194,28 @@ class Product
 end
 ```
 
+### Index documents From Source
+
+To fetch documents without an additional request to a backing ActiveRecord database you can load the documents from `_source`.
+
+```ruby
+Product.load_from_source do
+  Product.elastic_search.filter(name: "Pizza")
+end
+
+```
+
+Use `elastic_index.load_from_source = true` to build a model without ActiveRecord.
+
+```ruby
+class Product
+  include ActiveModel::Model
+  include ElasticRecord::Record
+
+  self.elastic_index.load_from_source = true
+end
+```
+
 ### Index Management ###
 
 If you need to manage multiple indexes via the rake tasks, you will need to declare them explicitly:
