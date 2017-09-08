@@ -52,6 +52,7 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_equal 2, array.size
     assert array.first.is_a?(Widget)
 
+  ensure
     Widget.elastic_index.load_from_source = false
   end
 
