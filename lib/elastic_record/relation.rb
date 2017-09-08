@@ -35,7 +35,7 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= load_hits(to_ids)
+      @records ||= load_hits
     end
 
     def to_ids
@@ -62,11 +62,12 @@ module ElasticRecord
       klass.current_elastic_search = previous
     end
 
-    def search_hits
-      search_results['hits']['hits']
-    end
-
     private
+
+      def search_hits
+        search_results['hits']['hits']
+      end
+
       def reset
         @search_results = @records = nil
       end
@@ -75,13 +76,21 @@ module ElasticRecord
         @search_results ||= begin
           options = search_type_value ? {search_type: search_type_value} : {}
 
-          klass.elastic_index.search(as_elastic.update('_source' => false), options)
+          unless klass.elastic_index.load_from_source
+            as_elastic.update('_source' => false)
+          end
+
+          klass.elastic_index.search(as_elastic, options)
         end
       end
 
-      def load_hits(ids)
-        scope = select_values.any? ? klass.select(select_values) : klass
-        scope.find(ids)
+      def load_hits
+        if klass.elastic_index.load_from_source
+           search_hits.map { |hit| klass.new(hit['_source'].update('id' => hit['_id'])) }
+        else
+          scope = select_values.any? ? klass.select(select_values) : klass
+          scope.find(to_ids)
+        end
       end
   end
 end

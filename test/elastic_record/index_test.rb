@@ -28,6 +28,13 @@ class ElasticRecord::IndexTest < MiniTest::Test
     refute index.disabled
   end
 
+  def test_loading_from_source
+    index.loading_from_source do
+      assert index.load_from_source
+    end
+    refute index.load_from_source
+  end
+
   private
 
     def index

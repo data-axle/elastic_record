@@ -37,6 +37,7 @@ module ElasticRecord
     attr_accessor :disabled
     attr_accessor :model
     attr_accessor :partial_updates
+    attr_accessor :load_from_source
 
     def initialize(models)
       models = Array.wrap(models)
@@ -63,6 +64,13 @@ module ElasticRecord
 
     def enable!
       @disabled = false
+    end
+
+    def loading_from_source(&block)
+      @load_from_source = true
+      yield
+    ensure
+      @load_from_source = false
     end
 
     def real_connection
