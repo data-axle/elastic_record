@@ -62,11 +62,12 @@ module ElasticRecord
       klass.current_elastic_search = previous
     end
 
-    def search_hits
-      search_results['hits']['hits']
-    end
-
     private
+
+      def search_hits
+        search_results['hits']['hits']
+      end
+
       def reset
         @search_results = @records = nil
       end
@@ -85,7 +86,7 @@ module ElasticRecord
 
       def load_hits
         if klass.elastic_index.load_from_source
-           search_hits.map { |hit| klass.new(hit['_source'].merge('id' => hit['_id'])) }
+           search_hits.map { |hit| klass.new(hit['_source'].update('id' => hit['_id'])) }
         else
           scope = select_values.any? ? klass.select(select_values) : klass
           scope.find(to_ids)
