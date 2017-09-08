@@ -76,11 +76,11 @@ module ElasticRecord
         @search_results ||= begin
           options = search_type_value ? {search_type: search_type_value} : {}
 
-          if klass.elastic_index.load_from_source
-            klass.elastic_index.search(as_elastic, options)
-          else
-            klass.elastic_index.search(as_elastic.update('_source' => false), options)
+          unless klass.elastic_index.load_from_source
+            as_elastic.update('_source' => false)
           end
+
+          klass.elastic_index.search(as_elastic, options)
         end
       end
 
