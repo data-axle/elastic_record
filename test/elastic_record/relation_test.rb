@@ -44,14 +44,15 @@ class ElasticRecord::RelationTest < MiniTest::Test
 
   def test_to_a_from_source
     warehouses = [Warehouse.new(name: 'Amazon'), Warehouse.new(name: 'Walmart')]
-    Warehouse.elastic_index.bulk_add(warehouses)
+    result = Warehouse.elastic_index.bulk_add(warehouses)
 
     array = Warehouse.elastic_relation.to_a
 
     assert_equal 2, array.size
     assert array.first.is_a?(Warehouse)
-    assert_equal 'Amazon', array.first.name
-    assert_equal 'Walmart', array.last.name
+    names = array.map(&:name)
+    assert_includes names, 'Amazon'
+    assert_includes names, 'Walmart'
   end
 
   def test_delete_all
