@@ -12,4 +12,8 @@ class Warehouse
   alias_method :as_json, :as_search_document
 
   elastic_index.load_from_source = true
+
+  def as_search_document
+    { name: name }
+  end
 end
