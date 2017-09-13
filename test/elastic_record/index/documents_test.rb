@@ -51,7 +51,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
     assert_equal expected, index.get('abc', Widget.doctype)['_source']
 
-    assert_raises ElasticRecord::Error do
+    assert_raises RuntimeError do
       index.update_document(nil, color: 'blue')
     end
   end
@@ -63,7 +63,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.delete_document('abc')
     refute index.record_exists?('abc')
 
-    assert_raises ElasticRecord::Error do
+    assert_raises RuntimeError do
       index.delete_document('')
     end
   end
