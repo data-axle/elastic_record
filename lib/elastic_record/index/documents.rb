@@ -84,7 +84,11 @@ module ElasticRecord
           path = "/#{index_name}/#{doctype.name}/#{id}"
           path << "?parent=#{parent}" if parent
 
-          connection.json_put path, document
+          if id
+            connection.json_put path, document
+          else
+            connection.json_post path, document
+          end
         end
       end
 

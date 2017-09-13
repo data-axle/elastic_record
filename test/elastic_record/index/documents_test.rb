@@ -23,6 +23,15 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     refute index.record_exists?('xyz')
   end
 
+  def test_index_document_without_id
+    without_deferring do
+      result = index.index_document(nil, color: 'red')
+
+      assert index.record_exists?(result['_id'])
+      refute index.record_exists?('xyz')
+    end
+  end
+
   def test_update_document
     index.index_document('abc', warehouse_id: '5', color: 'red')
     index.update_document('abc', color: 'blue')
