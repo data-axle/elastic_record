@@ -54,7 +54,7 @@ module ElasticRecord
       def index_record(record, index_name: alias_name)
         unless disabled
           index_document(
-            record_primary_key(record),
+            record.try(:id),
             record.as_search_document,
             doctype: record.doctype,
             index_name: index_name
@@ -65,7 +65,7 @@ module ElasticRecord
       def update_record(record, index_name: alias_name)
         unless disabled
           update_document(
-            record.send(record.class.primary_key),
+            record.try(:id),
             record.as_partial_update_document,
             doctype: record.doctype,
             index_name: index_name
@@ -197,11 +197,6 @@ module ElasticRecord
           end
 
           raise ElasticRecord::BulkError.new(errors) unless errors.empty?
-        end
-
-        def record_primary_key(record)
-          primary_key_name = record.class.try(:primary_key)
-          record.try(primary_key_name) if primary_key_name
         end
     end
   end
