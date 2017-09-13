@@ -93,6 +93,7 @@ module ElasticRecord
       end
 
       def update_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
+        raise "Cannot update a document with empty id" if id.blank?
         params = {doc: document, doc_as_upsert: true}
 
         if batch = current_bulk_batch
