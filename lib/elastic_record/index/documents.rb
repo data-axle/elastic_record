@@ -65,7 +65,7 @@ module ElasticRecord
       def update_record(record, index_name: alias_name)
         unless disabled
           update_document(
-            record.try(:id),
+            record.id,
             record.as_partial_update_document,
             doctype: record.doctype,
             index_name: index_name
