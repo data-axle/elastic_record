@@ -16,11 +16,32 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     refute index.record_exists?('7')
   end
 
+  def test_index_record_without_id
+    index = Warehouse.elastic_index
+    without_deferring(index) do
+      warehouse = Warehouse.new(name: 'Amazon')
+      result = index.index_record(warehouse)
+
+      assert index.record_exists?(result['_id'])
+      refute index.record_exists?('xyz')
+    end
+  end
+
   def test_index_document
     index.index_document('abc', color: 'red')
 
     assert index.record_exists?('abc')
     refute index.record_exists?('xyz')
+  end
+
+  def test_index_document_without_id
+    index = Warehouse.elastic_index
+    without_deferring(index) do
+      result = index.index_document(nil, name: 'red')
+
+      assert index.record_exists?(result['_id'])
+      refute index.record_exists?('xyz')
+    end
   end
 
   def test_update_document
@@ -29,6 +50,10 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
     assert_equal expected, index.get('abc', Widget.doctype)['_source']
+
+    assert_raises RuntimeError do
+      index.update_document(nil, color: 'blue')
+    end
   end
 
   def test_delete_document
@@ -94,7 +119,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk_error
-    without_deferring do
+    without_deferring(index) do
       begin
         index.bulk do
           index.index_document '5', color: 'green'
@@ -109,7 +134,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk_inheritence
-    without_deferring do
+    without_deferring(index) do
       index.bulk do
         InheritedWidget.elastic_index.index_document '5', color: 'green'
 
@@ -124,7 +149,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
   private
 
-    def without_deferring
+    def without_deferring(index)
       index.disable_deferring!
       yield
       index.reset

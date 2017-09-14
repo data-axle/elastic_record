@@ -43,16 +43,16 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_to_a_from_source
-    Widget.elastic_index.loading_from_source do
-      create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    warehouses = [Warehouse.new(name: 'Amazon'), Warehouse.new(name: 'Walmart')]
+    result = Warehouse.elastic_index.bulk_add(warehouses)
 
-      array = Widget.elastic_relation.to_a
+    array = Warehouse.elastic_relation.to_a
 
-      assert_equal 2, array.size
-      assert array.first.is_a?(Widget)
-      assert_equal 'red', array.first.color
-      assert_equal 'blue', array.last.color
-    end
+    assert_equal 2, array.size
+    assert array.first.is_a?(Warehouse)
+    names = array.map(&:name)
+    assert_includes names, 'Amazon'
+    assert_includes names, 'Walmart'
   end
 
   def test_delete_all

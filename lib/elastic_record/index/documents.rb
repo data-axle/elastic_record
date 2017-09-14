@@ -54,7 +54,7 @@ module ElasticRecord
       def index_record(record, index_name: alias_name)
         unless disabled
           index_document(
-            record.send(record.class.primary_key),
+            record.try(:id),
             record.as_search_document,
             doctype: record.doctype,
             index_name: index_name
@@ -65,7 +65,7 @@ module ElasticRecord
       def update_record(record, index_name: alias_name)
         unless disabled
           update_document(
-            record.send(record.class.primary_key),
+            record.id,
             record.as_partial_update_document,
             doctype: record.doctype,
             index_name: index_name
@@ -84,11 +84,16 @@ module ElasticRecord
           path = "/#{index_name}/#{doctype.name}/#{id}"
           path << "?parent=#{parent}" if parent
 
-          connection.json_put path, document
+          if id
+            connection.json_put path, document
+          else
+            connection.json_post path, document
+          end
         end
       end
 
       def update_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
+        raise "Cannot update a document with empty id" if id.blank?
         params = {doc: document, doc_as_upsert: true}
 
         if batch = current_bulk_batch
