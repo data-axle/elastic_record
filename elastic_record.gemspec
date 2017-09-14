@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'elastic_record'
-  s.version = '4.1.4'
+  s.version = '4.1.5'
   s.summary = 'An Elasticsearch querying ORM'
   s.description = 'Find your records with Elasticsearch'
 
