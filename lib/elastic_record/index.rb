@@ -44,6 +44,7 @@ module ElasticRecord
       @model = models.first
       @doctypes = models.map(&:doctype)
       @disabled = false
+      @load_from_source = false
     end
 
     def initialize_copy(other)
