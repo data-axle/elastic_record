@@ -22,6 +22,15 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
     assert_equal [['5', '10', '15'].to_set], results.map(&:to_set)
   end
 
+  def test_find_ids_in_batches_with_order
+    results = []
+    Widget.elastic_relation.order(color: :asc).find_ids_in_batches do |ids|
+      results << ids
+    end
+
+    assert_equal [['10', '15', '5']], results
+  end
+
   def test_find_ids_in_batches_with_size
     results = []
     Widget.elastic_relation.find_ids_in_batches(batch_size: 2) do |ids|
