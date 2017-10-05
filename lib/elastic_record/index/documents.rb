@@ -44,7 +44,7 @@ module ElasticRecord
       def initial_search_response
         @initial_search_response ||= begin
           search_options = {size: batch_size, scroll: keep_alive}
-          elastic_query = @search.merge('sort' => '_doc')
+          elastic_query = @search.reverse_merge('sort' => '_doc')
           @elastic_index.search(elastic_query, search_options)
         end
       end
