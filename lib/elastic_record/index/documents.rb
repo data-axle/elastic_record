@@ -13,8 +13,8 @@ module ElasticRecord
       end
 
       def each_slice(&block)
-        while (hit_ids = request_more_ids).any?
-          hit_ids.each_slice(batch_size, &block)
+        while (hits = request_more_hits).any?
+          hits.each_slice(batch_size, &block)
         end
       end
 
@@ -45,6 +45,7 @@ module ElasticRecord
         @initial_search_response ||= begin
           search_options = {size: batch_size, scroll: keep_alive}
           elastic_query = @search.reverse_merge('sort' => '_doc')
+
           @elastic_index.search(elastic_query, search_options)
         end
       end
@@ -129,9 +130,9 @@ module ElasticRecord
       def delete_by_query(query)
         scroll_enumerator = build_scroll_enumerator search: query
 
-        scroll_enumerator.each_slice do |ids|
+        scroll_enumerator.each_slice do |hits|
           bulk do
-            ids.each { |id| delete_document(id) }
+            hits.each { |hit| delete_document hit['_id'] }
           end
         end
       end

@@ -2,13 +2,14 @@ require 'elastic_record/relation/value_methods'
 require 'elastic_record/relation/batches'
 require 'elastic_record/relation/delegation'
 require 'elastic_record/relation/finder_methods'
+require 'elastic_record/relation/hits'
 require 'elastic_record/relation/merging'
 require 'elastic_record/relation/none'
 require 'elastic_record/relation/search_methods'
 
 module ElasticRecord
   class Relation
-    include Batches, Delegation, FinderMethods, Merging, SearchMethods
+    include Batches, Delegation, FinderMethods, Hits, Merging, SearchMethods
 
     attr_reader :klass, :values
 
@@ -35,11 +36,11 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= load_hits
+      @records ||= load_hits(search_hits)
     end
 
     def to_ids
-      search_hits.map { |hit| hit['_id'] }
+      map_hits_to_ids search_hits
     end
 
     def delete_all
@@ -78,15 +79,6 @@ module ElasticRecord
           search = as_elastic.update('_source' => klass.elastic_index.load_from_source)
 
           klass.elastic_index.search(search, options)
-        end
-      end
-
-      def load_hits
-        if klass.elastic_index.load_from_source
-           search_hits.map { |hit| klass.new(hit['_source'].update('id' => hit['_id'])) }
-        else
-          scope = select_values.any? ? klass.select(select_values) : klass
-          scope.find(to_ids)
         end
       end
   end
