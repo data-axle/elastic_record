@@ -39,10 +39,6 @@ module ElasticRecord
       @records ||= load_hits(search_hits)
     end
 
-    def to_ids
-      map_hits_to_ids search_hits
-    end
-
     def delete_all
       find_ids_in_batches { |ids| klass.delete(ids) }
       klass.elastic_index.delete_by_query(as_elastic)
@@ -65,20 +61,9 @@ module ElasticRecord
 
     private
 
-      def search_hits
-        search_results['hits']['hits']
-      end
-
       def reset
         @search_results = @records = nil
       end
 
-      def search_results
-        @search_results ||= begin
-          options = search_type_value ? {search_type: search_type_value} : {}
-
-          klass.elastic_index.search(as_elastic, options)
-        end
-      end
   end
 end
