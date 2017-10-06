@@ -147,7 +147,7 @@ module ElasticRecord
           url += "?#{options.to_query}"
         end
 
-        get url, model.doctype, elastic_query
+        get url, model.doctype, elastic_query.update('_source' => load_from_source)
       end
 
       def explain(id, elastic_query)
