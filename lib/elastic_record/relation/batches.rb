@@ -15,7 +15,7 @@ module ElasticRecord
 
       def find_ids_in_batches(options = {}, &block)
         build_scroll_enumerator(options).each_slice do |hits|
-          map_hits_to_ids hits
+          yield map_hits_to_ids(hits)
         end
       end
 
