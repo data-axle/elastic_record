@@ -5,7 +5,7 @@ module ElasticRecord
 
       base.class_eval do
         after_create :create_index_document
-        after_update :update_index_document, if: :changed?
+        after_update :update_index_document, if: -> { respond_to?(:saved_changes?) ? saved_changes? : changed? }
         after_destroy :delete_index_document
       end
     end
