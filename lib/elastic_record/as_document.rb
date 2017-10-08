@@ -12,8 +12,9 @@ module ElasticRecord
 
     def as_partial_update_document
       mappings = doctype.mapping[:properties]
+      changed_fields = respond_to?(:saved_changes) ? saved_changes.keys : changed
 
-      changed.each_with_object({}) do |field, result|
+      changed_fields.each_with_object({}) do |field, result|
         if field_mapping = mappings[field]
           result[field] = elastic_search_value field, field_mapping
         end
