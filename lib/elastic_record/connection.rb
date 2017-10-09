@@ -38,10 +38,10 @@ module ElasticRecord
     end
 
     def json_request(method, path, json)
-      body = json.is_a?(Hash) ? ElasticRecord::JSON.encode(json) : json
+      body = json.is_a?(Hash) ? JSON.generate(json) : json
       response = http_request_with_retry(method, path, body)
 
-      json = ElasticRecord::JSON.decode(response.body)
+      json = JSON.parse(response.body)
       raise ConnectionError.new(response.code, json['error']) if json['error']
 
       json

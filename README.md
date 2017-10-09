@@ -242,14 +242,3 @@ Product.elastic_index.reset              # Delete related indexes and deploy a n
 Product.elastic_index.refresh            # Call the refresh API
 Product.elastic_index.get_mapping        # Get the index mapping defined by elastic search
 ```
-
-## JSON Adapter ##
-
-By default, ElasticRecord uses ActiveSupport::JSON to serialize Elasticsearch payloads. There
-is optional support for using the Oj gem. To use Oj, ensure that oj is required and set:
-
-```ruby
-  ElasticRecord::JSON.parser = :oj
-```
-
-To return to the default parser, set the variable to :active_support.

@@ -9,7 +9,6 @@ module ElasticRecord
   autoload :Connection, 'elastic_record/connection'
   autoload :Doctype, 'elastic_record/doctype'
   autoload :Index, 'elastic_record/index'
-  autoload :JSON, 'elastic_record/json'
   autoload :Lucene, 'elastic_record/lucene'
   autoload :Model, 'elastic_record/model'
   autoload :NameCache, 'elastic_record/name_cache'

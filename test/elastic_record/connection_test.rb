@@ -1,14 +1,6 @@
 require 'helper'
 
 class ElasticRecord::ConnectionTest < MiniTest::Test
-  def setup
-    ElasticRecord::JSON.parser = :active_support
-  end
-
-  def teardown
-    ElasticRecord::JSON.parser = :active_support
-  end
-
   def test_servers
     assert_equal ['foo'], ElasticRecord::Connection.new('foo').servers
     assert_equal ['foo', 'bar'], ElasticRecord::Connection.new(['foo', 'bar']).servers
@@ -30,7 +22,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
 
   def test_json_requests
     expected = {'foo' => 'bar'}
-    stub_es_request(:any, "/test").to_return(status: 200, body: ElasticRecord::JSON.encode(expected))
+    stub_es_request(:any, "/test").to_return(status: 200, body: JSON.generate(expected))
 
     assert_equal expected, connection.json_delete("/test")
     assert_equal expected, connection.json_get("/test")
@@ -38,14 +30,9 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     assert_equal expected, connection.json_put("/test")
   end
 
-  def test_json_requests_with_oj
-    ElasticRecord::JSON.parser = :oj
-    test_json_requests
-  end
-
   def test_json_request_with_valid_error_status
     response_json = {'error' => 'Doing it wrong'}
-    stub_es_request(:get, "/error").to_return(status: 404, body: ElasticRecord::JSON.encode(response_json))
+    stub_es_request(:get, "/error").to_return(status: 404, body: JSON.generate(response_json))
 
     error = assert_raises ElasticRecord::ConnectionError do
       connection.json_get("/error")
@@ -57,7 +44,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
   def test_retry_server_exceptions
     responses = [
       {exception: Errno::ECONNREFUSED},
-      {status: ["200", "OK"], body: ElasticRecord::JSON.encode('hello' => 'world')}
+      {status: ["200", "OK"], body: JSON.generate('hello' => 'world')}
     ]
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
