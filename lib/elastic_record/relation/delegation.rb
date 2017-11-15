@@ -11,7 +11,7 @@ module ElasticRecord
 
       private
         def respond_to_missing?(method, include_private = false)
-          super || klass.respond_to?(method, include_private) || Array.method_defined?(method, include_private)
+          super || klass.respond_to?(method, include_private) || Array.method_defined?(method)
         end
 
         def method_missing(method, *args, &block)
