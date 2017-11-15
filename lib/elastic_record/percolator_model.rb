@@ -25,20 +25,14 @@ module ElasticRecord
 
       def percolate(document)
         query = {
-          "query" => {
-            "percolate" => {
-              "field"         => "query",
-              "document_type" => percolates_model.doctype.name,
-              "document"      => document
-            }
-          },
-          "size" => 1000
+          "percolate" => {
+            "field"         => "query",
+            "document_type" => percolates_model.doctype.name,
+            "document"      => document
+          }
         }
 
-        hits = elastic_index.search(query)['hits']['hits']
-        ids = hits.map { |hits| hits['_id'] }
-
-        where(id: ids)
+        elastic_search.filter(query)
       end
     end
   end
