@@ -25,14 +25,11 @@ module ElasticRecord
 
       def percolate(document)
         query = {
-          "query" => {
-            "percolate" => {
-              "field"         => "query",
-              "document_type" => percolates_model.doctype.name,
-              "document"      => document
-            }
-          },
-          "size" => 1000
+          "percolate" => {
+            "field"         => "query",
+            "document_type" => percolates_model.doctype.name,
+            "document"      => document
+          }
         }
 
         elastic_search.filter(query)
