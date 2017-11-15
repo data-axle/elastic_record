@@ -35,10 +35,7 @@ module ElasticRecord
           "size" => 1000
         }
 
-        hits = elastic_index.search(query)['hits']['hits']
-        ids = hits.map { |hits| hits['_id'] }
-
-        where(id: ids)
+        elastic_search.filter(query)
       end
     end
   end
