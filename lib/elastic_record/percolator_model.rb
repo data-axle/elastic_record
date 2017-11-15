@@ -32,7 +32,7 @@ module ElasticRecord
           }
         }
 
-        elastic_search.filter(query)
+        elastic_search.filter(query).limit(5000)
       end
     end
   end
