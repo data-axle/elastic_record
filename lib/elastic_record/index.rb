@@ -1,6 +1,7 @@
 require 'elastic_record/index/analyze'
 require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
+require 'elastic_record/index/bulk_documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/settings'
@@ -27,6 +28,7 @@ module ElasticRecord
   #   Update elastic search's mapping
   class Index
     include Documents
+    include BulkDocuments
     include Manage
     include Mapping, Settings
     include Analyze
