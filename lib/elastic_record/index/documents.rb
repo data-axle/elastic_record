@@ -86,8 +86,7 @@ module ElasticRecord
       end
 
       def update_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
-        raise "Cannot update a document with empty id" if id.blank?
-        params = {doc: document, doc_as_upsert: true}
+        params = validate_and_extract_update_params(id, document)
 
         path = "/#{index_name}/#{doctype.name}/#{id}/_update?retry_on_conflict=3"
         path << "&parent=#{parent}" if parent
@@ -144,6 +143,11 @@ module ElasticRecord
       def validate_doc_deletion(id, index_name)
         raise "Cannot delete document with empty id" if id.blank?
         raise "Cannot delete document with empty index_name" if index_name.blank?
+      end
+
+      def validate_and_extract_update_params(id, document)
+        raise "Cannot update a document with empty id" if id.blank?
+        {doc: document, doc_as_upsert: true}
       end
     end
   end
