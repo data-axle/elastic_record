@@ -2,10 +2,13 @@ require 'net/http'
 
 module ElasticRecord
   class Connection
+    def self.bulk_stack
+      Thread.current['elastic_record_bulk_stack'] ||= []
+    end
+
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
     attr_accessor :max_request_count
-    attr_accessor :bulk_stack
     def initialize(servers, options = {})
       self.servers = Array(servers)
 
@@ -14,7 +17,6 @@ module ElasticRecord
       self.request_count      = 0
       self.max_request_count  = 100
       self.options            = options.symbolize_keys
-      self.bulk_stack         = []
     end
 
     def head(path)
