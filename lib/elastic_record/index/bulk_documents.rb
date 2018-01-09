@@ -4,7 +4,6 @@ module ElasticRecord
   class Index
     module BulkDocuments
       def index_document(id, document, doctype: model.doctype, parent: nil, index_name: alias_name)
-        p "ARE WE RUNNING bulk???"
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: doctype.name, _id: id }
           instructions[:parent] = parent if parent
