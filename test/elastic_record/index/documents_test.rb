@@ -84,13 +84,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
   private
 
-    def without_deferring(index)
-      index.disable_deferring!
-      yield
-      index.reset
-      index.enable_deferring!
-    end
-
     def index
       @index ||= Widget.elastic_index
     end

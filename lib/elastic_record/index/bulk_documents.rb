@@ -31,8 +31,7 @@ module ElasticRecord
       end
 
       def delete_document(id, doctype: model.doctype, parent: nil, index_name: alias_name)
-        raise "Cannot delete document with empty id" if id.blank?
-        index_name ||= alias_name
+        validate_doc_deletion(id, index_name)
 
         if batch = current_bulk_batch
           instructions = { _index: index_name, _type: doctype.name, _id: id, _retry_on_conflict: 3 }

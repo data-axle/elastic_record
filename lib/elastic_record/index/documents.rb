@@ -95,8 +95,7 @@ module ElasticRecord
       end
 
       def delete_document(id, doctype: model.doctype, parent: nil, index_name: alias_name)
-        raise "Cannot delete document with empty id" if id.blank?
-        index_name ||= alias_name
+        validate_doc_deletion(id, index_name)
 
         path = "/#{index_name}/#{doctype.name}/#{id}"
         path << "&parent=#{parent}" if parent
@@ -140,6 +139,12 @@ module ElasticRecord
         connection.json_get("/_search/scroll?#{options.to_query}")
       end
 
+      private
+
+      def validate_doc_deletion(id, index_name)
+        raise "Cannot delete document with empty id" if id.blank?
+        raise "Cannot delete document with empty index_name" if index_name.blank?
+      end
     end
   end
 end
