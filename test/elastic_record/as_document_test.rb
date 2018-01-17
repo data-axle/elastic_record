@@ -41,7 +41,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     self.doctype.mapping[:properties].update(
       author:     { type: :object },
       commenters: { type: :nested },
-      meta:       { type: :object }
+      meta:       { type: "object" }
     )
 
     def author
