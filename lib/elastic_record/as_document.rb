@@ -26,7 +26,7 @@ module ElasticRecord
 
       value = case mapping[:type].to_sym
               when :object
-                value.try(:as_search_document) || value
+                value.respond_to?(:as_search_document) ? value.as_search_document : value
               when :nested
                 value.map(&:as_search_document)
               else
