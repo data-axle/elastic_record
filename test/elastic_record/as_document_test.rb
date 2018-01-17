@@ -39,12 +39,9 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     end
 
     self.doctype.mapping[:properties].update(
-      author: {
-        type: :object
-      },
-      commenters: {
-        type: :nested
-      }
+      author:     { type: :object },
+      commenters: { type: :nested },
+      meta:       { type: :object }
     )
 
     def author
@@ -54,6 +51,10 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     def commenters
       [Author.new, Author.new]
     end
+
+    def meta
+      { some: "value" }
+    end
   end
 
   def test_as_search_document_with_special_fields
@@ -61,5 +62,6 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
     assert_equal({name: 'Jonny'}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
+    assert_equal({some: 'value'}, doc[:meta])
   end
 end
