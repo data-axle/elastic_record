@@ -164,7 +164,7 @@ module ElasticRecord
       end
 
       def bulk(options = {})
-        ElasticRecord::Connection.bulk_stack.push []
+        connection.bulk_stack.push []
 
         yield
 
@@ -174,7 +174,7 @@ module ElasticRecord
           verify_bulk_results(results)
         end
       ensure
-        ElasticRecord::Connection.bulk_stack.pop
+        connection.bulk_stack.pop
       end
 
       def bulk_add(batch, index_name: alias_name)
@@ -186,7 +186,7 @@ module ElasticRecord
       end
 
       def current_bulk_batch
-        ElasticRecord::Connection.bulk_stack.last
+        connection.bulk_stack.last
       end
 
       private
