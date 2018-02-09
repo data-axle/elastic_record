@@ -23,9 +23,7 @@ module ElasticRecord
       end
 
       def analysis_body
-        doctypes.each_with_object({}) do |doctype, result|
-          result.deep_merge!(doctype.analysis)
-        end
+        doctype.analysis
       end
     end
   end
