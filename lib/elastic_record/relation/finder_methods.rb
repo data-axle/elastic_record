@@ -27,6 +27,14 @@ module ElasticRecord
         to_a
       end
 
+      def find_by(*args)
+        filter(*args).first
+      end
+
+      def find_by!(*args)
+        filter(*args).first!
+      end
+
       private
 
         def find_one(relation)

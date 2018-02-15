@@ -70,14 +70,6 @@ module ElasticRecord
         end
       end
 
-      def find_by(*args)
-        filter(*args).first
-      end
-
-      def find_by!(*args)
-        filter(*args).first!
-      end
-
       def limit!(value)
         self.limit_value = value
         self
