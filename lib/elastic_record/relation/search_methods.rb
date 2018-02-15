@@ -101,6 +101,19 @@ module ElasticRecord
         end
       end
 
+      def includes!(*args)
+        self.includes_values += args.flatten
+        self
+      end
+
+      def select(*args, &block)
+        if block_given?
+          to_a.select(&block)
+        else
+          clone.select! *args
+        end
+      end
+
       def search_options!(options)
         self.search_options_value ||= {}
         self.search_options_value.merge! options
