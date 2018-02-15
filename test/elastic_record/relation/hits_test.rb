@@ -9,7 +9,7 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
     red_widget = Widget.create(color: 'red')
     blue_widget = Widget.create(color: 'red')
 
-    assert_equal [red_widget.id, blue_widget.id].to_set, Widget.elastic_relation.to_ids.to_set
+    assert_equal [red_widget.id.to_s, blue_widget.id.to_s].to_set, Widget.elastic_relation.to_ids.to_set
   end
 
   def test_to_a

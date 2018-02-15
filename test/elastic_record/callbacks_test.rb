@@ -2,8 +2,7 @@ require 'helper'
 
 class ElasticRecord::CallbacksTest < MiniTest::Test
   def test_added_to_index
-    widget = Widget.new id: '10', color: 'green'
-    refute Widget.elastic_index.record_exists?(widget.id)
+    widget = Widget.new color: 'green'
 
     widget.save
 
@@ -11,22 +10,19 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
   end
 
   def test_not_added_to_index_if_not_dirty
-    widget = Widget.new id: '10', color: 'green'
-    widget.changed_attributes.clear
+    widget = Widget.create color: 'green'
+
+    widget.elastic_index.delete_document(widget.id)
 
     widget.save
-
-    refute Widget.elastic_index.record_exists?(widget.id)
+    assert_equal 0, Widget.elastic_search.count
   end
 
   def test_deleted_from_index
-    widget = Widget.new id: '10', color: 'green'
-    Widget.elastic_index.index_document(widget.id, widget.as_search_document)
-
+    widget = Widget.create color: 'green'
     assert Widget.elastic_index.record_exists?(widget.id)
 
     widget.destroy
-
     refute Widget.elastic_index.record_exists?(widget.id)
   end
 
