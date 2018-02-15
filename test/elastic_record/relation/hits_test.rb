@@ -6,13 +6,15 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
   end
 
   def test_to_ids
-    Widget.elastic_index.bulk_add [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    red_widget = Widget.create(color: 'red')
+    blue_widget = Widget.create(color: 'red')
 
-    assert_equal ['5', '10'].to_set, Widget.elastic_relation.to_ids.to_set
+    assert_equal [red_widget.id, blue_widget.id].to_set, Widget.elastic_relation.to_ids.to_set
   end
 
   def test_to_a
-    Widget.elastic_index.bulk_add [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    red_widget = Widget.create(color: 'red')
+    blue_widget = Widget.create(color: 'red')
 
     array = Widget.elastic_relation.to_a
 

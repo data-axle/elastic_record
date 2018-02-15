@@ -7,6 +7,10 @@ require 'webmock/minitest'
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
+def MiniTest.filter_backtrace(bt)
+  bt
+end
+
 module MiniTest
   class Test
     def setup
