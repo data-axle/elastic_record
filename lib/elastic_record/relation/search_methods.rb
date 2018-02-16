@@ -106,6 +106,10 @@ module ElasticRecord
         self
       end
 
+      def includes(*args)
+        clone.includes! *args
+      end
+
       def select(*args, &block)
         if block_given?
           to_a.select(&block)

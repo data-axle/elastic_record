@@ -2,7 +2,7 @@ require 'helper'
 
 class ElasticRecord::Relation::DelegationTest < MiniTest::Test
   def test_delegate_to_array
-    Widget.elastic_index.index_document('5', color: 'red')
+    Widget.create! color: 'red'
 
     records = []
     Widget.elastic_relation.each do |record|
