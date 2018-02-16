@@ -1,11 +1,15 @@
 ENV["RAILS_ENV"] = "test"
 
-require File.expand_path("../../test/dummy/config/environment.rb", __FILE__)
+require 'dummy/config/environment'
+require 'rails/test_help'
+Bundler.require(Rails.env)
 
-require 'minitest/autorun'
 require 'webmock/minitest'
-
 WebMock.disable_net_connect!(allow_localhost: true)
+
+def MiniTest.filter_backtrace(bt)
+  bt
+end
 
 module MiniTest
   class Test

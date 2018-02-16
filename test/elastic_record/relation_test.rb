@@ -3,13 +3,15 @@ require 'helper'
 class ElasticRecord::RelationTest < MiniTest::Test
   def test_count
     original_count = Widget.elastic_relation.count
-    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    Widget.create(color: 'red')
+    Widget.create(color: 'blue')
 
     assert_equal 2, Widget.elastic_relation.count - original_count
   end
 
   def test_aggregations
-    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    Widget.create(color: 'red')
+    Widget.create(color: 'blue')
 
     aggregations = Widget.elastic_relation.aggregate('popular_colors' => {'terms' => {'field' => 'color'}}).aggregations
 
@@ -18,26 +20,27 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_explain
-    create_widgets [Widget.new(id: 10, color: 'blue')]
+    Widget.create(color: 'blue')
 
     # explain = Widget.elastic_relation.filter(color: 'blue').explain('10')
   end
 
   def test_delete_all
-    project_red = Project.create! name: 'Red'
-    project_blue = Project.create! name: 'Blue'
+    project_red = Warehouse.create! name: 'Red'
+    project_blue = Warehouse.create! name: 'Blue'
 
-    Project.elastic_relation.filter(name: 'Red').delete_all
+    Warehouse.elastic_relation.filter(name: 'Red').delete_all
 
-    assert_nil Project.find_by(id: project_red.id)
-    assert_equal 0, Project.elastic_relation.filter(name: 'Red').count
+    assert_nil Warehouse.find_by(id: project_red.id)
+    assert_equal 0, Warehouse.elastic_relation.filter(name: 'Red').count
 
-    refute_nil Project.find_by(id: project_blue.id)
-    assert_equal 1, Project.elastic_relation.filter(name: 'Blue').count
+    refute_nil Warehouse.find_by(id: project_blue.id)
+    assert_equal 1, Warehouse.elastic_relation.filter(name: 'Blue').count
   end
 
   def test_equal
-    create_widgets [Widget.new(id: 5, color: 'red'), Widget.new(id: 10, color: 'blue')]
+    Widget.create(color: 'red')
+    Widget.create(color: 'blue')
 
     assert_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'red')
     refute_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'blue')
@@ -48,9 +51,4 @@ class ElasticRecord::RelationTest < MiniTest::Test
   def test_inspect
     assert_equal [].inspect, Widget.elastic_relation.filter(color: 'magenta').inspect
   end
-
-  private
-    def create_widgets(widgets)
-      Widget.elastic_index.bulk_add(widgets)
-    end
 end

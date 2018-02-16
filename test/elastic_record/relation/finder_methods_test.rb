@@ -3,23 +3,23 @@ require 'helper'
 class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   def setup
     super
-    create_widgets
+    @red_widget = Widget.create(color: 'red')
+    @blue_widget = Widget.create(color: 'blue')
   end
 
   def test_find
-    refute_nil Widget.elastic_relation.find('05')
-    refute_nil Widget.elastic_relation.filter('color' => 'red').find('05')
+    refute_nil Widget.elastic_relation.find(@red_widget.id)
+    refute_nil Widget.elastic_relation.filter('color' => 'red').find(@red_widget.id)
 
     assert_raises ActiveRecord::RecordNotFound do
-      Widget.elastic_relation.filter('color' => 'blue').find('05')
+      Widget.elastic_relation.filter('color' => 'blue').find(@red_widget.id)
     end
   end
 
   def test_find_passed_an_array
-    assert_equal 2, Widget.elastic_relation.find(['05', '10']).size
-    assert_equal 2, Widget.elastic_relation.filter('color' => ['red', 'blue']).find(['05', '10']).size
-    assert_equal 0, Widget.elastic_relation.find(['15', '20']).size
-    assert_equal 0, Widget.elastic_relation.filter('color' => ['purple', 'gold']).find(['05', '10']).size
+    assert_equal 2, Widget.elastic_relation.find([@red_widget.id, @blue_widget.id]).size
+    assert_equal 2, Widget.elastic_relation.filter('color' => ['red', 'blue']).find([@red_widget.id, @blue_widget.id]).size
+    assert_equal 0, Widget.elastic_relation.filter('color' => ['purple', 'gold']).find([@red_widget.id, @blue_widget.id]).size
   end
 
   def test_find_passed_an_empty_args
@@ -29,23 +29,23 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   end
 
   def test_first
-    assert_equal '10', Widget.elastic_relation.order('color').first.id
-    assert_equal '05', Widget.elastic_relation.order('color').filter('color' => 'red').first.id
-    assert_equal '10', Widget.elastic_relation.order('color').filter('color' => 'blue').first.id
+    assert_equal 'blue', Widget.elastic_relation.order('color').first.color
+    assert_equal 'red', Widget.elastic_relation.order('color').filter('color' => 'red').first.color
+    assert_equal 'blue', Widget.elastic_relation.order('color').filter('color' => 'blue').first.color
     assert_nil Widget.elastic_relation.filter('color' => 'green').first
   end
 
   def test_first_with_bang
-    assert_equal '10', Widget.elastic_relation.order('color').first!.id
+    assert_equal 'blue', Widget.elastic_relation.order('color').first!.color
     assert_raises ActiveRecord::RecordNotFound do
       Widget.elastic_relation.filter('color' => 'green').first!
     end
   end
 
   def test_last
-    assert_equal '05', Widget.elastic_relation.order('color').last.id
-    assert_equal '05', Widget.elastic_relation.order('color' => 'asc').last.id
-    assert_equal '10', Widget.elastic_relation.order('color' => 'desc').last.id
+    assert_equal 'red', Widget.elastic_relation.order('color').last.color
+    assert_equal 'red', Widget.elastic_relation.order('color' => 'asc').last.color
+    assert_equal 'blue', Widget.elastic_relation.order('color' => 'desc').last.color
   end
 
   def test_all
@@ -54,24 +54,10 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   end
 
   def test_find_by
-    Widget.elastic_index.bulk_add [
-      Widget.new(color: 'red', id: '05'),
-      Widget.new(color: 'blue', id: '10'),
-    ]
-
-    assert_equal '05', Widget.elastic_relation.find_by(color: 'red').id
-    assert_equal '05', Widget.elastic_relation.find_by!(color: 'red').id
+    assert_equal 'red', Widget.elastic_relation.find_by(color: 'red').color
+    assert_equal 'red', Widget.elastic_relation.find_by!(color: 'red').color
     assert_raises ActiveRecord::RecordNotFound do
       Widget.elastic_relation.find_by!(color: 'green')
     end
   end
-
-  private
-
-    def create_widgets
-      Widget.elastic_index.bulk_add [
-        Widget.new(color: 'red', id: '05'),
-        Widget.new(color: 'blue', id: '10'),
-      ]
-    end
 end

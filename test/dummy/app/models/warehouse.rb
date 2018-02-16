@@ -1,19 +1,7 @@
-class Warehouse
-  class << self
-    def base_class
-      self
-    end
-  end
-
-  include ActiveModel::Model
+class Warehouse < ActiveRecord::Base
   include ElasticRecord::Model
 
-  attr_accessor :id, :name
-  alias_method :as_json, :as_search_document
-
-  elastic_index.load_from_source = true
-
-  def as_search_document
-    { name: name }
-  end
+  self.doctype.mapping[:properties].update(
+    'name' => { type: 'string', index: 'not_analyzed' }
+  )
 end

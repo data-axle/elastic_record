@@ -1,9 +1,9 @@
-class Widget
-  include TestModel
+class Widget < ActiveRecord::Base
+  include ElasticRecord::Model
+  self.elastic_index.partial_updates = true
 
+  belongs_to :warehouse
   validates :color, format: {with: /[a-z]/}
-
-  define_attributes [:name, :color, :warehouse_id]
 
   self.doctype.mapping[:properties].update(
     'name' => {
@@ -30,9 +30,5 @@ class Widget
         instance_eval(&block)
       end
     end
-  end
-
-  def warehouse=(other)
-    self.warehouse_id = other.id
   end
 end

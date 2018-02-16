@@ -88,15 +88,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert_equal 1, scroll_enumerator.request_more_ids.size
   end
 
-  def test_bulk_add
-    record = Widget.new(id: 'abc', color: 'red')
-
-    index.bulk_add [record]
-
-    assert index.record_exists?('abc')
-    refute index.record_exists?('xyz')
-  end
-
   def test_bulk
     assert_nil index.instance_variable_get(:@_batch)
 
