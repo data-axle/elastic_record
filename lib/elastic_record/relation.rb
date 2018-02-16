@@ -13,9 +13,9 @@ module ElasticRecord
 
     attr_reader :klass, :values
 
-    def initialize(klass)
+    def initialize(klass, values = {})
       @klass = klass
-      @values = {}
+      @values = values
     end
 
     def count
