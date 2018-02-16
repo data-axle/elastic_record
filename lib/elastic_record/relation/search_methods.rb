@@ -48,6 +48,21 @@ module ElasticRecord
         end
       end
 
+      %i(
+        includes
+        joins
+        select
+      ).each do |ar_method|
+        define_method ar_method do |*args, &block|
+          result = klass.send(ar_method, *args, &block)
+          if result.is_a?(ActiveRecord::Relation)
+            self.class.new(result, values)
+          else
+            result
+          end
+        end
+      end
+
       def query!(value)
         self.query_value = value
         self
@@ -86,36 +101,6 @@ module ElasticRecord
 
       def offset(value)
         clone.offset! value
-      end
-
-      def select!(*args)
-        self.select_values += args.flatten
-        self
-      end
-
-      def select(*args, &block)
-        if block_given?
-          to_a.select(&block)
-        else
-          clone.select! *args
-        end
-      end
-
-      def includes!(*args)
-        self.includes_values += args.flatten
-        self
-      end
-
-      def includes(*args)
-        clone.includes! *args
-      end
-
-      def select(*args, &block)
-        if block_given?
-          to_a.select(&block)
-        else
-          clone.select! *args
-        end
       end
 
       def search_options!(options)

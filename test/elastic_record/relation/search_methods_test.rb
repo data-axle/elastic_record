@@ -198,17 +198,9 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
   end
 
   def test_select
-    selectable_klass = Widget.anon do
-      def self.select(values)
-        @latest_select = values
-        self
-      end
-    end
+    scope = relation.select 'foo'
 
-    relation = selectable_klass.elastic_relation.select 'foo'
-    relation.to_a
-
-    assert_equal ['foo'], selectable_klass.instance_variable_get('@latest_select')
+    assert_equal ['foo'], scope.select_values
   end
 
   def test_select_with_block
