@@ -15,10 +15,10 @@ module ElasticRecord
         end
 
         def method_missing(method, *args, &block)
-          if klass.respond_to?(method)
-            scoping { klass.send(method, *args, &block) }
-          elsif Array.method_defined?(method)
+          if Array.method_defined?(method)
             to_a.send(method, *args, &block)
+          elsif klass.respond_to?(method)
+            scoping { klass.send(method, *args, &block) }
           else
             super
           end
