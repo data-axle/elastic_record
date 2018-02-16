@@ -1,5 +1,6 @@
 class Widget < ActiveRecord::Base
   include ElasticRecord::Model
+  self.elastic_index.partial_updates = true
 
   belongs_to :warehouse
   validates :color, format: {with: /[a-z]/}

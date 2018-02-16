@@ -16,17 +16,14 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
   end
 
   def test_as_partial_update_document
-    # Widget.new(id: '10', color: 'green').tap do |widget|
-    #   assert_equal({'color' => 'green'}, widget.as_partial_update_document)
-    # end
-    #
-    # Widget.new(id: '10').tap do |widget|
-    #   assert_equal({}, widget.as_partial_update_document)
-    # end
-    #
-    # Widget.new(id: '10', color: '').tap do |widget|
-    #   assert_equal({'color' => nil}, widget.as_partial_update_document)
-    # end
+    widget = Widget.create(name: 'elmo', color: 'green')
+
+    Widget.elastic_index.update_document widget.id, name: 'wilbur'
+
+    widget.update! color: 'grey'
+
+    assert_equal 1, Widget.elastic_search.filter(color: 'grey').count
+    assert_equal 0, Widget.elastic_search.filter(name: 'elmo').count
   end
 
   class SpecialFieldsModel
