@@ -221,6 +221,9 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal @blue_widget, records.first
   end
 
+  def test_includes
+  end
+
   def test_extending_with_block
     relation.extending! do
       def foo

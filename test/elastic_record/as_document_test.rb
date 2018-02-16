@@ -2,11 +2,11 @@ require 'helper'
 
 class ElasticRecord::AsDocumentTest < MiniTest::Test
   def test_as_search_document
-    Widget.new(id: '10', color: 'green').tap do |widget|
+    Widget.new(color: 'green').tap do |widget|
       assert_equal({"color" => "green"}, widget.as_search_document)
     end
 
-    Widget.new(id: '10', color: '').tap do |widget|
+    Widget.new(color: '').tap do |widget|
       assert_equal({}, widget.as_search_document)
     end
 
