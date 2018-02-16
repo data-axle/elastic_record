@@ -23,15 +23,15 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
   end
 
   def test_to_a_from_source
-    warehouses = [Warehouse.new(name: 'Amazon'), Warehouse.new(name: 'Walmart')]
-    result = Warehouse.elastic_index.bulk_add(warehouses)
+    warehouses = [Project.new(name: 'Latte'), Project.new(name: 'Americano')]
+    result = Project.elastic_index.bulk_add(warehouses)
 
-    array = Warehouse.elastic_relation.to_a
+    array = Project.elastic_relation.to_a
 
     assert_equal 2, array.size
-    assert array.first.is_a?(Warehouse)
+    assert array.first.is_a?(Project)
     names = array.map(&:name)
-    assert_includes names, 'Amazon'
-    assert_includes names, 'Walmart'
+    assert_includes names, 'Latte'
+    assert_includes names, 'Americano'
   end
 end
