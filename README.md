@@ -68,9 +68,6 @@ search.filter(Product.arelastic[:name].prefix("Sca").negate)
 
 # Size is greater than 5
 search.filter(Product.arelastic[:size].gt(5))
-
-# Name is 'hola' or name is missing
-search.filter(Product.arelastic[:name].eq("hola").or(Product.arelastic[:name].missing))
 ```
 
 Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
