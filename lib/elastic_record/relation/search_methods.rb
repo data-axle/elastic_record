@@ -52,6 +52,7 @@ module ElasticRecord
         includes
         joins
         select
+        where
       ).each do |ar_method|
         define_method ar_method do |*args, &block|
           result = klass.send(ar_method, *args, &block)
