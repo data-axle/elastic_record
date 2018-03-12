@@ -13,7 +13,7 @@ module ElasticRecord
       def elastic_index
         @elastic_index ||=
           begin
-            index = ElasticRecord::Index.new(percolates_model)
+            index = ElasticRecord::Index.new(self)
             index.partial_updates = false
             index
           end

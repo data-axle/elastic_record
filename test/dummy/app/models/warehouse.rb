@@ -2,6 +2,6 @@ class Warehouse < ActiveRecord::Base
   include ElasticRecord::Model
 
   self.doctype.mapping[:properties].update(
-    'name' => { type: 'string', index: 'not_analyzed' }
+    'name' => { type: 'text', index: false }
   )
 end
