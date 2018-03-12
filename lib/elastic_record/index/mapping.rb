@@ -2,7 +2,7 @@ module ElasticRecord
   class Index
     module Mapping
       def update_mapping(index_name = alias_name)
-        connection.json_put "/#{index_name}/_mapping", mapping_body
+        connection.json_put "/#{index_name}/_mapping/#{doctype.name}", mapping_body
       end
 
       def get_mapping(index_name = alias_name)
