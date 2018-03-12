@@ -7,10 +7,6 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
     assert_equal({}, index.settings)
   end
 
-  def test_doctype
-    assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
-  end
-
   def test_as_search_document
     query = WidgetQuery.new(name: 'foo', color: 'red')
 

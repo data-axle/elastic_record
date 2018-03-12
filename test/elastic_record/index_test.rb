@@ -8,7 +8,7 @@ class ElasticRecord::IndexTest < MiniTest::Test
   end
 
   def test_doctype
-    assert_equal [Widget.doctype], index.doctype
+    assert_equal Widget.doctype, index.doctype
   end
 
   def test_alias_name
