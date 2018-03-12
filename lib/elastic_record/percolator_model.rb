@@ -19,15 +19,10 @@ module ElasticRecord
           end
       end
 
-      def doctype
-        @doctype ||= Doctype.percolator_doctype
-      end
-
       def percolate(document)
         query = {
           "percolate" => {
             "field"         => "query",
-            "document_type" => percolates_model.doctype.name,
             "document"      => document
           }
         }
