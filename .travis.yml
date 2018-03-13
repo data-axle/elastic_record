@@ -1,6 +1,6 @@
 rvm: 2.4.1
 cache: bundler
-sudo: false
+sudo: required
 dist: trusty
 before_install:
 - echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
