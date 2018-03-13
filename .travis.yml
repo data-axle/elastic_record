@@ -5,7 +5,7 @@ dist: trusty
 before_install:
 - echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 - sudo apt-get install elasticsearch
-- sudo service elasticsearch start
+- sudo service elasticsearch start; sleep 10
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
 - curl localhost:9200
