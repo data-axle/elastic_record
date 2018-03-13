@@ -5,7 +5,7 @@ dist: trusty
 addons:
   apt:
     sources:
-    - elasticsearch-6.x
+    - elasticsearch-6.2
     packages:
     - elasticsearch
 before_script:
