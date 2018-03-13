@@ -5,11 +5,11 @@ dist: trusty
 before_install:
 - echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 - sudo apt-get install elasticsearch
+- sudo service elasticsearch start
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
 - curl localhost:9200
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
 services:
-- elasticsearch
 - postgresql
