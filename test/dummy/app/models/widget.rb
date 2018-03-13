@@ -7,16 +7,13 @@ class Widget < ActiveRecord::Base
 
   self.doctype.mapping[:properties].update(
     'name' => {
-      type: 'text', index: false,
-      fields: {
-        analyzed: {type: 'text', index: true}
-      }
+      type: 'text',
     },
     'color' => {
-      type: 'text', index: false
+      type: 'keyword'
     },
     'warehouse_id' => {
-      type: 'text', index: false
+      type: 'keyword'
     }
   )
 
