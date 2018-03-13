@@ -2,12 +2,9 @@ rvm: 2.4.1
 cache: bundler
 sudo: false
 dist: trusty
-addons:
-  apt:
-    sources:
-    - elasticsearch-6.2
-    packages:
-    - elasticsearch
+before_install:
+- echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
+- sudo apt-get install elasticsearch
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
 - curl localhost:9200
