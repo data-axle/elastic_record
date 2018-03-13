@@ -6,10 +6,10 @@ before_install:
 - wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 - echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
 - sudo apt-get update && sudo apt-get install -y elasticsearch
-- sudo service elasticsearch start
+- sudo service elasticsearch start; sleep 10
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
-- until ping -c1 http://localhost:9200 &>/dev/null; do :; done
+- curl http://localhost:9200
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
 services:
