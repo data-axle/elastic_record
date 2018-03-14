@@ -19,6 +19,15 @@ module ElasticRecord
           end
       end
 
+      def doctype
+        @doctype ||=
+          begin
+            dt = Doctype.new(base_class.name.demodulize.underscore)
+            dt.mapping = Doctype::PERCOLATOR_MAPPING
+            dt
+          end
+      end
+
       def percolate(document)
         query = {
           "percolate" => {

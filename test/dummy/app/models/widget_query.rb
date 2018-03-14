@@ -8,8 +8,7 @@ class WidgetQuery
   doctype.mapping = {
     properties: {
       name: { type: 'keyword' },
-      color: { type: 'keyword' },
-      query: { type: 'percolator' }
+      color: { type: 'keyword' }
     }
   }
 

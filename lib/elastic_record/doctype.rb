@@ -10,6 +10,12 @@ module ElasticRecord
       }
     }
 
+    PERCOLATOR_MAPPING = {
+      properties: {
+        query: { type: 'percolator' }
+      }
+    }
+
     def initialize(name, mapping = DEFAULT_MAPPING.deep_dup)
       @name = name
       @mapping = mapping
