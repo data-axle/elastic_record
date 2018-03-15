@@ -22,9 +22,9 @@ module ElasticRecord
       def doctype
         @doctype ||=
           begin
-            dt = Doctype.new(base_class.name.demodulize.underscore)
-            dt.mapping = Doctype::PERCOLATOR_MAPPING
-            dt
+            percolator_doctype = Doctype.new(base_class.name.demodulize.underscore, Doctype::PERCOLATOR_MAPPING)
+            percolator_doctype.mapping = percolates_model.doctype.mapping
+            percolator_doctype
           end
       end
 

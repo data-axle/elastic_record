@@ -5,13 +5,6 @@ class WidgetQuery
 
   self.percolates_model = Widget
 
-  doctype.mapping = {
-    properties: {
-      name: { type: 'keyword' },
-      color: { type: 'keyword' }
-    }
-  }
-
   def as_search_document
     filters = {}
     filters[:name] = name if name
