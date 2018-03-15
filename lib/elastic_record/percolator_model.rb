@@ -13,21 +13,26 @@ module ElasticRecord
       def elastic_index
         @elastic_index ||=
           begin
-            index = ElasticRecord::Index.new([self, percolates_model])
+            index = ElasticRecord::Index.new(self)
             index.partial_updates = false
             index
           end
       end
 
       def doctype
-        @doctype ||= Doctype.percolator_doctype
+        @doctype ||=
+          begin
+            percolator_doctype = Doctype.new(base_class.name.demodulize.underscore, Doctype::PERCOLATOR_MAPPING)
+            percolator_doctype.analysis = percolates_model.doctype.analysis
+            percolator_doctype.mapping = percolates_model.doctype.mapping
+            percolator_doctype
+          end
       end
 
       def percolate(document)
         query = {
           "percolate" => {
             "field"         => "query",
-            "document_type" => percolates_model.doctype.name,
             "document"      => document
           }
         }

@@ -1,18 +1,16 @@
 rvm: 2.4.1
 cache: bundler
-sudo: false
+sudo: required
 dist: trusty
-addons:
-  apt:
-    sources:
-    - elasticsearch-5.x
-    packages:
-    - elasticsearch
+before_install:
+- wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+- echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
+- sudo apt-get update && sudo apt-get install -y elasticsearch
+- sudo service elasticsearch start; sleep 10
 before_script:
 - cp test/dummy/.env.example test/dummy/.env
-- curl localhost:9200
+- curl http://localhost:9200
 - bundle exec rake app:db:setup
 - bundle exec rake app:index:reset
 services:
-- elasticsearch
 - postgresql

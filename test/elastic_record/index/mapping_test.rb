@@ -8,8 +8,10 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
         "properties" => {
           "color" => { "type" => "keyword" },
           "name" => {
-            "type" => "keyword",
-            "fields" => { "analyzed" => { "type" => "text" } }
+            "type" => "text",
+            "fields" => {
+              "raw" => { "type" => "keyword" }
+            }
           },
           "warehouse_id" => { "type" => "keyword" }
         }
