@@ -18,12 +18,12 @@ module ElasticRecord
 
     def initialize(name, mapping = DEFAULT_MAPPING.deep_dup)
       @name = name
-      @mapping = mapping
+      @mapping = mapping.deep_symbolize_keys
       @analysis = {}
     end
 
     def mapping=(custom_mapping)
-      mapping.deep_merge!(custom_mapping)
+      mapping.deep_merge!(custom_mapping.deep_symbolize_keys)
     end
 
     def analysis=(custom_analysis)
