@@ -8,6 +8,9 @@ class Widget < ActiveRecord::Base
   self.doctype.mapping[:properties].update(
     'name' => {
       type: 'text',
+      fields: {
+        raw: { type: 'keyword' }
+      }
     },
     'color' => {
       type: 'keyword'
