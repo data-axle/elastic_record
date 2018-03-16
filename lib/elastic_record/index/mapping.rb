@@ -14,9 +14,7 @@ module ElasticRecord
       end
 
       def mapping_body
-        doctypes.each_with_object({}) do |doctype, result|
-          result[doctype.name] = doctype.mapping
-        end
+        doctype.mapping
       end
     end
   end

@@ -32,17 +32,16 @@ module ElasticRecord
     include Analyze
     include Deferred
 
-    attr_accessor :doctypes
+    attr_accessor :doctype
 
     attr_accessor :disabled
     attr_accessor :model
     attr_accessor :partial_updates
     attr_accessor :load_from_source
 
-    def initialize(models)
-      models = Array.wrap(models)
-      @model = models.first
-      @doctypes = models.map(&:doctype)
+    def initialize(model)
+      @model    = model
+      @doctype  = model.doctype
       @disabled = false
       @load_from_source = false
     end
