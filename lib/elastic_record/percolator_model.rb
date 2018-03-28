@@ -27,7 +27,7 @@ module ElasticRecord
         query = {
           "percolate" => {
             "field"         => "query",
-            "document_type" => percolates_model.doctype.name,
+            "document_type" => doctype.name,
             "document"      => document
           }
         }

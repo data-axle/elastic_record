@@ -14,9 +14,11 @@ module ElasticRecord
       end
 
       def mapping_body
-        doctypes.each_with_object({}) do |doctype, result|
-          result[doctype.name] = doctype.mapping
+        mapping = doctypes.each_with_object({}) do |doctype, result|
+          result.deep_merge! doctype.mapping
         end
+
+        { model.doctype.name.to_sym => mapping }
       end
     end
   end
