@@ -8,7 +8,7 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
   end
 
   def test_doctype
-    assert_equal ElasticRecord::Doctype.percolator_doctype, WidgetQuery.doctype
+    assert_equal ElasticRecord::Doctype::PERCOLATOR_MAPPING, WidgetQuery.doctype.mapping
   end
 
   def test_as_search_document

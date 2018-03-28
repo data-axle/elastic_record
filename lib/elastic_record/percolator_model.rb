@@ -20,14 +20,14 @@ module ElasticRecord
       end
 
       def doctype
-        @doctype ||= Doctype.percolator_doctype
+        @doctype ||= Doctype.new(percolates_model.doctype.name, Doctype::PERCOLATOR_MAPPING)
       end
 
       def percolate(document)
         query = {
           "percolate" => {
             "field"         => "query",
-            "document_type" => doctype.name,
+            "document_type" => percolates_model.doctype.name,
             "document"      => document
           }
         }

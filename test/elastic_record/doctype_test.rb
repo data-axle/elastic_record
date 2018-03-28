@@ -37,9 +37,9 @@ class ElasticRecord::DoctypeTest < MiniTest::Test
   end
 
   def test_percolator_doctype
-    doctype = ElasticRecord::Doctype.percolator_doctype
+    doctype = WidgetQuery.doctype
 
-    assert_equal 'queries', doctype.name
+    assert_equal WidgetQuery.percolates_model.doctype.name, doctype.name
     assert_equal ElasticRecord::Doctype::PERCOLATOR_MAPPING, doctype.mapping
   end
 end
