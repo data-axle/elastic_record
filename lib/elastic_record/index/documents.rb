@@ -141,6 +141,10 @@ module ElasticRecord
         get(id, model.doctype)['found']
       end
 
+      def multiple_doctypes?
+        get_mapping.keys.count > 1
+      end
+
       def search(elastic_query, options = {})
         url = "_search"
         if options.any?
