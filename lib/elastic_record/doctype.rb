@@ -4,9 +4,6 @@ module ElasticRecord
 
     DEFAULT_MAPPING = {
       properties: {
-      },
-      _all: {
-        enabled: false
       }
     }
 

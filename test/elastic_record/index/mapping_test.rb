@@ -4,7 +4,6 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
   def test_get_mapping
     expected = {
       "widget" => {
-        "_all" => { "enabled" => false },
         "properties" => {
           "color" => { "type" => "keyword" },
           "name" => {
