@@ -138,12 +138,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
-  def test_has_single_doctype
-    without_deferring(index) do
-      refute index.multiple_doctypes?
-    end
-  end
-
   private
 
     def without_deferring(index)
