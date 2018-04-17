@@ -99,9 +99,9 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
       expected = [
         {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
         {color: "green"},
-        {update: {_index: "widgets", _type: "widget", _id: "5", _retry_on_conflict: 3}},
+        {update: {_index: "widgets", _type: "widget", _id: "5", retry_on_conflict: 3}},
         {doc: {color: "blue"}, doc_as_upsert: true},
-        {delete: {_index: index.alias_name, _type: "widget", _id: "3", _retry_on_conflict: 3}}
+        {delete: {_index: index.alias_name, _type: "widget", _id: "3", retry_on_conflict: 3}}
       ]
       assert_equal expected, index.current_bulk_batch
     end
