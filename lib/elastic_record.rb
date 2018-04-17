@@ -16,6 +16,19 @@ module ElasticRecord
   autoload :Relation
   autoload :Searching
 
+  module AggregationResponse
+    extend ActiveSupport::Autoload
+
+    autoload :Aggregation
+    autoload :Bucket
+    autoload :Builder
+    autoload :HasAggregations
+    autoload :MultiBucketAggregation
+    autoload :MultiValueAggregation
+    autoload :SingleBucketAggregation
+    autoload :SingleValueAggregation
+  end
+
   class << self
     def configure
       yield(ElasticRecord::Config)

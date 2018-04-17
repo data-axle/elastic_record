@@ -21,13 +21,13 @@ module ElasticRecord
           sterms
 
         ),
-        SingleValue => %w(
+        SingleValueAggregation => %w(
           avg
           cardinality
           max
           min
         ),
-        MultiValue => %w(
+        MultiValueAggregation => %w(
           stats
           lpercentiles
           spercentiles
@@ -39,13 +39,13 @@ module ElasticRecord
       end
 
       def self.extract(hash)
-        hash.each do |key, results|
-          name, type = key.split('#')
-          next if type.nil?
+        hash.each_with_object({}) do |(key, results), aggs|
+          next unless key.include?('#')
 
+          type, name = key.split('#')
           klass = AGGREGATIONS_BY_TYPE.fetch(type)
-          aggregations << klass.new(name, results)
-        end.compact
+          aggs[name] = klass.new(name, results)
+        end
       end
     end
   end

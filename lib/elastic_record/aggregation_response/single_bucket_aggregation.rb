@@ -10,7 +10,7 @@ module ElasticRecord
   end
 end
 
-# smash concep
+# smash concept
 # SingleBucketAggregation
 #
 # def smash

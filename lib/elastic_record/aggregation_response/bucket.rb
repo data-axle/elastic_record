@@ -1,8 +1,17 @@
 module ElasticRecord
   module AggregationResponse
-    class SingleBucket < Aggregation
+    class Bucket
       include HasAggregations
-      # key, doc_count
+
+      attr_accessor :results
+      def initialize(results)
+        @results = results
+      end
+
+      def key
+        results['key']
+      end
+
       def doc_count
         results['doc_count']
       end

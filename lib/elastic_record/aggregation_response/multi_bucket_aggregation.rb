@@ -1,10 +1,8 @@
 module ElasticRecord
   module AggregationResponse
     class MultiBucketAggregation < Aggregation
-      include HasAggregations
-
       def buckets
-        results['buckets']
+        @buckets ||= results['buckets'].map { |bucket| ElasticRecord::AggregationResponse::Bucket.new(bucket) }
       end
     end
   end
