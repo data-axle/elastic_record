@@ -1,5 +1,5 @@
 module ElasticRecord
-  module Aggregations
+  module AggregationResponse
     class MultiBucketAggregation < Aggregation
       include HasAggregations
 

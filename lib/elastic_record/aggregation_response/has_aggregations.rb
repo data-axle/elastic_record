@@ -1,5 +1,5 @@
 module ElasticRecord
-  module Aggregations
+  module AggregationResponse
     module HasAggregations
       def aggregations
         @aggregations ||= Builder.extract(results)

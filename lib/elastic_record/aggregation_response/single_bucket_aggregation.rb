@@ -1,5 +1,5 @@
 module ElasticRecord
-  module Aggregations
+  module AggregationResponse
     class SingleBucketAggregation < Aggregation
       include HasAggregations
 
@@ -9,3 +9,27 @@ module ElasticRecord
     end
   end
 end
+
+# smash concep
+# SingleBucketAggregation
+#
+# def smash
+#   if aggregations.any?
+#.    { one/many }
+#   else
+#     doc_count
+#   end
+# end
+#
+
+# MultiBucketAggregation
+#
+# def smash
+#   if aggregations.any?
+#.    { one/many }
+#   else
+#     buckets....
+#     doc_count
+#   end
+# end
+#

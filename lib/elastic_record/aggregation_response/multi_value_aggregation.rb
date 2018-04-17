@@ -1,5 +1,5 @@
 module ElasticRecord
-  module Aggregations
+  module AggregationResponse
     class MultiValueAggregation < Aggregation
       attr_accessor :values
     end
