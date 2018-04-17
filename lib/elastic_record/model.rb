@@ -6,7 +6,6 @@ module ElasticRecord
         extend ClassMethods
         include Callbacks
         include AsDocument
-        include NameCache
 
         class_attribute :elastic_connection
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
