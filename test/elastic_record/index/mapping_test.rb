@@ -12,6 +12,9 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
               "raw" => { "type" => "keyword" }
             }
           },
+          "price" => {
+            "type" => "long"
+          },
           "warehouse_id" => { "type" => "keyword" }
         }
       }

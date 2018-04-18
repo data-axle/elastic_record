@@ -23,7 +23,10 @@ module ElasticRecord
     end
 
     def aggregations
-      search_results['aggregations']
+      @aggregations ||= begin
+        results = search_results['aggregations']
+        ElasticRecord::AggregationResponse::Builder.extract(results)
+      end
     end
 
     def explain(id)
