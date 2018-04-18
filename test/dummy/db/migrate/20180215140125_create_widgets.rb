@@ -4,6 +4,7 @@ class CreateWidgets < ActiveRecord::Migration[5.1]
       t.string :warehouse_id
       t.string :name
       t.string :color
+      t.integer :price
     end
   end
 end

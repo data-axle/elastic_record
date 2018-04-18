@@ -10,13 +10,16 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_aggregations
-    Widget.create(color: 'red')
-    Widget.create(color: 'blue')
+    Widget.create(color: 'red', price: 5)
+    Widget.create(color: 'blue', price: 10)
 
     aggregations = Widget.elastic_relation.aggregate('popular_colors' => {'terms' => {'field' => 'color'}}).aggregations
 
     assert_equal 2, aggregations['popular_colors'].buckets.size
     assert_equal %w(red blue).to_set, aggregations['popular_colors'].buckets.map(&:key).to_set
+
+    aggregations = Widget.elastic_relation.aggregate('avg_price' => {'avg' => {'field' => 'price'}}).aggregations
+    assert_equal 7.5, aggregations['avg_price'].value
   end
 
   def test_explain

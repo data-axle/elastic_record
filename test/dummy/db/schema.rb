@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20180215140125) do
     t.string "warehouse_id"
     t.string "name"
     t.string "color"
+    t.integer "price"
   end
 
 end

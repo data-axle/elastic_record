@@ -17,6 +17,9 @@ class Widget < ActiveRecord::Base
     },
     'warehouse_id' => {
       type: 'keyword'
+    },
+    'price' => {
+      type: 'long'
     }
   )
 

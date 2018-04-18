@@ -1,7 +1,9 @@
 module ElasticRecord
   module AggregationResponse
     class SingleValueAggregation < Aggregation
-      attr_accessor :value
+      def value
+        results['value']
+      end
     end
   end
 end
