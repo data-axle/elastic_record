@@ -27,9 +27,6 @@ class ElasticRecord::DoctypeTest < MiniTest::Test
       properties: {
         color: { type: 'integer' },
         name: { type: 'string' }
-      },
-      _all: {
-        enabled: false
       }
     }
 
