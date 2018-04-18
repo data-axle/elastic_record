@@ -1,18 +1,14 @@
 require 'helper'
 
 class ElasticRecord::AggregationResponse::BuilderTest < MiniTest::Test
-  def test_foo
+  def test_sub_aggregation_terms
     hash = {
       "sterms#states" => {
-        "doc_count_error_upper_bound" => 0,
-        "sum_other_doc_count" => 0,
         "buckets" => [
           {
             "key" => "WA",
             "doc_count" => 2,
             "sterms#names" => {
-              "doc_count_error_upper_bound" => 0,
-              "sum_other_doc_count" => 0,
               "buckets" => [
                 {
                   "key" => "Acme",

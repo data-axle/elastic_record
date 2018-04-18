@@ -27,7 +27,7 @@ module ElasticRecord
         def search_results
           @search_results ||= begin
             options = {typed_keys: true}
-            options[search_type] = search_type_value if search_type_value
+            options[:search_type] = search_type_value if search_type_value
 
             klass.elastic_index.search(as_elastic, options)
           end
