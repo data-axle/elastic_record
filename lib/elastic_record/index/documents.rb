@@ -164,7 +164,8 @@ module ElasticRecord
       end
 
       def bulk(options = {})
-        connection.bulk_stack.push []
+        return if current_bulk_batch
+        connection.bulk_actions = []
 
         yield
 
@@ -174,7 +175,7 @@ module ElasticRecord
           verify_bulk_results(results)
         end
       ensure
-        connection.bulk_stack.pop
+        connection.bulk_actions = nil
       end
 
       def bulk_add(batch, index_name: alias_name)
@@ -186,7 +187,7 @@ module ElasticRecord
       end
 
       def current_bulk_batch
-        connection.bulk_stack.last
+        connection.bulk_actions
       end
 
       private

@@ -89,7 +89,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk
-    assert_nil index.instance_variable_get(:@_batch)
+    assert_nil index.current_bulk_batch
 
     index.bulk do
       index.index_document '5', color: 'green'
@@ -107,6 +107,28 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
 
     assert_nil index.current_bulk_batch
+  end
+
+  def test_bulk_nested
+    expected_warehouse_count = Warehouse.count
+
+    begin
+      Warehouse.elastic_index.bulk do
+        Warehouse.transaction do
+          Warehouse.elastic_index.bulk do
+            Warehouse.transaction do
+              Warehouse.create(name: 'Warehouse 13')
+            end
+          end
+
+          Warehouse.create(name: nil)
+        end
+      end
+    rescue ActiveRecord::NotNullViolation
+    end
+
+    assert_equal 0, Warehouse.elastic_relation.count
+    assert_equal expected_warehouse_count, Warehouse.count
   end
 
   def test_bulk_error
