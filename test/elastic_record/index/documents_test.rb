@@ -113,15 +113,10 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     expected_warehouse_count = Warehouse.count + 2
 
     Warehouse.elastic_index.bulk do
-      Warehouse.transaction do
-        Warehouse.elastic_index.bulk do
-          Warehouse.transaction do
-            Warehouse.create(name: 'Warehouse 13')
-          end
-        end
-
-        Warehouse.create(name: 'Warehouse 12')
+      Warehouse.elastic_index.bulk do
+        Warehouse.create(name: 'Warehouse 13')
       end
+      Warehouse.create(name: 'Warehouse 12')
     end
 
     assert_equal 2, Warehouse.elastic_relation.count
@@ -133,21 +128,16 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
 
     begin
       Warehouse.elastic_index.bulk do
-        Warehouse.transaction do
-          Warehouse.elastic_index.bulk do
-            Warehouse.transaction do
-              Warehouse.create(name: 'Warehouse 13')
-            end
-          end
-
-          Warehouse.create(name: nil)
+        Warehouse.elastic_index.bulk do
+          Warehouse.create(name: 'Warehouse 13')
         end
+
+        Warehouse.create(name: nil)
       end
     rescue ActiveRecord::NotNullViolation
     end
 
     assert_equal 0, Warehouse.elastic_relation.count
-    assert_equal expected_warehouse_count, Warehouse.count
   end
 
   def test_bulk_error
