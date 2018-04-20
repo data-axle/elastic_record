@@ -167,7 +167,7 @@ module ElasticRecord
         if current_bulk_batch
           yield
         else
-          run_new_bulk_batch(options, &block)
+          start_new_bulk_batch(options, &block)
         end
       end
 
@@ -185,7 +185,7 @@ module ElasticRecord
 
       private
 
-        def run_new_bulk_batch(options, &block)
+        def start_new_bulk_batch(options, &block)
           connection.bulk_actions = []
 
           yield
