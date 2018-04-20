@@ -164,6 +164,7 @@ module ElasticRecord
       end
 
       def bulk(options = {})
+        return if connection.bulk_stack.any?
         connection.bulk_stack.push []
 
         yield
