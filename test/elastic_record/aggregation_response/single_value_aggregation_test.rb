@@ -1,7 +1,7 @@
 require 'helper'
 
-class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < MiniTest::Test
-  def test_single
+class ElasticRecord::AggregationResponse::SingleValueAggregationTest < MiniTest::Test
+  def test_value
     agg = ElasticRecord::AggregationResponse::SingleValueAggregation.new 'average_price', 'value' => 4
 
     assert_equal 4, agg.value

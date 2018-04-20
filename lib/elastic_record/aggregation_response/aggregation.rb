@@ -15,11 +15,6 @@ module ElasticRecord
       def multi_bucket_agg
       end
 
-      # # Override
-      # def flatten_buckets
-      #   multi_bucket_agg&.flattened_buckets || []
-      # end
-
       def flatten_buckets
         if bucket_agg = multi_bucket_agg
           bucket_agg.buckets.inject([]) do |result, bucket|
