@@ -19,13 +19,14 @@ module ElasticRecord
       def flatten_buckets
         if multi_bucket_agg
           multi_bucket_agg.flatten_buckets.map do |flattened|
-            p "bucket flatten with #{flattened}"
             [self] + flattened
           end
         else
           [[self]]
         end
       end
+
+      # "<#{self.class} #{@parameters} permitted: #{@permitted}>"
     end
   end
 end

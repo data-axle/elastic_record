@@ -22,13 +22,9 @@ module ElasticRecord
 
       def flatten_buckets
         if bucket_agg = multi_bucket_agg
-          p "going in hard!"
-          result = bucket_agg.buckets.inject([]) do |result, bucket|
-            p "concating #{bucket.flatten_buckets}"
+          bucket_agg.buckets.inject([]) do |result, bucket|
             result.concat bucket.flatten_buckets
           end
-          p "result = #{result}"
-          result
         else
           []
         end

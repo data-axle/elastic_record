@@ -1,8 +1,28 @@
 require 'helper'
 
 class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < MiniTest::Test
-  def test_sub_aggregations
-    agg = ElasticRecord::AggregationResponse::MultiBucketAggregation.new 'states', {
+  def test_buckets_with_sub_aggregations
+    agg = sales_per_month
+
+    bucket = agg.buckets.first
+    assert_equal 4, bucket.doc_count
+    assert_equal ['sales_per_month'], bucket.aggregations.keys
+    assert_equal 2, bucket.aggregations['sales_per_month'].buckets.size
+  end
+
+  def test_flatten_buckets
+    flatten_buckets = sales_per_month.flatten_buckets
+
+    assert_equal 2, flatten_buckets.size
+    row = flatten_buckets.first
+    assert_equal 'WA', row[0].key
+    assert_equal 1422748800000, row[1].key
+  end
+
+  private
+
+  def sales_per_month
+    ElasticRecord::AggregationResponse::MultiBucketAggregation.new 'states', {
       "buckets" => [
         {
           "key" => "WA",
@@ -24,17 +44,5 @@ class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < MiniTest:
         }
       ]
     }
-
-    # bucket = agg.buckets.first
-    # assert_equal 4, bucket.doc_count
-    # assert_equal ['sales_per_month'], bucket.aggregations.keys
-    # assert_equal 2, bucket.aggregations['sales_per_month'].buckets.size
-
-    assert_equal 3, agg.flatten_buckets.size
-    # p "things = #{agg.flattened_buckets}"
-  end
-
-  def test_shit
-    # agg
   end
 end
