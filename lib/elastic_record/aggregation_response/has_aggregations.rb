@@ -6,7 +6,7 @@ module ElasticRecord
       end
 
       def multi_bucket_agg
-        aggregations.values.detect(&:multi_bucket_agg)
+        aggregations.values.map(&:multi_bucket_agg).compact.first
       end
     end
   end

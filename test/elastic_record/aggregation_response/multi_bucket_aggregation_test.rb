@@ -10,6 +10,11 @@ class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < MiniTest:
     assert_equal 2, bucket.aggregations['sales_per_month'].buckets.size
   end
 
+  def test_multi_bucket_agg
+    agg = sales_per_month
+    assert_equal agg, agg.multi_bucket_agg
+  end
+
   def test_flatten_buckets
     flatten_buckets = sales_per_month.flatten_buckets
 

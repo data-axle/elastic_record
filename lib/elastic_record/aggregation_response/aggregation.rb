@@ -13,6 +13,7 @@ module ElasticRecord
 
       # Override
       def multi_bucket_agg
+        nil
       end
 
       def flatten_buckets
