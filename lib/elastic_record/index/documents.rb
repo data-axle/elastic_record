@@ -163,19 +163,12 @@ module ElasticRecord
         connection.json_get("/_search/scroll?#{options.to_query}")
       end
 
-      def bulk(options = {})
-        return if current_bulk_batch
-        connection.bulk_actions = []
-
-        yield
-
-        if current_bulk_batch.any?
-          body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
-          results = connection.json_post("/_bulk?#{options.to_query}", body)
-          verify_bulk_results(results)
+      def bulk(options = {}, &block)
+        if current_bulk_batch
+          yield
+        else
+          run_new_bulk_batch(options, &block)
         end
-      ensure
-        connection.bulk_actions = nil
       end
 
       def bulk_add(batch, index_name: alias_name)
@@ -191,6 +184,20 @@ module ElasticRecord
       end
 
       private
+
+        def run_new_bulk_batch(options, &block)
+          connection.bulk_actions = []
+
+          yield
+
+          if current_bulk_batch.any?
+            body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
+            results = connection.json_post("/_bulk?#{options.to_query}", body)
+            verify_bulk_results(results)
+          end
+        ensure
+          connection.bulk_actions = nil
+        end
 
         def verify_bulk_results(results)
           return unless results.is_a?(Hash)

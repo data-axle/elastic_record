@@ -110,6 +110,25 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk_nested
+    expected_warehouse_count = Warehouse.count + 2
+
+    Warehouse.elastic_index.bulk do
+      Warehouse.transaction do
+        Warehouse.elastic_index.bulk do
+          Warehouse.transaction do
+            Warehouse.create(name: 'Warehouse 13')
+          end
+        end
+
+        Warehouse.create(name: 'Warehouse 12')
+      end
+    end
+
+    assert_equal 2, Warehouse.elastic_relation.count
+    assert_equal expected_warehouse_count, Warehouse.count
+  end
+
+  def test_bulk_nested_with_error
     expected_warehouse_count = Warehouse.count
 
     begin
