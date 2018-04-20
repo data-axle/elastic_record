@@ -164,18 +164,23 @@ module ElasticRecord
       end
 
       def bulk(options = {})
-        return if current_bulk_batch
-        connection.bulk_actions = []
+        if current_bulk_batch
+          yield
+        else
+          begin
+            connection.bulk_actions = []
 
-        yield
+            yield
 
-        if current_bulk_batch.any?
-          body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
-          results = connection.json_post("/_bulk?#{options.to_query}", body)
-          verify_bulk_results(results)
+            if current_bulk_batch.any?
+              body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
+              results = connection.json_post("/_bulk?#{options.to_query}", body)
+              verify_bulk_results(results)
+            end
+          ensure
+            connection.bulk_actions = nil
+          end
         end
-      ensure
-        connection.bulk_actions = nil
       end
 
       def bulk_add(batch, index_name: alias_name)
