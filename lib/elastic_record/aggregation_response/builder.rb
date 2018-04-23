@@ -12,6 +12,7 @@ module ElasticRecord
           global
         ),
         MultiBucketAggregation => %w(
+          composite
           date_histogram
           filters
           geohash_grid
