@@ -110,12 +110,11 @@ Aggregations are added with the aggregate method:
 search.aggregate('popular_colors' => {'terms' => {'field' => 'color'}})
 ```
 
-It is important to note that adding aggregations to a query is different than retrieving the results of the query:
+Results are retrieved at query time within `aggregations`:
 
 ```ruby
 search = search.aggregate('popular_colors' => {'terms' => {'field' => 'color'}})
-search.aggregations
-#=> {"popular_colors" => {"buckets" => ...}}
+search.aggregations['popular_colors'].buckets
 ```
 
 ### Getting Results ###
