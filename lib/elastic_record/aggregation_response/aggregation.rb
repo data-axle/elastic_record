@@ -10,6 +10,10 @@ module ElasticRecord
       def meta
         results['meta']
       end
+
+      def inspect
+        "#<#{self.class} #{results}>"
+      end
     end
   end
 end

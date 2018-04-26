@@ -15,6 +15,10 @@ module ElasticRecord
       def doc_count
         results['doc_count']
       end
+
+      def inspect
+        "#<#{self.class} #{results}>"
+      end
     end
   end
 end
