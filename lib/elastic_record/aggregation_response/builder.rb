@@ -18,6 +18,7 @@ module ElasticRecord
           geohash_grid
           histogram
           range
+          dterms
           lterms
           sterms
 
@@ -30,6 +31,7 @@ module ElasticRecord
         ),
         MultiValueAggregation => %w(
           stats
+          dpercentiles
           lpercentiles
           spercentiles
         )
