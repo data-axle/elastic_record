@@ -28,6 +28,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
   class SpecialFieldsModel
     include TestModel
+    attr_accessor :meta, :book_length
 
     class Author
       def as_search_document
@@ -36,9 +37,10 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     end
 
     self.doctype.mapping[:properties].update(
-      author:     { type: :object },
-      commenters: { type: :nested },
-      meta:       { type: "object" }
+      author:      { type: :object },
+      commenters:  { type: :nested },
+      meta:        { type: "object" },
+      book_length: { type: :integer_range }
     )
 
     def author
@@ -48,17 +50,16 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     def commenters
       [Author.new, Author.new]
     end
-
-    def meta
-      { some: "value" }
-    end
   end
 
   def test_as_search_document_with_special_fields
-    doc = SpecialFieldsModel.new.as_search_document
+    record = SpecialFieldsModel.new(meta: { some: "value" }, book_length: 250..500)
+
+    doc = record.as_search_document
 
     assert_equal({name: 'Jonny'}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
     assert_equal({some: 'value'}, doc[:meta])
+    assert_equal({"gte" => 250, "lte" => 500}, doc[:book_length])
   end
 end

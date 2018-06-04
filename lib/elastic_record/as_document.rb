@@ -33,6 +33,8 @@ module ElasticRecord
           value.map { |entry| value_for_elastic_search_object(entry) }
         when :integer_range, :float_range, :long_range, :double_range, :date_range
           value_for_elastic_search_range(value)
+        else
+          value
         end
 
       if value.present? || value == false
