@@ -47,9 +47,21 @@ module ElasticRecord
     end
 
     def value_for_elastic_search_range(range)
-      gte = range.begin unless range.begin == -Float::INFINITY
-      lte = range.end unless range.end == Float::INFINITY
+      ordered = ordered_range(range)
+
+      gte = ordered.begin unless ordered.begin == -Float::INFINITY
+      lte = ordered.end unless ordered.end == Float::INFINITY
       {'gte' => gte, 'lte' => lte}
     end
+
+    private
+
+      def ordered_range(range)
+        if range.begin > range.end
+          range.end..range.begin
+        else
+          range
+        end
+      end
   end
 end

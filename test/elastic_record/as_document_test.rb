@@ -60,6 +60,23 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     assert_equal({name: 'Jonny'}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
     assert_equal({some: 'value'}, doc[:meta])
+  end
+
+  def test_as_search_document_with_range_fields
+    record = SpecialFieldsModel.new(book_length: 250..500)
+    doc = record.as_search_document
     assert_equal({"gte" => 250, "lte" => 500}, doc[:book_length])
+
+    record = SpecialFieldsModel.new(book_length: 500..250)
+    doc = record.as_search_document
+    assert_equal({ "gte" => 250, "lte" => 500 }, doc[:book_length])
+
+    record = SpecialFieldsModel.new(book_length: -Float::INFINITY..500)
+    doc = record.as_search_document
+    assert_equal({ "gte" => nil, "lte" => 500 }, doc[:book_length])
+
+    record = SpecialFieldsModel.new(book_length: 250..Float::INFINITY)
+    doc = record.as_search_document
+    assert_equal({ "gte" => 250, "lte" => nil }, doc[:book_length])
   end
 end
