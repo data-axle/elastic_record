@@ -65,11 +65,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
   def test_as_search_document_with_range_fields
     record = SpecialFieldsModel.new(book_length: 250..500)
     doc = record.as_search_document
-    assert_equal({"gte" => 250, "lte" => 500}, doc[:book_length])
-
-    record = SpecialFieldsModel.new(book_length: 500..250)
-    doc = record.as_search_document
-    assert_nil doc[:book_length]
+    assert_equal({ "gte" => 250, "lte" => 500 }, doc[:book_length])
 
     record = SpecialFieldsModel.new(book_length: -Float::INFINITY..500)
     doc = record.as_search_document
@@ -78,5 +74,11 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     record = SpecialFieldsModel.new(book_length: 250..Float::INFINITY)
     doc = record.as_search_document
     assert_equal({ "gte" => 250, "lte" => nil }, doc[:book_length])
+  end
+
+  def test_as_search_document_with_invalid_range_fields
+    record = SpecialFieldsModel.new(book_length: 500..250)
+    invalid_elasticsearch_doc = record.as_search_document
+    assert_equal({ "gte" => 500, "lte" => 250 }, invalid_elasticsearch_doc[:book_length])
   end
 end

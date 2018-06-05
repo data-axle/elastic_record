@@ -47,12 +47,10 @@ module ElasticRecord
     end
 
     def value_for_elastic_search_range(range)
-      if range.begin <= range.end
-        gte = range.begin unless range.begin == -Float::INFINITY
-        lte = range.end unless range.end == Float::INFINITY
+      gte = range.begin unless range.begin == -Float::INFINITY
+      lte = range.end unless range.end == Float::INFINITY
 
-        {'gte' => gte, 'lte' => lte}
-      end
+      {'gte' => gte, 'lte' => lte}
     end
   end
 end
