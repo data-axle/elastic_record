@@ -53,7 +53,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
   end
 
   def test_as_search_document_with_special_fields
-    record = SpecialFieldsModel.new(meta: { some: "value" }, book_length: 250..500)
+    record = SpecialFieldsModel.new(meta: { some: "value" })
 
     doc = record.as_search_document
 
@@ -69,7 +69,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
     record = SpecialFieldsModel.new(book_length: 500..250)
     doc = record.as_search_document
-    assert_equal({ "gte" => 250, "lte" => 500 }, doc[:book_length])
+    assert_nil doc[:book_length]
 
     record = SpecialFieldsModel.new(book_length: -Float::INFINITY..500)
     doc = record.as_search_document
