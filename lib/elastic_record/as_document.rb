@@ -25,11 +25,12 @@ module ElasticRecord
       value = try field
       return if value.nil?
 
-      value = case mapping[:type]&.to_sym
-              when :object
-                value.respond_to?(:as_search_document) ? value.as_search_document : value
-              when :nested
+      value = if mapping[:type]&.to_sym == :nested
                 value.map(&:as_search_document)
+              elsif value.respond_to?(:as_search_document)
+                value.as_search_document
+              elsif properties = mapping[:properties]&.keys
+                value.slice(*properties)
               else
                 value
               end
