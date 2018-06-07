@@ -29,6 +29,8 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
   class SpecialFieldsModel
     include TestModel
 
+    attr_accessor :details
+
     class Author
       def as_search_document
         {name: 'Jonny'}
@@ -38,7 +40,12 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     self.doctype.mapping[:properties].update(
       author:     { type: :object },
       commenters: { type: :nested },
-      meta:       { type: "object" }
+      meta:       { type: "object" },
+      details: {
+        properties: {
+          genre: { type: :text }
+        }
+      }
     )
 
     def author
@@ -52,6 +59,17 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     def meta
       { some: "value" }
     end
+  end
+
+  def test_as_search_document_with_explicit_mapped_objects
+    doc = SpecialFieldsModel.new(
+      details: {
+        genre: 'action',
+        rating: 4.85
+      }
+    ).as_search_document
+
+    assert_equal({ genre: 'action' }, doc[:details])
   end
 
   def test_as_search_document_with_special_fields
