@@ -2,7 +2,7 @@ module ElasticRecord
   module AsDocument
     def as_search_document
       doctype.mapping[:properties].each_with_object({}) do |(field, mapping), result|
-        value = elastic_search_value field, mapping
+        value = value_for_elastic_search field, mapping
 
         unless value.nil?
           result[field] = value
@@ -16,27 +16,41 @@ module ElasticRecord
 
       changed_fields.each_with_object({}) do |field, result|
         if field_mapping = mappings[field]
-          result[field] = elastic_search_value field, field_mapping
+          result[field] = value_for_elastic_search field, field_mapping
         end
       end
     end
 
-    def elastic_search_value(field, mapping)
+    def value_for_elastic_search(field, mapping)
       value = try field
       return if value.nil?
 
-      value = case mapping[:type]&.to_sym
-              when :object
-                value.respond_to?(:as_search_document) ? value.as_search_document : value
-              when :nested
-                value.map(&:as_search_document)
-              else
-                value
-              end
+      value =
+        case mapping[:type]&.to_sym
+        when :object
+          value_for_elastic_search_object(value)
+        when :nested
+          value.map { |entry| value_for_elastic_search_object(entry) }
+        when :integer_range, :float_range, :long_range, :double_range, :date_range
+          value_for_elastic_search_range(value)
+        else
+          value
+        end
 
       if value.present? || value == false
         value
       end
+    end
+
+    def value_for_elastic_search_object(object)
+      object.respond_to?(:as_search_document) ? object.as_search_document : object
+    end
+
+    def value_for_elastic_search_range(range)
+      gte = range.begin unless range.begin == -Float::INFINITY
+      lte = range.end unless range.end == Float::INFINITY
+
+      {'gte' => gte, 'lte' => lte}
     end
   end
 end
