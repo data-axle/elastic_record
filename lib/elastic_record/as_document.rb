@@ -1,8 +1,9 @@
 module ElasticRecord
   module AsDocument
-    def as_search_document
-      doctype.mapping[:properties].each_with_object({}) do |(field, mapping), result|
-        value = value_for_elastic_search field, mapping
+    def as_search_document(mappings = doctype.mapping[:properties])
+      (mappings || []).each_with_object({}) do |(field, mapping), result|
+        nested = mappings.dig(field, :properties)
+        value = value_for_elastic_search field, mapping, nested
 
         unless value.nil?
           result[field] = value
@@ -15,22 +16,23 @@ module ElasticRecord
       changed_fields = respond_to?(:saved_changes) ? saved_changes.keys : changed
 
       changed_fields.each_with_object({}) do |field, result|
+        nested = mappings.dig(field, :properties)
         if field_mapping = mappings[field]
-          result[field] = value_for_elastic_search field, field_mapping
+          result[field] = value_for_elastic_search field, field_mapping, nested
         end
       end
     end
 
-    def value_for_elastic_search(field, mapping)
+    def value_for_elastic_search(field, mapping, nested_mapping)
       value = try field
       return if value.nil?
 
       value =
         case mapping[:type]&.to_sym
         when :object
-          value_for_elastic_search_object(value)
+          value_for_elastic_search_object(value, nested_mapping)
         when :nested
-          value.map { |entry| value_for_elastic_search_object(entry) }
+          value.map { |entry| value_for_elastic_search_object(entry, nested_mapping) }
         when :integer_range, :float_range, :long_range, :double_range, :date_range
           value_for_elastic_search_range(value)
         else
@@ -42,8 +44,8 @@ module ElasticRecord
       end
     end
 
-    def value_for_elastic_search_object(object)
-      object.respond_to?(:as_search_document) ? object.as_search_document : object
+    def value_for_elastic_search_object(object, nested_mapping)
+      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping) : object
     end
 
     def value_for_elastic_search_range(range)
