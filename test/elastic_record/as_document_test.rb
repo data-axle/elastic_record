@@ -16,9 +16,10 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
     Widget.elastic_index.update_document widget.id, name: 'wilbur'
 
-    widget.update! color: 'grey'
+    widget.update! color: 'grey', widget_part: { name: 'Doohicky' }
 
     assert_equal 1, Widget.elastic_search.filter(color: 'grey').count
+    assert_equal 1, Widget.elastic_search.filter('widget_part.name' => 'Doohicky').count
     assert_equal 0, Widget.elastic_search.filter(name: 'elmo').count
   end
 
