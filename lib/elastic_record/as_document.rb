@@ -1,8 +1,8 @@
 module ElasticRecord
   module AsDocument
-    def as_search_document(mappings = doctype.mapping[:properties])
-      mappings.each_with_object({}) do |(field, mapping), result|
-        value = value_for_elastic_search field, mapping, mappings
+    def as_search_document(mapping_properties = doctype.mapping[:properties])
+      mapping_properties.each_with_object({}) do |(field, mapping), result|
+        value = value_for_elastic_search field, mapping, mapping_properties
 
         unless value.nil?
           result[field] = value
@@ -11,26 +11,28 @@ module ElasticRecord
     end
 
     def as_partial_update_document
-      mappings = doctype.mapping[:properties]
+      mapping_properties = doctype.mapping[:properties]
       changed_fields = respond_to?(:saved_changes) ? saved_changes.keys : changed
 
       changed_fields.each_with_object({}) do |field, result|
-        if field_mapping = mappings[field]
-          result[field] = value_for_elastic_search field, field_mapping, mappings
+        if field_mapping = mapping_properties[field]
+          result[field] = value_for_elastic_search field, field_mapping, mapping_properties
         end
       end
     end
 
-    def value_for_elastic_search(field, mapping, mappings)
+    def value_for_elastic_search(field, mapping, mapping_properties)
       value = try field
       return if value.nil?
 
       value =
         case mapping[:type]&.to_sym
         when :object
-          value_for_elastic_search_object(value, mappings.dig(field, :properties))
+          object_mapping_properties = mapping_properties.dig(field, :properties)
+          value_for_elastic_search_object(value, object_mapping_properties)
         when :nested
-          value.map { |entry| value_for_elastic_search_object(entry, mappings.dig(field, :properties)) }
+          object_mapping_properties = mapping_properties.dig(field, :properties)
+          value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties) }
         when :integer_range, :float_range, :long_range, :double_range, :date_range
           value_for_elastic_search_range(value)
         else
