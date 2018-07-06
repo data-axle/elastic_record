@@ -1,9 +1,8 @@
 module ElasticRecord
   module AsDocument
     def as_search_document(mappings = doctype.mapping[:properties])
-      (mappings || []).each_with_object({}) do |(field, mapping), result|
-        nested = mappings.dig(field, :properties)
-        value = value_for_elastic_search field, mapping, nested
+      mappings.each_with_object({}) do |(field, mapping), result|
+        value = value_for_elastic_search field, mapping, mappings
 
         unless value.nil?
           result[field] = value
@@ -16,23 +15,22 @@ module ElasticRecord
       changed_fields = respond_to?(:saved_changes) ? saved_changes.keys : changed
 
       changed_fields.each_with_object({}) do |field, result|
-        nested = mappings.dig(field, :properties)
         if field_mapping = mappings[field]
-          result[field] = value_for_elastic_search field, field_mapping, nested
+          result[field] = value_for_elastic_search field, field_mapping, mappings
         end
       end
     end
 
-    def value_for_elastic_search(field, mapping, nested_mapping)
+    def value_for_elastic_search(field, mapping, mappings)
       value = try field
       return if value.nil?
 
       value =
         case mapping[:type]&.to_sym
         when :object
-          value_for_elastic_search_object(value, nested_mapping)
+          value_for_elastic_search_object(value, mappings.dig(field, :properties))
         when :nested
-          value.map { |entry| value_for_elastic_search_object(entry, nested_mapping) }
+          value.map { |entry| value_for_elastic_search_object(entry, mappings.dig(field, :properties)) }
         when :integer_range, :float_range, :long_range, :double_range, :date_range
           value_for_elastic_search_range(value)
         else
