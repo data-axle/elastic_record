@@ -9,10 +9,6 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     Widget.new(color: '').tap do |widget|
       assert_equal({}, widget.as_search_document)
     end
-
-    # Widget.new(id: '10', color: false).tap do |widget|
-    #   assert_equal({"color" => false}, widget.as_search_document)
-    # end
   end
 
   def test_as_partial_update_document
@@ -20,9 +16,10 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
     Widget.elastic_index.update_document widget.id, name: 'wilbur'
 
-    widget.update! color: 'grey'
+    widget.update! color: 'grey', widget_part: { name: 'Doohicky' }
 
     assert_equal 1, Widget.elastic_search.filter(color: 'grey').count
+    assert_equal 1, Widget.elastic_search.filter('widget_part.name' => 'Doohicky').count
     assert_equal 0, Widget.elastic_search.filter(name: 'elmo').count
   end
 
@@ -31,24 +28,34 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     attr_accessor :meta, :book_length
 
     class Author
-      def as_search_document
-        {name: 'Jonny'}
-      end
+      include TestModel
+      attr_accessor :name, :salary_estimate
     end
 
     self.doctype.mapping[:properties].update(
-      author:      { type: :object },
-      commenters:  { type: :nested },
+      author:      {
+        type: :object,
+        properties: {
+          name: { type: :string },
+          salary_estimate: { type: :integer_range }
+        }
+      },
+      commenters:  {
+        type: :nested,
+        properties: {
+          name: { type: :string }
+        }
+      },
       meta:        { type: "object" },
       book_length: { type: :integer_range }
     )
 
     def author
-      Author.new
+      Author.new(name: 'Jonny', salary_estimate: 250..Float::INFINITY)
     end
 
     def commenters
-      [Author.new, Author.new]
+      [Author.new(name: 'Jonny'), Author.new(name: 'Jonny')]
     end
   end
 
@@ -57,7 +64,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
     doc = record.as_search_document
 
-    assert_equal({name: 'Jonny'}, doc[:author])
+    assert_equal({name: 'Jonny', salary_estimate: { 'gte' => 250, 'lte' => nil }}, doc[:author])
     assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
     assert_equal({some: 'value'}, doc[:meta])
   end

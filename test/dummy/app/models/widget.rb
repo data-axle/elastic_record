@@ -5,6 +5,11 @@ class Widget < ActiveRecord::Base
   belongs_to :warehouse
   validates :color, format: {with: /[a-z]/}
 
+  class WidgetPart
+    include ElasticRecord::Model
+    attr_accessor :name
+  end
+
   self.doctype.mapping[:properties].update(
     'name' => {
       type: 'text',
@@ -20,6 +25,12 @@ class Widget < ActiveRecord::Base
     },
     'price' => {
       type: 'long'
+    },
+    'widget_part' => {
+      type: 'object',
+      properties: {
+        'name' => { type: 'keyword' }
+      }
     }
   )
 
