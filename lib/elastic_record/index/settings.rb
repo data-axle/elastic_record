@@ -19,7 +19,6 @@ module ElasticRecord
       end
 
       def update_settings(index_name = alias_name, settings: self.settings)
-        self.settings = settings
         connection.json_put "/#{index_name}/_settings", settings
       end
 
