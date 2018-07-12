@@ -28,6 +28,10 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
     assert_equal expected, index.get_mapping
   end
 
+  def test_update_mapping
+    index.update_mapping
+  end
+
   private
 
     def index

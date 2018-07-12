@@ -2,7 +2,7 @@ module ElasticRecord
   class Index
     module Mapping
       def update_mapping(index_name = alias_name)
-        connection.json_put "/#{index_name}/_mapping", mapping_body
+        connection.json_put "/#{index_name}/_mapping/#{model.doctype.name}", mapping_body
       end
 
       def get_mapping(index_name = alias_name)
@@ -14,11 +14,9 @@ module ElasticRecord
       end
 
       def mapping_body
-        mapping = doctypes.each_with_object({}) do |doctype, result|
+        doctypes.each_with_object({}) do |doctype, result|
           result.deep_merge! doctype.mapping
         end
-
-        { model.doctype.name.to_sym => mapping }
       end
     end
   end
