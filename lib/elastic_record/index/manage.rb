@@ -81,6 +81,14 @@ module ElasticRecord
         # TODO: In ES 1.4, this returns empty rather than a 404
         []
       end
+
+      def mapping_body
+        mapping = doctypes.each_with_object({}) do |doctype, result|
+          result.deep_merge! doctype.mapping
+        end
+
+        { model.doctype.name.to_sym => mapping }
+      end
     end
   end
 end
