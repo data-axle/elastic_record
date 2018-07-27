@@ -88,6 +88,29 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert_equal 1, scroll_enumerator.request_more_ids.size
   end
 
+  def test_expired_scroll_error
+    index.index_document('bob', name: 'bob')
+    index.index_document('bobs', name: 'bob')
+
+    scroll_enumerator = index.build_scroll_enumerator(
+      search: { 'query' => { query_string: { query: 'name:bob' } } },
+      batch_size: 1,
+      keep_alive: '1ms'
+    )
+
+    scroll_enumerator.request_more_hits
+    index.connection.json_delete '/_search/scroll', scroll_id: scroll_enumerator.scroll_id
+    assert_raises ElasticRecord::ExpiredScrollError do
+      scroll_enumerator.request_more_hits
+    end
+  end
+
+  def test_invalid_scroll_error
+    assert_raises ElasticRecord::InvalidScrollError do
+      index.scroll('invalid', '1m')
+    end
+  end
+
   def test_bulk
     assert_nil index.current_bulk_batch
 

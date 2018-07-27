@@ -161,6 +161,12 @@ module ElasticRecord
       def scroll(scroll_id, scroll_keep_alive)
         options = {scroll_id: scroll_id, scroll: scroll_keep_alive}
         connection.json_get("/_search/scroll?#{options.to_query}")
+      rescue ElasticRecord::ConnectionError => e
+        case e.status_code
+        when '400' then raise ElasticRecord::InvalidScrollError, e.message
+        when '404' then raise ElasticRecord::ExpiredScrollError, e.message
+        else raise e
+        end
       end
 
       def bulk(options = {}, &block)

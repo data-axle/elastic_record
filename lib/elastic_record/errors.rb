@@ -12,4 +12,10 @@ module ElasticRecord
 
   class BulkError < Error
   end
+
+  class ExpiredScrollError < Error
+  end
+
+  class InvalidScrollError < Error
+  end
 end
