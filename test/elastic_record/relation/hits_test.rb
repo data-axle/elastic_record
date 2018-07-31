@@ -34,4 +34,20 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
     assert_includes names, 'Latte'
     assert_includes names, 'Americano'
   end
+
+  def test_matching_documents_by_id
+    red_query = WidgetQuery.create(color: 'red')
+    blue_query = WidgetQuery.create(color: 'blue')
+    expected = {
+      red_query.id => [0],
+      blue_query.id => [1]
+    }
+    matching_documents_by_id = WidgetQuery.percolate([
+      { color: 'red' },
+      { color: 'blue' },
+      { color: 'green' }
+    ]).matching_documents_by_id
+
+    assert_equal expected, matching_documents_by_id
+  end
 end
