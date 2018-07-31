@@ -28,12 +28,7 @@ module ElasticRecord
       end
 
       def percolate(document)
-        query = {
-          "percolate" => {
-            "field"         => "query",
-            "document"      => document
-          }
-        }
+        query = Arelastic::Queries::Percolate.new("query", document)
 
         elastic_search.filter(query).limit(5000)
       end
