@@ -17,12 +17,17 @@ module ElasticRecord
         hits.map { |hit| hit['_id'] }
       end
 
+      def matching_documents_by_id
+        search_hits.each_with_object({}) do |hit, result|
+          result[hit['_id']] = hit['fields']['_percolator_document_slot']
+        end
+      end
+
       private
 
         def search_hits
           search_results['hits']['hits']
         end
-
 
         def search_results
           @search_results ||= begin
