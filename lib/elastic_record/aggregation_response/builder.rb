@@ -21,13 +21,13 @@ module ElasticRecord
           dterms
           lterms
           sterms
-
         ),
         SingleValueAggregation => %w(
           avg
           cardinality
           max
           min
+          value_count
         ),
         MultiValueAggregation => %w(
           stats
