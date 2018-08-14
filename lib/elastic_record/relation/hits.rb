@@ -17,22 +17,18 @@ module ElasticRecord
         hits.map { |hit| hit['_id'] }
       end
 
-      private
+      def search_hits
+        search_results['hits']['hits']
+      end
 
-        def search_hits
-          search_results['hits']['hits']
+      def search_results
+        @search_results ||= begin
+          options = {typed_keys: true}
+          options[:search_type] = search_type_value if search_type_value
+
+          klass.elastic_index.search(as_elastic, options)
         end
-
-
-        def search_results
-          @search_results ||= begin
-            options = {typed_keys: true}
-            options[:search_type] = search_type_value if search_type_value
-
-            klass.elastic_index.search(as_elastic, options)
-          end
-        end
-
+      end
     end
   end
 end
