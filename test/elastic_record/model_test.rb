@@ -20,6 +20,8 @@ class ElasticRecord::ModelTest < MiniTest::Test
   def test_elastic_index_inheritence
     refute_equal Widget.elastic_index.object_id, InheritedModel.elastic_index.object_id
     assert_equal Widget.elastic_index.mapping_type, InheritedModel.elastic_index.mapping_type
+    assert_equal 'widgets', InheritedModel.elastic_index.alias_name
     assert_equal InheritedModel, InheritedModel.elastic_index.model
+    assert_equal 'widget', InheritedModel.elastic_index.mapping_type
   end
 end

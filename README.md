@@ -181,6 +181,8 @@ and `elastic_index.settings`:
 
 ```ruby
 class Product
+  include ElasticRecord::Model
+
   elastic_index.mapping = {
     properties: {
       name: {type: "text"},
@@ -194,9 +196,22 @@ Mapping types will be removed in ElasticSearch 7.x.  To rename the default mappi
 
 ```ruby
 class Product
+  include ElasticRecord::Model
+
   elastic_index.mapping_type = 'product'
 end
 ```
+
+### Inheritence
+
+When one model inherits from another, ElasticRecord makes some assumptions about how the child index should be configured.  By default:
+
+* `alias_name` - Same as parent
+* `mapping` - Same as parent
+* `mapping_type` - Same as parent
+* `settings` (including analysis configuration) - Same as parent
+
+These can all be overridden.  For instance, it might be desirable for the child documents to be in a separate index.
 
 ### Load Documents from Source
 

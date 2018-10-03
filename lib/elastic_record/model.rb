@@ -19,6 +19,7 @@ module ElasticRecord
         if child < child.base_class
           child.elastic_index = elastic_index.dup
           child.elastic_index.model = child
+          child.elastic_index.mapping_type = elastic_index.mapping_type
         end
       end
 
