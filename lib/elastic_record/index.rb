@@ -4,7 +4,7 @@ require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/settings'
-require 'elastic_record/index/type'
+require 'elastic_record/index/mapping_type'
 
 require 'active_support/core_ext/object/deep_dup'
 
@@ -32,7 +32,7 @@ module ElasticRecord
     include Mapping, Settings
     include Analyze
     include Deferred
-    include Type
+    include MappingType
 
     attr_accessor :disabled
     attr_accessor :model
@@ -78,7 +78,7 @@ module ElasticRecord
 
     def get(end_path, json = nil)
       path = "/#{alias_name}"
-      path += "/#{type}"
+      path += "/#{mapping_type}"
       path += "/#{end_path}"
 
       connection.json_get path, json

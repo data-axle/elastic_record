@@ -176,8 +176,8 @@ Use the `percolate` method to find records with queries that match.
 
 ## Index Configuration
 
-To avoid elasticsearch dynamically mapping fields, you can directly configure Product.elastic_index.mapping
-and Product.elastic_index.settings:
+To avoid elasticsearch dynamically mapping fields, you can directly configure `elastic_index.mapping`
+and `elastic_index.settings`:
 
 ```ruby
 class Product
@@ -187,6 +187,14 @@ class Product
       status: {type: "keyword"}
     }
   }
+end
+```
+
+Mapping types will be removed in ElasticSearch 7.x.  To rename the default mapping type (`_doc`), use `elastic_index.mapping_type`:
+
+```ruby
+class Product
+  elastic_index.mapping_type = 'product'
 end
 ```
 

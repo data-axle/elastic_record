@@ -74,13 +74,13 @@ module ElasticRecord
 
       def index_document(id, document, parent: nil, index_name: alias_name)
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id }
+          instructions = { _index: index_name, _type: mapping_type, _id: id }
           instructions[:parent] = parent if parent
 
           batch << { index: instructions }
           batch << document
         else
-          path = "/#{index_name}/#{type}/#{id}"
+          path = "/#{index_name}/#{mapping_type}/#{id}"
           path << "?parent=#{parent}" if parent
 
           if id
@@ -96,13 +96,13 @@ module ElasticRecord
         params = {doc: document, doc_as_upsert: true}
 
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id, retry_on_conflict: 3 }
+          instructions = { _index: index_name, _type: mapping_type, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
 
           batch << { update: instructions }
           batch << params
         else
-          path = "/#{index_name}/#{type}/#{id}/_update?retry_on_conflict=3"
+          path = "/#{index_name}/#{mapping_type}/#{id}/_update?retry_on_conflict=3"
           path << "&parent=#{parent}" if parent
 
           connection.json_post path, params
@@ -114,11 +114,11 @@ module ElasticRecord
         index_name ||= alias_name
 
         if batch = current_bulk_batch
-          instructions = { _index: index_name, _type: type, _id: id, retry_on_conflict: 3 }
+          instructions = { _index: index_name, _type: mapping_type, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
           batch << { delete: instructions }
         else
-          path = "/#{index_name}/#{type}/#{id}"
+          path = "/#{index_name}/#{mapping_type}/#{id}"
           path << "&parent=#{parent}" if parent
 
           connection.json_delete path

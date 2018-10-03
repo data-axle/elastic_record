@@ -10,7 +10,7 @@ class Widget < ActiveRecord::Base
     attr_accessor :name
   end
 
-  self.elastic_index.type = 'widget'
+  self.elastic_index.mapping_type = 'widget'
   self.elastic_index.mapping[:properties].update(
     'name' => {
       type: 'text',

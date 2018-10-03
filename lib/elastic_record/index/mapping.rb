@@ -16,11 +16,11 @@ module ElasticRecord
       end
 
       def update_mapping(index_name = alias_name)
-        connection.json_put "/#{index_name}/_mapping/#{type}", mapping
+        connection.json_put "/#{index_name}/_mapping/#{mapping_type}", mapping
       end
 
       def get_mapping(index_name = alias_name)
-        json = connection.json_get "/#{index_name}/_mapping/#{type}"
+        json = connection.json_get "/#{index_name}/_mapping/#{mapping_type}"
 
         unless json.empty?
           json.values.first['mappings']

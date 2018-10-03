@@ -5,11 +5,11 @@ module ElasticRecord
     #
     #   * 6.x - Type defaults to _doc, but any type can be specified
     #   * 7.x - Only _doc will be supported, effectively removing the type concept.
-    module Type
-      attr_accessor :type
+    module MappingType
+      attr_accessor :mapping_type
 
-      def type
-        @type || '_doc'
+      def mapping_type
+        @mapping_type || '_doc'
       end
     end
   end

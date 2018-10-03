@@ -10,7 +10,7 @@ module ElasticRecord
       def create(index_name = new_index_name)
         connection.json_put "/#{index_name}", {
           "mappings" => {
-            type => mapping
+            mapping_type => mapping
           },
           "settings" => settings
         }
