@@ -2,13 +2,33 @@ require 'helper'
 
 class ElasticRecord::PercolatorModelTest < MiniTest::Test
   def test_elastic_index
-    assert_equal [WidgetQuery.doctype, Widget.doctype], index.doctypes
+    index = WidgetQuery.elastic_index
+
+    expected_mapping = {
+      "widget"=> {
+        "properties"=> {
+          "color"=> {"type" => "keyword" },
+          "name"=> {
+            "type" => "text",
+            "fields" => {
+              "raw" => { "type" => "keyword" }
+            }
+          },
+          "price" => { "type" => "long" },
+          "query" => { "type" => "percolator" },
+          "warehouse_id" => { "type" => "keyword" },
+          "widget_part" => {
+            "properties" => {
+              "name" => { "type" => "keyword" }
+            }
+          }
+        }
+      }
+    }
+
+    assert_equal expected_mapping, index.get_mapping
     refute index.partial_updates
     assert_equal({}, index.settings)
-  end
-
-  def test_doctype
-    assert_equal ElasticRecord::Doctype::PERCOLATOR_MAPPING, WidgetQuery.doctype.mapping
   end
 
   def test_as_search_document
@@ -45,10 +65,4 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
 
     assert_equal [query], WidgetQuery.percolate(should_hit)
   end
-
-  private
-
-    def index
-      @index ||= WidgetQuery.elastic_index
-    end
 end

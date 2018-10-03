@@ -34,17 +34,13 @@ module ElasticRecord
     include Deferred
     include Type
 
-    attr_accessor :doctypes
-
     attr_accessor :disabled
     attr_accessor :model
     attr_accessor :partial_updates
     attr_accessor :load_from_source
 
-    def initialize(models)
-      models = Array.wrap(models)
-      @model = models.first
-      @doctypes = models.map(&:doctype)
+    def initialize(model)
+      @model = model
       @disabled = false
       @load_from_source = false
     end
@@ -80,9 +76,9 @@ module ElasticRecord
       model.elastic_connection
     end
 
-    def get(end_path, doctype = nil, json = nil)
+    def get(end_path, json = nil)
       path = "/#{alias_name}"
-      path += "/#{doctype.name}" if doctype
+      path += "/#{type}"
       path += "/#{end_path}"
 
       connection.json_get path, json

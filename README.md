@@ -176,12 +176,12 @@ Use the `percolate` method to find records with queries that match.
 
 ## Index Configuration
 
-To avoid elasticsearch dynamically mapping fields, you can directly configure Product.doctype.mapping
+To avoid elasticsearch dynamically mapping fields, you can directly configure Product.elastic_index.mapping
 and Product.elastic_index.settings:
 
 ```ruby
 class Product
-  doctype.mapping = {
+  elastic_index.mapping = {
     properties: {
       name: {type: "text"},
       status: {type: "keyword"}

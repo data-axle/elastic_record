@@ -11,6 +11,7 @@ class Project
   attr_accessor :id, :name
   alias_method :as_json, :as_search_document
 
+  elastic_index.type = 'project'
   elastic_index.load_from_source = true
 
   def as_search_document

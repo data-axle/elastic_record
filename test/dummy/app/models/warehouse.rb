@@ -1,7 +1,8 @@
 class Warehouse < ActiveRecord::Base
   include ElasticRecord::Model
 
-  self.doctype.mapping[:properties].update(
+  elastic_index.type = 'warehouse'
+  elastic_index.mapping[:properties].update(
     'name' => { type: 'keyword' }
   )
 end

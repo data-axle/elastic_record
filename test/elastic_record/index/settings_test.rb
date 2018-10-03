@@ -9,7 +9,7 @@ class ElasticRecord::Index::SettingsTest < MiniTest::Test
   class ModelWithAnalyzers
     include TestModel
 
-    doctype.analysis = {
+    elastic_index.analysis = {
       "analyzer": {
         "my_custom_analyzer": {
           "type":      "custom",
@@ -38,10 +38,4 @@ class ElasticRecord::Index::SettingsTest < MiniTest::Test
 
     assert_equal expected, ModelWithAnalyzers.elastic_index.settings
   end
-
-  private
-
-    def index
-      @index ||= ElasticRecord::Index.new(Widget)
-    end
 end

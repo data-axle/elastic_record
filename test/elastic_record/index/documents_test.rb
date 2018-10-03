@@ -49,7 +49,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.update_document('abc', color: 'blue')
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
-    assert_equal expected, index.get('abc', Widget.doctype)['_source']
+    assert_equal expected, index.get('abc', index.type)['_source']
 
     assert_raises RuntimeError do
       index.update_document(nil, color: 'blue')

@@ -35,6 +35,6 @@ class ElasticRecord::Index::MappingTest < MiniTest::Test
   private
 
     def index
-      @index ||= ElasticRecord::Index.new(Widget)
+      @index ||= Widget.elastic_index
     end
 end
