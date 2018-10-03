@@ -18,6 +18,7 @@ module ElasticRecord
 
         if child < child.base_class
           child.elastic_index = elastic_index.dup
+          child.elastic_index.model = child
         end
       end
 
