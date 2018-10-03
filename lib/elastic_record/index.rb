@@ -4,6 +4,7 @@ require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/settings'
+require 'elastic_record/index/type'
 
 require 'active_support/core_ext/object/deep_dup'
 
@@ -31,6 +32,7 @@ module ElasticRecord
     include Mapping, Settings
     include Analyze
     include Deferred
+    include Type
 
     attr_accessor :doctypes
 
