@@ -10,10 +10,16 @@ module ElasticRecord
     end
 
     module ClassMethods
+      DEFAULT_PERCOLATOR_MAPPING = {
+        properties: {
+          query: { type: 'percolator' }
+        }
+      }
       def elastic_index
         @elastic_index ||=
           begin
             index = ElasticRecord::Index.new(self)
+            index.mapping = DEFAULT_PERCOLATOR_MAPPING
             index.mapping = percolates_model.elastic_index.mapping
             index.partial_updates = false
             index

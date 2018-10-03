@@ -12,7 +12,7 @@ module ElasticRecord
       end
 
       def mapping=(custom_mapping)
-        mapping.deep_merge!(custom_mapping)
+        mapping.deep_merge!(custom_mapping.deep_dup)
       end
 
       def update_mapping(index_name = alias_name)
