@@ -178,7 +178,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
-  def test_bulk_inheritence
+  def test_bulk_inheritance
     without_deferring(index) do
       index.bulk do
         InheritedWidget.elastic_index.index_document '5', color: 'green'

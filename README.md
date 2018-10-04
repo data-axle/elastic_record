@@ -202,7 +202,7 @@ class Product
 end
 ```
 
-### Inheritence
+### Inheritance
 
 When one model inherits from another, ElasticRecord makes some assumptions about how the child index should be configured.  By default:
 
