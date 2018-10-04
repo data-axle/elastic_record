@@ -49,7 +49,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.update_document('abc', color: 'blue')
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
-    assert_equal expected, index.get('abc', Widget.doctype)['_source']
+    assert_equal expected, index.get('abc', index.mapping_type)['_source']
 
     assert_raises RuntimeError do
       index.update_document(nil, color: 'blue')
@@ -178,7 +178,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
-  def test_bulk_inheritence
+  def test_bulk_inheritance
     without_deferring(index) do
       index.bulk do
         InheritedWidget.elastic_index.index_document '5', color: 'green'

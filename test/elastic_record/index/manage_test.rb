@@ -25,13 +25,6 @@ class ElasticRecord::Index::ManageTest < MiniTest::Test
     assert !index.exists?('felons_bar')
   end
 
-  def test_type_exists
-    index.create 'felons_foo'
-
-    assert index.type_exists?('felons_foo')
-    assert !index.type_exists?('felons_bar')
-  end
-
   def test_deploy
     index.create 'felons_foo'
 

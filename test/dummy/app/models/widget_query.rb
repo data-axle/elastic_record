@@ -4,6 +4,7 @@ class WidgetQuery
   define_attributes [:name, :color]
 
   self.percolates_model = Widget
+  self.elastic_index.mapping_type = 'widget'
 
   def as_search_document
     filters = {}

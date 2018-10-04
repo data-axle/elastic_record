@@ -10,7 +10,7 @@ module ElasticRecord
       def create(index_name = new_index_name)
         connection.json_put "/#{index_name}", {
           "mappings" => {
-            model.doctype.name.to_sym => mapping_body
+            mapping_type => mapping
           },
           "settings" => settings
         }
@@ -29,10 +29,6 @@ module ElasticRecord
 
       def exists?(index_name)
         connection.head("/#{index_name}") == '200'
-      end
-
-      def type_exists?(index_name = alias_name, type = model.doctype.name)
-        connection.head("/#{index_name}/_mapping/#{type}") == '200'
       end
 
       def deploy(index_name)

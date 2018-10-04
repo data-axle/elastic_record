@@ -32,7 +32,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
       attr_accessor :name, :salary_estimate
     end
 
-    self.doctype.mapping[:properties].update(
+    self.elastic_index.mapping[:properties].update(
       author:      {
         type: :object,
         properties: {

@@ -176,12 +176,14 @@ Use the `percolate` method to find records with queries that match.
 
 ## Index Configuration
 
-To avoid elasticsearch dynamically mapping fields, you can directly configure Product.doctype.mapping
-and Product.elastic_index.settings:
+To avoid elasticsearch dynamically mapping fields, you can directly configure `elastic_index.mapping`
+and `elastic_index.settings`:
 
 ```ruby
 class Product
-  doctype.mapping = {
+  include ElasticRecord::Model
+
+  elastic_index.mapping = {
     properties: {
       name: {type: "text"},
       status: {type: "keyword"}
@@ -189,6 +191,27 @@ class Product
   }
 end
 ```
+
+Mapping types will be removed in ElasticSearch 7.x.  To rename the default mapping type (`_doc`), use `elastic_index.mapping_type`:
+
+```ruby
+class Product
+  include ElasticRecord::Model
+
+  elastic_index.mapping_type = 'product'
+end
+```
+
+### Inheritance
+
+When one model inherits from another, ElasticRecord makes some assumptions about how the child index should be configured.  By default:
+
+* `alias_name` - Same as parent
+* `mapping` - Same as parent
+* `mapping_type` - Same as parent
+* `settings` (including analysis configuration) - Same as parent
+
+These can all be overridden.  For instance, it might be desirable for the child documents to be in a separate index.
 
 ### Load Documents from Source
 

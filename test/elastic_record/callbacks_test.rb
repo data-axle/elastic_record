@@ -31,7 +31,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
 
     define_attributes [:height]
 
-    self.doctype.mapping[:properties].update(
+    self.elastic_index.mapping[:properties].update(
       height: {
         type: 'keyword'
       }
