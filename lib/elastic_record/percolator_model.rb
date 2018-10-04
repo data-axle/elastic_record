@@ -21,6 +21,7 @@ module ElasticRecord
             index = ElasticRecord::Index.new(self)
             index.mapping = DEFAULT_PERCOLATOR_MAPPING
             index.mapping = percolates_model.elastic_index.mapping
+            index.analysis = percolates_model.elastic_index.analysis
             index.partial_updates = false
             index
           end
