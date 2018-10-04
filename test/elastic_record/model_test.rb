@@ -17,7 +17,7 @@ class ElasticRecord::ModelTest < MiniTest::Test
     assert_equal Widget, index.model
   end
 
-  def test_elastic_index_inheritaence
+  def test_elastic_index_inheritance
     refute_equal Widget.elastic_index.object_id, InheritedModel.elastic_index.object_id
     assert_equal Widget.elastic_index.mapping_type, InheritedModel.elastic_index.mapping_type
     assert_equal 'widgets', InheritedModel.elastic_index.alias_name
