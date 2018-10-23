@@ -7,7 +7,7 @@ module ElasticRecord
         index_name
       end
 
-      def create(index_name = new_index_name)
+      def create(index_name = new_index_name, settings: self.settings, mapping: self.mapping)
         connection.json_put "/#{index_name}", {
           "mappings" => {
             mapping_type => mapping
