@@ -5,6 +5,9 @@ module ElasticRecord
     class_attribute :connection_options
     self.connection_options = {}
 
+    class_attribute :default_index_settings
+    self.index_settings = {}
+
     class_attribute :model_names
     self.model_names = []
 
