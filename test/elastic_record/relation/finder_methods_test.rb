@@ -24,6 +24,7 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
 
   def test_find_passed_an_array
     assert_equal 2, Widget.elastic_relation.find([@red_widget.id, @blue_widget.id]).size
+    assert_equal 1, Widget.elastic_relation.find([@red_widget.id]).size
     assert_equal 2, Widget.elastic_relation.filter('color' => ['red', 'blue']).find([@red_widget.id, @blue_widget.id]).size
     assert_equal 0, Widget.elastic_relation.filter('color' => ['purple', 'gold']).find([@red_widget.id, @blue_widget.id]).size
   end
