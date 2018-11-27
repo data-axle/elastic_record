@@ -16,6 +16,12 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
     end
   end
 
+  def test_find_exceed_default_limit
+    widgets = ('a'..'l').map {|color| Widget.create(color: color) }
+    assert_equal 12, Widget.elastic_relation.find(widgets.map(&:id)).size
+    assert_equal 11, Widget.elastic_relation.limit(11).find(widgets.map(&:id)).size
+  end
+
   def test_find_passed_an_array
     assert_equal 2, Widget.elastic_relation.find([@red_widget.id, @blue_widget.id]).size
     assert_equal 2, Widget.elastic_relation.filter('color' => ['red', 'blue']).find([@red_widget.id, @blue_widget.id]).size
@@ -23,6 +29,7 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   end
 
   def test_find_passed_an_empty_args
+    assert_equal [], Widget.elastic_relation.find([])
     assert_raises ActiveRecord::RecordNotFound do
       Widget.elastic_relation.find
     end

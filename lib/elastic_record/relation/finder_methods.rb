@@ -2,12 +2,15 @@ module ElasticRecord
   class Relation
     module FinderMethods
       def find(*ids)
-        ids = ids.flatten
+        return [] if ids.first.is_a?(Array) && ids.first.empty?
+        ids       = ids.flatten
+        id_filter = filter(arelastic.filter.ids(ids))
+        id_filter = id_filter.limit(ids.size) unless limit_value
+
         case ids.size
         when 0; raise ActiveRecord::RecordNotFound.new('empty argument')
-        when 1; filter(arelastic.filter.ids(ids)).first!
-        else
-          filter(arelastic.filter.ids(ids))
+        when 1; id_filter.first!
+        else id_filter
         end
       end
 
