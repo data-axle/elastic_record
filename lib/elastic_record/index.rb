@@ -65,6 +65,11 @@ module ElasticRecord
       @disabled = false
     end
 
+    def load_from_source!
+      @load_from_source = true
+      model.singleton_class.delegate :find, :find_by, :find_each, :find_in_batches, :first, to: :elastic_search
+    end
+
     def loading_from_source(&block)
       @load_from_source = true
       yield

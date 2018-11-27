@@ -224,14 +224,14 @@ end
 
 ```
 
-Use `elastic_index.load_from_source = true` to configure an index without ActiveRecord.
+Call `load_from_source!` to configure an index without ActiveRecord. Finder methods will be
+delegated to the ElasticRecord module.
 
 ```ruby
 class Product
   include ActiveModel::Model
   include ElasticRecord::Record
-
-  self.elastic_index.load_from_source = true
+  elastic_index.load_from_source!
 end
 ```
 
