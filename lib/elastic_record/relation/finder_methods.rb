@@ -4,7 +4,8 @@ module ElasticRecord
       def find(*ids)
         return [] if ids.first.is_a?(Array) && ids.first.empty?
         ids       = ids.flatten
-        id_filter = filter(arelastic.filter.ids(ids)).limit(ids.size)
+        id_filter = filter(arelastic.filter.ids(ids))
+        id_filter = id_filter.limit(ids.size) unless limit_value
 
         case ids.size
         when 0; raise ActiveRecord::RecordNotFound.new('empty argument')

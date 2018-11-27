@@ -19,6 +19,7 @@ class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
   def test_find_exceed_default_limit
     widgets = ('a'..'l').map {|color| Widget.create(color: color) }
     assert_equal 12, Widget.elastic_relation.find(widgets.map(&:id)).size
+    assert_equal 11, Widget.elastic_relation.limit(11).find(widgets.map(&:id)).size
   end
 
   def test_find_passed_an_array
