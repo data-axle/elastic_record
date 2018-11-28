@@ -11,6 +11,7 @@ module ElasticRecord
         elastic_relation
       end
     end
+    alias es elastic_search
 
     def elastic_scope(name, body, &block)
       extension = Module.new(&block) if block
