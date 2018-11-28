@@ -31,6 +31,15 @@ class ElasticRecord::IndexTest < MiniTest::Test
     refute index.load_from_source
   end
 
+  def test_delegations_when_loading_from_source
+    project = Project.new(name: 'Something')
+    Project.elastic_index.index_record(project)
+
+    found_project = Project.first
+    assert_equal 'Something', found_project.name
+    assert_equal 'Something', Project.find(found_project.id).name
+  end
+
   private
 
     def index

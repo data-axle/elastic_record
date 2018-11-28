@@ -9,7 +9,9 @@ class ElasticRecord::SearchingTest < MiniTest::Test
   end
 
   def test_elastic_search
-
+    widget = Widget.create(color: 'red')
+    assert_equal widget, Widget.elastic_search.filter(color: 'red').first
+    assert_equal widget, Widget.es.filter(color: 'red').first
   end
 
   def test_elastic_scope
