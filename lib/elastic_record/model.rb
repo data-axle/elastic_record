@@ -9,6 +9,8 @@ module ElasticRecord
 
         class_attribute :elastic_connection
         self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
+
+        singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
       end
     end
 
