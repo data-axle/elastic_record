@@ -7,7 +7,7 @@ module ElasticRecord
 
       def load_hits(search_hits)
         if klass.elastic_index.load_from_source
-           search_hits.map { |hit| klass.new(hit['_source'].update('id' => hit['_id'])) }
+           search_hits.map { |hit| load_from_hit(hit) }
         else
           klass.find map_hits_to_ids(search_hits)
         end
@@ -19,6 +19,15 @@ module ElasticRecord
 
       def search_hits
         search_results['hits']['hits']
+      end
+
+      def load_from_hit(hit)
+        record = klass.new
+        record.id = hit['_id']
+        hit['_source'].each do |k, v|
+          record.send("#{k}=", v) if record.respond_to?("#{k}=")
+        end
+        record
       end
 
       def search_results
