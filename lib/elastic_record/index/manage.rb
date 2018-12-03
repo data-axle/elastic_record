@@ -12,7 +12,7 @@ module ElasticRecord
           "mappings" => {
             mapping_type => mapping
           },
-          "settings" => setting_overrides.merge(settings)
+          "settings" => settings.merge(setting_overrides)
         }
         index_name
       end

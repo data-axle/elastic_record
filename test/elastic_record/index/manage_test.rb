@@ -18,6 +18,21 @@ class ElasticRecord::Index::ManageTest < MiniTest::Test
     assert index.exists?('felons_foo')
   end
 
+  def test_create_with_overrides
+    old_settings = ElasticRecord::Config.default_index_settings
+    ElasticRecord::Config.default_index_settings = {
+      number_of_replicas: '2'
+    }
+    index.remove_instance_variable('@settings')
+    index.create 'felons_default'
+    assert_equal '2', index_settings('felons_default')['index']['number_of_replicas']
+    index.create 'felons_override', setting_overrides: { number_of_replicas: 4 }
+    assert_equal '4', index_settings('felons_override')['index']['number_of_replicas']
+  ensure
+    ElasticRecord::Config.default_index_settings = old_settings
+    index.remove_instance_variable('@settings') if index.instance_variable_defined?('@settings')
+  end
+
   def test_exists
     index.create 'felons_foo'
 
@@ -47,5 +62,9 @@ class ElasticRecord::Index::ManageTest < MiniTest::Test
 
     def index
       @index ||= Felon.elastic_index
+    end
+
+    def index_settings(index_name)
+      Felon.elastic_connection.json_get("/#{index_name}/_settings")[index_name]['settings']
     end
 end
