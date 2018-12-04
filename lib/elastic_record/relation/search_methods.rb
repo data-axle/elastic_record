@@ -197,11 +197,11 @@ module ElasticRecord
           filter = build_filter(filters)
 
           query_and_filter = if filter
-            arelastic.query.bool(filter: filter, must: query)
+            arelastic.queries.bool(filter: filter, must: query)
           elsif query
             query
           else
-            arelastic.query.match_all
+            arelastic.queries.match_all
           end
 
           Arelastic::Searches::Query.new query_and_filter
