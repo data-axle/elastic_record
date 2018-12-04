@@ -23,7 +23,7 @@ class ElasticRecord::Index::ManageTest < MiniTest::Test
     ElasticRecord::Config.default_index_settings = {
       number_of_replicas: '2'
     }
-    index.remove_instance_variable('@settings')
+    index.remove_instance_variable('@settings') if index.instance_variable_defined?('@settings')
     index.create 'felons_default'
     assert_equal '2', index_settings('felons_default')['index']['number_of_replicas']
     index.create 'felons_override', setting_overrides: { number_of_replicas: 4 }
