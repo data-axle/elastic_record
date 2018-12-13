@@ -28,6 +28,29 @@ class ElasticRecord::RelationTest < MiniTest::Test
     # explain = Widget.elastic_relation.filter(color: 'blue').explain('10')
   end
 
+  def test_to_a
+    Widget.create(color: 'red')
+    Widget.create(color: 'red')
+
+    array = Widget.elastic_relation.to_a
+
+    assert_equal 2, array.size
+    assert array.first.is_a?(Widget)
+  end
+
+  def test_to_a_from_source
+    warehouses = [Project.new(name: 'Latte'), Project.new(name: 'Americano')]
+    Project.elastic_index.bulk_add(warehouses)
+
+    array = Project.elastic_relation.to_a
+
+    assert_equal 2, array.size
+    assert array.first.is_a?(Project)
+    names = array.map(&:name)
+    assert_includes names, 'Latte'
+    assert_includes names, 'Americano'
+  end
+
   def test_delete_all
     project_red = Warehouse.create! name: 'Red'
     project_blue = Warehouse.create! name: 'Blue'
