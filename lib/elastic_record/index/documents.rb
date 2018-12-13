@@ -1,15 +1,19 @@
 require 'active_support/core_ext/object/to_query'
+require 'elastic_record/search_hits'
 
 module ElasticRecord
   class Index
     class ScrollEnumerator
-      attr_reader :keep_alive, :batch_size, :scroll_id
+      include ElasticRecord::SearchHits
+
+      attr_reader :klass, :scroll_id, :keep_alive, :batch_size
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
-        @elastic_index  = elastic_index
-        @search         = search
-        @scroll_id      = scroll_id
-        @keep_alive     = keep_alive
-        @batch_size     = batch_size
+        @elastic_index = elastic_index
+        @klass         = elastic_index.model
+        @search        = search
+        @scroll_id     = scroll_id
+        @keep_alive    = keep_alive
+        @batch_size    = batch_size
       end
 
       def each_slice(&block)
@@ -19,11 +23,11 @@ module ElasticRecord
       end
 
       def request_more_ids
-        request_more_hits.map { |hit| hit['_id'] }
+        map_hits_to_ids(request_more_hits)
       end
 
       def request_more_hits
-        request_next_scroll['hits']['hits']
+        hits_from_response(request_next_scroll)
       end
 
       def request_next_scroll
