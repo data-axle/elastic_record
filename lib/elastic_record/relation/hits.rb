@@ -1,33 +1,16 @@
+require 'elastic_record/search_hits'
+
 module ElasticRecord
   class Relation
     module Hits
+      include ElasticRecord::SearchHits
+
       def to_ids
         map_hits_to_ids search_hits
       end
 
-      def load_hits(search_hits)
-        if klass.elastic_index.load_from_source
-           search_hits.map { |hit| load_from_hit(hit) }
-        else
-          klass.find map_hits_to_ids(search_hits)
-        end
-      end
-
-      def map_hits_to_ids(hits)
-        hits.map { |hit| hit['_id'] }
-      end
-
       def search_hits
-        search_results['hits']['hits']
-      end
-
-      def load_from_hit(hit)
-        record = klass.new
-        record.id = hit['_id']
-        hit['_source'].each do |k, v|
-          record.send("#{k}=", v) if record.respond_to?("#{k}=")
-        end
-        record
+        hits_from_response(search_results)
       end
 
       def search_results
