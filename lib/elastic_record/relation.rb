@@ -39,7 +39,7 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= load_hits(search_hits)
+      @records ||= search_hits.to_records
     end
 
     def delete_all

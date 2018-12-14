@@ -18,7 +18,7 @@ module ElasticRecord
       hits.map { |hit| hit['_id'] }
     end
 
-    def to_models
+    def to_records
       if model.elastic_index.load_from_source
         hits.map { |hit| load_from_hit(hit) }
       else
