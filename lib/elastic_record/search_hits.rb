@@ -1,7 +1,6 @@
 module ElasticRecord
   class SearchHits
     attr_accessor :hits, :model
-    delegate(*Enumerable.instance_methods, to: :hits)
 
     class << self
       def from_response(model, response)
