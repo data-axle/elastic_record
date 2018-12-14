@@ -13,7 +13,7 @@ module ElasticRecord
       end
 
       def each_slice(&block)
-        while (hits = request_more_hits).any?
+        while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
       end
