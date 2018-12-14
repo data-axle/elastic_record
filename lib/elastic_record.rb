@@ -15,6 +15,7 @@ module ElasticRecord
   autoload :PercolatorModel
   autoload :Relation
   autoload :Searching
+  autoload :SearchHits
 
   module AggregationResponse
     extend ActiveSupport::Autoload
