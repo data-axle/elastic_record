@@ -3,27 +3,27 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     class ScrollEnumerator
-      attr_reader :keep_alive, :batch_size, :scroll_id
+      attr_reader :scroll_id, :keep_alive, :batch_size
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
-        @elastic_index  = elastic_index
-        @search         = search
-        @scroll_id      = scroll_id
-        @keep_alive     = keep_alive
-        @batch_size     = batch_size
+        @elastic_index = elastic_index
+        @search        = search
+        @scroll_id     = scroll_id
+        @keep_alive    = keep_alive
+        @batch_size    = batch_size
       end
 
       def each_slice(&block)
-        while (hits = request_more_hits).any?
+        while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
       end
 
       def request_more_ids
-        request_more_hits.map { |hit| hit['_id'] }
+        request_more_hits.to_ids
       end
 
       def request_more_hits
-        request_next_scroll['hits']['hits']
+        SearchHits.from_response(@elastic_index.model, request_next_scroll)
       end
 
       def request_next_scroll
@@ -43,7 +43,7 @@ module ElasticRecord
 
       def initial_search_response
         @initial_search_response ||= begin
-          search_options = {size: batch_size, scroll: keep_alive}
+          search_options = { size: batch_size, scroll: keep_alive }
           elastic_query = @search.reverse_merge('sort' => '_doc')
 
           @elastic_index.search(elastic_query, search_options)

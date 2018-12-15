@@ -12,7 +12,7 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
     coffees = [Project.new(name: 'Latte'), Project.new(name: 'Americano')]
     Project.elastic_index.bulk_add(coffees)
 
-    array = Project.elastic_relation.search_hits
+    array = Project.elastic_relation.search_hits.hits
     assert_equal %w(Latte Americano).to_set, array.map { |hit| hit["_source"]["name"] }.to_set
   end
 

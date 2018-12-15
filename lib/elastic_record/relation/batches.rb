@@ -9,13 +9,13 @@ module ElasticRecord
 
       def find_in_batches(options = {})
         build_scroll_enumerator(options).each_slice do |hits|
-          yield load_hits(hits)
+          yield SearchHits.new(klass, hits).to_records
         end
       end
 
-      def find_ids_in_batches(options = {}, &block)
+      def find_ids_in_batches(options = {})
         build_scroll_enumerator(options).each_slice do |hits|
-          yield map_hits_to_ids(hits)
+          yield SearchHits.new(klass, hits).to_ids
         end
       end
 
