@@ -67,6 +67,7 @@ module ElasticRecord
 
     def load_from_source!
       self.load_from_source = true
+      model.include ElasticRecord::PersistenceOverride
       model.singleton_class.delegate :find, :find_by, :find_each, :find_in_batches, :first, to: :elastic_search
     end
 

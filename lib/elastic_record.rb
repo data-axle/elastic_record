@@ -13,6 +13,7 @@ module ElasticRecord
   autoload :Lucene
   autoload :Model
   autoload :PercolatorModel
+  autoload :PersistenceOverride
   autoload :Relation
   autoload :Searching
   autoload :SearchHits
