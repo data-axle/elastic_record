@@ -38,7 +38,7 @@ module ElasticRecord
       end
     end
 
-    def save_to_elasticsearch
+    def index_to_elasticsearch
       elastic_index.index_record(self)
     end
 

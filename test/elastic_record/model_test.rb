@@ -25,9 +25,9 @@ class ElasticRecord::ModelTest < MiniTest::Test
     assert_equal 'widget', InheritedModel.elastic_index.mapping_type
   end
 
-  def test_save_to_elasticsearch
+  def test_index_to_elasticsearch
     project = Project.new(name: 'scorpio')
-    project.save_to_elasticsearch
+    project.index_to_elasticsearch
 
     assert_equal [project.name], Project.filter(name: 'scorpio').map(&:name)
   end
