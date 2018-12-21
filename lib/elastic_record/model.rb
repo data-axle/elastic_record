@@ -38,6 +38,10 @@ module ElasticRecord
       end
     end
 
+    def index_to_elasticsearch
+      elastic_index.index_record(self)
+    end
+
     def arelastic
       self.class.arelastic
     end
