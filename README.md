@@ -209,7 +209,7 @@ When one model inherits from another, ElasticRecord makes some assumptions about
 * `alias_name` - Same as parent
 * `mapping` - Same as parent
 * `mapping_type` - Same as parent
-* `settings` (including analysis configuration) - Same as parent
+* `settings` - Same as parent
 
 These can all be overridden.  For instance, it might be desirable for the child documents to be in a separate index.
 

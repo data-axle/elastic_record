@@ -6,11 +6,7 @@ module ElasticRecord
       end
 
       def settings
-        @settings ||= begin
-          result = ElasticRecord::Config.default_index_settings.deep_dup
-          result['analysis'] = analysis if analysis.any?
-          result
-        end
+        @settings ||= ElasticRecord::Config.default_index_settings.deep_dup
       end
 
       def update_settings(index_name = alias_name, settings: self.settings)
