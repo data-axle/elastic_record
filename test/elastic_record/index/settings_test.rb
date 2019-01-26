@@ -9,11 +9,11 @@ class ElasticRecord::Index::SettingsTest < MiniTest::Test
   class ModelWithAnalyzers
     include TestModel
 
-    elastic_index.analysis = {
-      "analyzer": {
-        "my_custom_analyzer": {
-          "type":      "custom",
-          "tokenizer": "standard"
+    elastic_index.settings['analysis'] = {
+      "analyzer" => {
+        "my_custom_analyzer" => {
+          "type"      => "custom",
+          "tokenizer" => "standard"
         }
       }
     }
@@ -26,10 +26,10 @@ class ElasticRecord::Index::SettingsTest < MiniTest::Test
   def test_settings
     expected = {
       "analysis" => {
-        "analyzer": {
-          "my_custom_analyzer": {
-            "type":      "custom",
-            "tokenizer": "standard"
+        "analyzer" => {
+          "my_custom_analyzer" => {
+            "type"      => "custom",
+            "tokenizer" => "standard"
           }
         }
       },
