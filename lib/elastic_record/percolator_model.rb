@@ -16,15 +16,14 @@ module ElasticRecord
         }
       }
       def elastic_index
-        @elastic_index ||=
-          begin
-            index = ElasticRecord::Index.new(self)
-            index.mapping = DEFAULT_PERCOLATOR_MAPPING
-            index.mapping = percolates_model.elastic_index.mapping
-            index.analysis = percolates_model.elastic_index.analysis
-            index.partial_updates = false
-            index
-          end
+        @elastic_index ||= begin
+          index = ElasticRecord::Index.new(self)
+          index.mapping = DEFAULT_PERCOLATOR_MAPPING
+          index.mapping = percolates_model.elastic_index.mapping
+          index.settings = percolates_model.elastic_index.settings
+          index.partial_updates = false
+          index
+        end
       end
 
       def percolate(document)
