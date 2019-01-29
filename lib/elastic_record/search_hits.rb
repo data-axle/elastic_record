@@ -19,21 +19,10 @@ module ElasticRecord
 
     def to_records
       if model.elastic_index.load_from_source
-        hits.map { |hit| load_from_hit(hit) }
+        hits.map { |hit| model.instantiate(hit) }
       else
         model.find to_ids
       end
     end
-
-    private
-
-      def load_from_hit(hit)
-        model.new.tap do |record|
-          record.id = hit['_id']
-          hit['_source'].each do |k, v|
-            record.send("#{k}=", v) if record.respond_to?("#{k}=")
-          end
-        end
-      end
   end
 end
