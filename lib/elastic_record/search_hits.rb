@@ -20,7 +20,7 @@ module ElasticRecord
     def to_records
       if model.elastic_index.load_from_source
         hits.map do |hit|
-          model.respond_to?(:instantiate) ? model.instantiate(hit) : load_from_hit(hit)
+          model.respond_to?(:instantiate) ? model.instantiate(hit['_source'].update('id' => hit['_id'])) : load_from_hit(hit)
         end
       else
         model.find to_ids
