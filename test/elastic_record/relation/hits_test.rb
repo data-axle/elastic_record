@@ -23,4 +23,19 @@ class ElasticRecord::Relation::HitsTest < MiniTest::Test
     results = Project.elastic_relation.search_results
     %w(took timed_out _shards hits).each { |key| assert results.key?(key) }
   end
+
+  def test_range_datatype_convert
+    project = Project.new(
+      name: 'foo',
+      estimated_start_date: Date.new(2019, 1, 1)..Date.new(2019, 2, 1),
+      estimated_hours: 1..5
+    )
+
+    Project.elastic_index.index_record(project)
+    hits = Project.elastic_relation.search_hits.to_records
+
+    assert_equal 'foo', hits.first.name
+    assert_equal project.estimated_start_date, hits.first.estimated_start_date
+    assert_equal project.estimated_hours, hits.first.estimated_hours
+  end
 end
