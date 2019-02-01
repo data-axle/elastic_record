@@ -55,6 +55,8 @@ module ElasticRecord
       end
 
       def value_for_range(value)
+        value['gte'] = -Float::INFINITY if value['gte'].nil?
+        value['lte'] =  Float::INFINITY if value['lte'].nil?
         value['gte']..value['lte']
       end
 
