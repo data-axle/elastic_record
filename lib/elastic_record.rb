@@ -9,6 +9,7 @@ module ElasticRecord
   autoload :Config
   autoload :Connection
   autoload :Doctype
+  autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
   autoload :Model
