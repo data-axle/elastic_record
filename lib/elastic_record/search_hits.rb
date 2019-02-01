@@ -19,7 +19,7 @@ module ElasticRecord
 
     def to_records
       if model.elastic_index.load_from_source
-        hits.map { |hit| model.instantiate_from_hit(hit) }
+        hits.map { |hit| model.from_search_hit(hit) }
       else
         model.find to_ids
       end
