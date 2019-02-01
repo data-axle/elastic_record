@@ -30,7 +30,7 @@ module ElasticRecord
       end
 
       def value_from_search_hit(hit, field, mapping, mapping_properties)
-        value = hot[field]
+        value = hit[field]
         return if value.nil?
 
         value =
