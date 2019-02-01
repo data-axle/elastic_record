@@ -6,11 +6,14 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
     @project = Project.new(
       name: 'foo',
       estimated_start_date: Date.new(2019, 1, 1)..Date.new(2019, 2, 1),
-      estimated_hours: 1..5,
       team_members: team_members,
-      leader: leader
+      manager: manager
     )
     Project.elastic_index.index_record(@project)
+  end
+
+  def teardown
+    Project.elastic_index.delete_by_query query: { match_all: {} }
   end
 
   def test_ranges
@@ -18,7 +21,6 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
 
     assert_equal 'foo', document.name
     assert_equal @project.estimated_start_date, document.estimated_start_date
-    assert_equal @project.estimated_hours, document.estimated_hours
   end
 
   def test_nested_ranges
@@ -32,16 +34,15 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
   def test_object_ranges
     document = Project.elastic_relation.search_hits.to_records.first
 
-    expected = Date.new(2018, 1, 14)..Date.new(2018, 1, 21)
-    assert_equal expected, document.leader['estimated_join_date']
+    assert_equal 25..30, document.manager['estimated_age']
   end
 
   private
 
-    def leader
-      Project::Leader.new(
+    def manager
+      Project::TeamMember.new(
         name: 'Fred',
-        estimated_join_date: Date.new(2018, 1, 14)..Date.new(2018, 1, 21)
+        estimated_age: 25..30
       )
     end
 
