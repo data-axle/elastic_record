@@ -4,7 +4,7 @@ module ElasticRecord
       base.class_eval do
         extend Searching
         extend ClassMethods
-        extend SearchHit
+        extend FromSearchHit
         include Callbacks
         include AsDocument
 

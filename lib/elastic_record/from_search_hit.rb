@@ -1,5 +1,5 @@
 module ElasticRecord
-  module SearchHit
+  module FromSearchHit
 
     def from_search_hit(hit, mapping_properties = elastic_index.mapping[:properties])
       hit = hit['_source'].merge('id' => hit['_id'])

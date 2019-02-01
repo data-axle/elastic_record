@@ -9,6 +9,7 @@ module ElasticRecord
   autoload :Config
   autoload :Connection
   autoload :Doctype
+  autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
   autoload :Model
@@ -16,7 +17,6 @@ module ElasticRecord
   autoload :Relation
   autoload :Searching
   autoload :SearchHits
-  autoload :SearchHit
 
   module AggregationResponse
     extend ActiveSupport::Autoload
