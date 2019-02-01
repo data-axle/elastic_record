@@ -20,13 +20,15 @@ module ElasticRecord
     private
 
       def value_from_search_hit_object(hit, mapping_properties)
-        mapping_properties.each_with_object(hit) do |(field, mapping), result|
+        mapping_properties.each do |(field, mapping)|
           value = value_from_search_hit hit, field, mapping, mapping_properties
 
           unless value.nil?
-            result[field] = value
+            hit[field] = value
           end
         end
+
+        hit
       end
 
       def value_from_search_hit(hit, field, mapping, mapping_properties)
