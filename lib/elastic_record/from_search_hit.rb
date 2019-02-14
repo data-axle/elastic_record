@@ -26,30 +26,27 @@ module ElasticRecord
           case value
           when Hash
             hit[field] = value_from_search_hit(value)
-          when Array
-            hit[field] = value.map { |el| value_from_search_hit_object(el) }
+          when Array # type: 'nested'
+            value.each do |element|
+              if element.is_a? Hash
+                value_from_search_hit_object(element)
+              end
+            end
           end
         end
 
         hit
       end
 
-      RANGE_KEYS = %w(gte lte)
       def value_from_search_hit(value)
-        if (RANGE_KEYS & value.keys).any?
-          value = case value['lte'] # Lower bound is never nil
-          when String
-            value_for_date_range(value)
-          when Integer
-            value_for_range(value)
-          end
-        else
-          case value
-          when Hash
-            value_from_search_hit_object(value)
-          end
+        case value['gte'] # the gte lower bound is never nil
+        when String
+          value_for_date_range(value)
+        when Integer
+          value_for_range(value)
+        else # type: 'object'
+          value_from_search_hit_object(value)
         end
-        value
       end
 
       def value_for_range(value)
