@@ -1,10 +1,10 @@
 module ElasticRecord
   module FromSearchHit
 
-    def from_search_hit(hit, mapping_properties = elastic_index.mapping[:properties])
+    def from_search_hit(hit)
       hit = hit['_source'].merge('id' => hit['_id'])
 
-      attrs = value_from_search_hit_object(hit, mapping_properties)
+      attrs = value_from_search_hit_object(hit)
 
       if respond_to?(:instantiate)
         instantiate(attrs)
@@ -19,40 +19,33 @@ module ElasticRecord
 
     private
 
-      def value_from_search_hit_object(hit, mapping_properties)
-        mapping_properties.each do |(field, mapping)|
-          value = value_from_search_hit hit, field, mapping, mapping_properties
+      def value_from_search_hit_object(hit)
+        hit.each do |field, value|
+          next unless value
 
-          unless value.nil?
-            hit[field] = value
+          case value
+          when Hash
+            hit[field] = value_from_search_hit(value)
+          when Array # type: 'nested'
+            value.each do |element|
+              if element.is_a? Hash
+                value_from_search_hit_object(element)
+              end
+            end
           end
         end
 
         hit
       end
 
-      def value_from_search_hit(hit, field, mapping, mapping_properties)
-        value = hit[field]
-        return if value.nil?
-
-        value =
-          case mapping[:type]&.to_sym
-          when :object
-            object_mapping_properties = mapping_properties.dig(field, :properties)
-            value_from_search_hit_object(value, object_mapping_properties)
-          when :nested
-            object_mapping_properties = mapping_properties.dig(field, :properties)
-            value.map { |entry| value_from_search_hit_object(entry, object_mapping_properties) }
-          when :integer_range, :float_range, :long_range, :double_range
-            value_for_range(value)
-          when :date_range
-            value_for_date_range(value)
-          else
-            value
-          end
-
-        if value.present? || value == false
-          value
+      def value_from_search_hit(value)
+        case value['gte'] # the gte lower bound is never nil
+        when String
+          value_for_date_range(value)
+        when Integer
+          value_for_range(value)
+        else # type: 'object'
+          value_from_search_hit_object(value)
         end
       end
 
