@@ -68,6 +68,9 @@ module ElasticRecord
     def load_from_source!
       self.load_from_source = true
       model.singleton_class.delegate :find, :find_by, :find_each, :find_in_batches, :first, to: :elastic_search
+
+      model.redefine_method(:_create_record) { |*args| }
+      model.redefine_method(:_update_record) { |*args| }
     end
 
     def loading_from_source(&block)
