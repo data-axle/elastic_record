@@ -4,7 +4,7 @@ gemspec
 
 gem 'dotenv-rails'
 gem 'oj'
-gem 'pg', '~> 0.21'
-gem 'rails'
-gem 'rake', '~> 10.5.0'
+gem 'pg'
+gem 'rails', '~> 5.2.2'
+gem 'rake'
 gem 'webmock', require: false
