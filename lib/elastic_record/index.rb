@@ -50,11 +50,11 @@ module ElasticRecord
     end
 
     def alias_name=(name)
-      @alias_name = name
+      @alias_name = add_suffix(name)
     end
 
     def alias_name
-      @alias_name ||= model.base_class.name.demodulize.underscore.pluralize
+      @alias_name ||= add_suffix(model.base_class.name.demodulize.underscore.pluralize)
     end
 
     def disable!
@@ -95,6 +95,15 @@ module ElasticRecord
     end
 
     private
+
+      def add_suffix(name)
+        suffix = ElasticRecord::Config.index_suffix
+        if suffix && !name.end_with?(suffix)
+          name + "_#{suffix}"
+        else
+          name
+        end
+      end
 
       def new_index_name
         "#{alias_name}_#{Time.now.utc.strftime('%Y%m%d_%H%M%S')}"

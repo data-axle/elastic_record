@@ -2,17 +2,11 @@ require 'active_support/core_ext/class/attribute'
 
 module ElasticRecord
   class Config
-    class_attribute :connection_options
-    self.connection_options = {}
-
-    class_attribute :default_index_settings
-    self.default_index_settings = {}
-
-    class_attribute :model_names
-    self.model_names = []
-
-    class_attribute :scroll_keep_alive
-    self.scroll_keep_alive = '5m'
+    class_attribute :connection_options,     default: {}
+    class_attribute :default_index_settings, default: {}
+    class_attribute :model_names,            default: []
+    class_attribute :scroll_keep_alive,      default: '5m'
+    class_attribute :index_suffix
 
     class << self
       def models
@@ -32,6 +26,7 @@ module ElasticRecord
 
       def settings=(settings)
         self.servers = settings['servers']
+        self.index_suffix = settings['index_suffix']
         self.connection_options = settings
 
         if settings['scroll_keep_alive'].present?

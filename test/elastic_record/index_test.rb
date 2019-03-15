@@ -9,6 +9,12 @@ class ElasticRecord::IndexTest < MiniTest::Test
 
   def test_alias_name
     assert_equal 'widgets', index.alias_name
+
+    ElasticRecord::Config.index_suffix = 'test'
+    index.alias_name = "other_name"
+    assert_equal 'other_name_test', index.alias_name
+  ensure
+    ElasticRecord::Config.index_suffix = nil
   end
 
   def test_disable
