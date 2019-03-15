@@ -8,8 +8,11 @@ class ElasticRecord::IndexTest < MiniTest::Test
   end
 
   def test_alias_name
+    assert_equal 'widgets', index.alias_name
+
     ElasticRecord::Config.index_suffix = 'test'
-    assert_equal 'widgets_test', index.alias_name
+    index.alias_name = "other_name"
+    assert_equal 'other_name_test', index.alias_name
   ensure
     ElasticRecord::Config.index_suffix = nil
   end
