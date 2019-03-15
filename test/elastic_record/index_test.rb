@@ -8,7 +8,9 @@ class ElasticRecord::IndexTest < MiniTest::Test
   end
 
   def test_alias_name
-    assert_equal 'widgets', index.alias_name
+    with_test_suffix do
+      assert_equal 'widgets_test', index.alias_name
+    end
   end
 
   def test_disable
@@ -44,5 +46,12 @@ class ElasticRecord::IndexTest < MiniTest::Test
 
     def index
       @index ||= ElasticRecord::Index.new(Widget)
+    end
+
+    def with_test_suffix
+      ElasticRecord::Config.index_suffix = 'test'
+      yield
+    ensure
+      ElasticRecord::Config.index_suffix = nil
     end
 end
