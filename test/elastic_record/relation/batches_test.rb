@@ -21,8 +21,8 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
     Widget.elastic_relation.find_hits_in_batches do |hits|
       results << hits
     end
-    expected_ids = [[@red_widget.id.to_s, @blue_widget.id.to_s, @green_widget.id.to_s].to_set]
-    assert_equal expected_ids, results.map(&:to_ids).map(&:to_set)
+    expected_ids = [[@red_widget, @blue_widget, @green_widget].to_set]
+    assert_equal expected_ids, results.map(&:to_records).map(&:to_set)
   end
 
   def test_find_ids_in_batches
