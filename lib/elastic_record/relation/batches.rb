@@ -8,14 +8,20 @@ module ElasticRecord
       end
 
       def find_in_batches(options = {})
-        build_scroll_enumerator(options).each_slice do |hits|
-          yield SearchHits.new(klass, hits).to_records
+        find_hits_in_batches(options) do |hits|
+          yield hits.to_records
         end
       end
 
       def find_ids_in_batches(options = {})
+        find_hits_in_batches(options) do |hits|
+          yield hits.to_ids
+        end
+      end
+
+      def find_hits_in_batches(options = {})
         build_scroll_enumerator(options).each_slice do |hits|
-          yield SearchHits.new(klass, hits).to_ids
+          yield SearchHits.new(klass, hits)
         end
       end
 
