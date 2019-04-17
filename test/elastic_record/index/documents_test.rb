@@ -106,21 +106,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_each_slice_clear
-    index.index_document('bob', name: 'bob')
-    index.index_document('bobs', name: 'bob')
-
-    scroll_enumerator = index.build_scroll_enumerator(
-      search: { 'query' => { query_string: { query: 'name:bob' } } },
-      batch_size: 1,
-      keep_alive: '1ms'
-    )
+    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}})
 
     scroll_enumerator.each_slice
-    assert scroll_enumerator.scroll_ids.any?
-    assert_equal 1, index.connection.deferred_actions.size
     delete = index.connection.deferred_actions.first
+
+    assert scroll_enumerator.scroll_ids.any?
     assert_equal :json_delete, delete.method
-    assert_equal scroll_enumerator.scroll_ids, delete.args.second[:scroll_id]
+    assert_equal ['/_search/scroll', {scroll_id: scroll_enumerator.scroll_ids}], delete.args
   end
 
   def test_invalid_scroll_error
