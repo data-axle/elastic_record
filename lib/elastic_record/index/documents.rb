@@ -3,7 +3,7 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     class ScrollEnumerator
-      attr_reader :scroll_id, :keep_alive, :batch_size, :scroll_ids
+      attr_reader :keep_alive, :batch_size, :scroll_ids
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
         @elastic_index = elastic_index
         @search        = search
@@ -170,7 +170,7 @@ module ElasticRecord
       end
 
       def clear_scroll(scroll_ids)
-        connection.json_delete('/_search/scroll', { scroll_id: [scroll_ids] })
+        connection.json_delete('/_search/scroll', { scroll_id: Array.wrap(scroll_ids) })
       end
 
       def bulk(options = {}, &block)
