@@ -7,7 +7,7 @@ module ElasticRecord
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
         @elastic_index = elastic_index
         @search        = search
-        @scroll_ids    = []
+        @scroll_ids    = [scroll_id].compact
         @keep_alive    = keep_alive
         @batch_size    = batch_size
 
@@ -30,7 +30,7 @@ module ElasticRecord
       end
 
       def request_next_scroll
-        response = scroll_id.any? ? @elastic_index.scroll(scroll_ids.last, keep_alive) : initial_search_response
+        response = scroll_ids.any? ? @elastic_index.scroll(scroll_ids.last, keep_alive) : initial_search_response
         @scroll_ids << response['_scroll_id']
         response
       end
