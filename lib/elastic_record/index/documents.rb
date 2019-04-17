@@ -12,10 +12,12 @@ module ElasticRecord
         @batch_size    = batch_size
       end
 
-      def each_slice(&block)
+      def each_slice(clear_scroll_after = true, &block)
         while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
+
+        clear if clear_scroll_after
       end
 
       def request_more_ids
@@ -39,6 +41,10 @@ module ElasticRecord
 
       def total_hits
         initial_search_response['hits']['total']
+      end
+
+      def clear
+        @elastic_index.clear_scroll(scroll_id)
       end
 
       def initial_search_response
@@ -165,6 +171,10 @@ module ElasticRecord
         when '404' then raise ElasticRecord::ExpiredScrollError, e.message
         else raise e
         end
+      end
+
+      def clear_scroll(scroll_id)
+        connection.json_delete('/_search/scroll', { scroll_id: scroll_id })
       end
 
       def bulk(options = {}, &block)
