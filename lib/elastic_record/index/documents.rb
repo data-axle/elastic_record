@@ -31,7 +31,11 @@ module ElasticRecord
 
       def request_next_scroll
         response = scroll_ids.any? ? @elastic_index.scroll(scroll_ids.last, keep_alive) : initial_search_response
-        @scroll_ids << response['_scroll_id']
+
+        if new_scroll_id = response['_scroll_id']
+          @scroll_ids << new_scroll_id
+        end
+
         response
       end
 
@@ -170,7 +174,7 @@ module ElasticRecord
       end
 
       def clear_scroll(scroll_ids)
-        connection.json_delete('/_search/scroll', { scroll_id: Array.wrap(scroll_ids) })
+        connection.json_delete('/_search/scroll', { scroll_id: scroll_ids) })
       end
 
       def bulk(options = {}, &block)
