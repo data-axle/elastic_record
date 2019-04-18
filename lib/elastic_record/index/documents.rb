@@ -29,14 +29,17 @@ module ElasticRecord
       end
 
       def request_next_scroll
-        response = scroll_id.present? ? @elastic_index.scroll(scroll_id, keep_alive) : initial_search_response
-        new_scroll_id = response['_scroll_id']
+        if scroll_id
+          response = @elastic_index.scroll(scroll_id, keep_alive)
 
-        if scroll_id && new_scroll_id != scroll_id
-          @elastic_index.delete_scroll(scroll_id)
+          if response['_scroll_id'] != scroll_id
+            @elastic_index.delete_scroll(scroll_id)
+          end
+        else
+          response = initial_search_response
         end
 
-        @scroll_id = new_scroll_id
+        @scroll_id =  response['_scroll_id']
 
         response
       end
