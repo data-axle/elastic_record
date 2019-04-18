@@ -99,22 +99,38 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     )
 
     scroll_enumerator.request_more_hits
-    scroll_enumerator.clear
+    index.delete_scroll(scroll_enumerator.scroll_id)
     assert_raises ElasticRecord::ExpiredScrollError do
       scroll_enumerator.request_more_hits
     end
   end
 
-  def test_each_slice_clear
-    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}})
+  def test_each_slice
+    10.times { |i| index.index_document("bob#{i}", color: 'red') }
+    batches = []
 
-    scroll_enumerator.each_slice
-    delete = index.connection.deferred_actions.first
+    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: 'color:red'}}}, batch_size: 1)
 
-    assert scroll_enumerator.scroll_ids.any?
-    assert_equal :json_delete, delete.method
-    assert_equal ['/_search/scroll', {scroll_id: scroll_enumerator.scroll_ids}], delete.args
+    scroll_enumerator.each_slice do |slice|
+      batches << slice
+    end
+    # delete = index.connection.deferred_actions.first
+
+    assert_equal 10, batches.size
+    # refute scroll_enumerator.scroll_ids.any?
+    # assert_equal :json_delete, delete.method
   end
+
+  # def reset_scroll
+  #   scroll_id = 'test'
+  #   scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}}, scroll_id: scroll_id)
+  #   scroll_enumerator.reset_scroll
+
+  #   refute scroll_enumerator.scroll_ids.any?
+  #   refute scroll_enumerator.instance_eval('@initial_search_response')
+  #   assert_equal :json_delete, delete.method
+  #   assert_equal ['/_search/scroll', {scroll_id: scroll_id}], delete.args
+  # end
 
   def test_invalid_scroll_error
     assert_raises ElasticRecord::InvalidScrollError do

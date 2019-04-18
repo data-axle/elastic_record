@@ -3,11 +3,11 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     class ScrollEnumerator
-      attr_reader :keep_alive, :batch_size, :scroll_ids
+      attr_reader :keep_alive, :batch_size, :scroll_id
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
         @elastic_index = elastic_index
         @search        = search
-        @scroll_ids    = [scroll_id].compact
+        @scroll_id     = scroll_id
         @keep_alive    = keep_alive
         @batch_size    = batch_size
 
@@ -17,8 +17,6 @@ module ElasticRecord
         while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
-
-        clear if scroll_ids.any?
       end
 
       def request_more_ids
@@ -30,21 +28,20 @@ module ElasticRecord
       end
 
       def request_next_scroll
-        response = scroll_ids.any? ? @elastic_index.scroll(scroll_ids.last, keep_alive) : initial_search_response
+        response = scroll_id.present? ? @elastic_index.scroll(scroll_id, keep_alive) : initial_search_response
+        new_scroll_id = response['_scroll_id']
 
-        if new_scroll_id = response['_scroll_id']
-          @scroll_ids << new_scroll_id
+        if scroll_id && new_scroll_id != scroll_id
+          @elastic_index.delete_scroll(scroll_id)
         end
+
+        @scroll_id = new_scroll_id
 
         response
       end
 
       def total_hits
         initial_search_response['hits']['total']
-      end
-
-      def clear
-        @elastic_index.clear_scroll(scroll_ids)
       end
 
       def initial_search_response
@@ -173,7 +170,7 @@ module ElasticRecord
         end
       end
 
-      def clear_scroll(scroll_ids)
+      def delete_scroll(scroll_ids)
         connection.json_delete('/_search/scroll', { scroll_id: scroll_ids })
       end
 
