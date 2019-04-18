@@ -10,7 +10,6 @@ module ElasticRecord
         @scroll_id     = scroll_id
         @keep_alive    = keep_alive
         @batch_size    = batch_size
-
       end
 
       def each_slice(&block)

@@ -114,23 +114,20 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     scroll_enumerator.each_slice do |slice|
       batches << slice
     end
-    # delete = index.connection.deferred_actions.first
 
     assert_equal 10, batches.size
-    # refute scroll_enumerator.scroll_ids.any?
-    # assert_equal :json_delete, delete.method
   end
 
-  # def reset_scroll
-  #   scroll_id = 'test'
-  #   scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}}, scroll_id: scroll_id)
-  #   scroll_enumerator.reset_scroll
+  def test_delete_scroll
+    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}})
+    scroll_enumerator.initial_search_response
 
-  #   refute scroll_enumerator.scroll_ids.any?
-  #   refute scroll_enumerator.instance_eval('@initial_search_response')
-  #   assert_equal :json_delete, delete.method
-  #   assert_equal ['/_search/scroll', {scroll_id: scroll_id}], delete.args
-  # end
+    index.delete_scroll(scroll_enumerator.scroll_id)
+    delete = index.connection.deferred_actions.first
+
+    assert_equal :json_delete, delete.method
+    assert_equal ['/_search/scroll', {scroll_id: scroll_enumerator.scroll_id}], delete.args
+  end
 
   def test_invalid_scroll_error
     assert_raises ElasticRecord::InvalidScrollError do
