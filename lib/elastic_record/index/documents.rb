@@ -16,6 +16,8 @@ module ElasticRecord
         while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
+
+        @elastic_index.delete_scroll(scroll_id)
       end
 
       def request_more_ids
