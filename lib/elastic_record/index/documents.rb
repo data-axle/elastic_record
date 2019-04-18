@@ -174,8 +174,8 @@ module ElasticRecord
         end
       end
 
-      def delete_scroll(scroll_ids)
-        connection.json_delete('/_search/scroll', { scroll_id: scroll_ids })
+      def delete_scroll(scroll_id)
+        connection.json_delete('/_search/scroll', { scroll_id: scroll_id })
       end
 
       def bulk(options = {}, &block)

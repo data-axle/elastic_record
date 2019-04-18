@@ -116,17 +116,11 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
 
     assert_equal 10, batches.size
-  end
 
-  def test_delete_scroll
-    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: ''}}})
-    scroll_enumerator.initial_search_response
-
-    index.delete_scroll(scroll_enumerator.scroll_id)
-    delete = index.connection.deferred_actions.first
-
-    assert_equal :json_delete, delete.method
-    assert_equal ['/_search/scroll', {scroll_id: scroll_enumerator.scroll_id}], delete.args
+    # Assert context was removed
+    assert_raises ElasticRecord::ExpiredScrollError do
+      scroll_enumerator.request_more_hits
+    end
   end
 
   def test_invalid_scroll_error
