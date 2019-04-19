@@ -3,7 +3,7 @@ require 'active_support/core_ext/object/to_query'
 module ElasticRecord
   class Index
     class ScrollEnumerator
-      attr_reader :scroll_id, :keep_alive, :batch_size
+      attr_reader :keep_alive, :batch_size, :scroll_id
       def initialize(elastic_index, search: nil, scroll_id: nil, keep_alive:, batch_size:)
         @elastic_index = elastic_index
         @search        = search
@@ -16,6 +16,8 @@ module ElasticRecord
         while (hits = request_more_hits.hits).any?
           hits.each_slice(batch_size, &block)
         end
+
+        @elastic_index.delete_scroll(scroll_id)
       end
 
       def request_more_ids
@@ -27,13 +29,18 @@ module ElasticRecord
       end
 
       def request_next_scroll
-        if scroll_id.nil?
-          response = initial_search_response
-        else
+        if scroll_id
           response = @elastic_index.scroll(scroll_id, keep_alive)
+
+          if response['_scroll_id'] != scroll_id
+            @elastic_index.delete_scroll(scroll_id)
+          end
+        else
+          response = initial_search_response
         end
 
-        @scroll_id = response['_scroll_id']
+        @scroll_id =  response['_scroll_id']
+
         response
       end
 
@@ -165,6 +172,10 @@ module ElasticRecord
         when '404' then raise ElasticRecord::ExpiredScrollError, e.message
         else raise e
         end
+      end
+
+      def delete_scroll(scroll_id)
+        connection.json_delete('/_search/scroll', { scroll_id: scroll_id })
       end
 
       def bulk(options = {}, &block)

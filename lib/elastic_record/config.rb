@@ -5,7 +5,7 @@ module ElasticRecord
     class_attribute :connection_options,     default: {}
     class_attribute :default_index_settings, default: {}
     class_attribute :model_names,            default: []
-    class_attribute :scroll_keep_alive,      default: '5m'
+    class_attribute :scroll_keep_alive,      default: '2m'
     class_attribute :index_suffix
 
     class << self

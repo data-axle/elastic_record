@@ -99,7 +99,25 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     )
 
     scroll_enumerator.request_more_hits
-    index.connection.json_delete '/_search/scroll', scroll_id: scroll_enumerator.scroll_id
+    index.delete_scroll(scroll_enumerator.scroll_id)
+    assert_raises ElasticRecord::ExpiredScrollError do
+      scroll_enumerator.request_more_hits
+    end
+  end
+
+  def test_each_slice
+    10.times { |i| index.index_document("bob#{i}", color: 'red') }
+    batches = []
+
+    scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: 'color:red'}}}, batch_size: 1)
+
+    scroll_enumerator.each_slice do |slice|
+      batches << slice
+    end
+
+    assert_equal 10, batches.size
+
+    # Assert context was removed
     assert_raises ElasticRecord::ExpiredScrollError do
       scroll_enumerator.request_more_hits
     end
