@@ -8,9 +8,6 @@ module ElasticRecord
         include Callbacks
         include AsDocument
 
-        class_attribute :elastic_connection
-        self.elastic_connection = ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
-
         singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
       end
     end
@@ -36,6 +33,10 @@ module ElasticRecord
 
       def elastic_index=(index)
         @elastic_index = index
+      end
+
+      def elastic_connection
+        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
       end
     end
 
