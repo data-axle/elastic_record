@@ -14,18 +14,18 @@ class ElasticRecord::SearchingTest < MiniTest::Test
     assert_equal widget, Widget.es.filter(color: 'red').first
   end
 
-  def test_elastic_scope
-    model = Widget.anon do
-      elastic_scope :by_color, ->(color) { elastic_search.filter(color: color) } do
-        def negative_offset
-          -offset_value
-        end
+  class ScopedWidget < Widget
+    elastic_scope :by_color, ->(color) { elastic_search.filter(color: color) } do
+      def negative_offset
+        -offset_value
       end
     end
+  end
 
-    relation = model.by_color('blue')
+  def test_elastic_scope
+    relation = ScopedWidget.by_color('blue')
 
-    assert_equal model.elastic_relation.filter(color: 'blue'), relation
+    assert_equal ScopedWidget.elastic_relation.filter(color: 'blue'), relation
     assert_equal -5, relation.offset(5).negative_offset
   end
 end

@@ -34,16 +34,4 @@ class Widget < ActiveRecord::Base
       }
     }
   )
-
-  class << self
-    def anon(&block)
-      Class.new(self) do
-        def self.name
-          'Widget'
-        end
-
-        instance_eval(&block)
-      end
-    end
-  end
 end
