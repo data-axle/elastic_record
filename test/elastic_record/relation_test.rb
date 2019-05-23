@@ -77,4 +77,30 @@ class ElasticRecord::RelationTest < MiniTest::Test
   def test_inspect
     assert_equal [].inspect, Widget.elastic_relation.filter(color: 'magenta').inspect
   end
+
+  def test_nested_hits
+    blue_widget = Widget.create(color: 'blue')
+    red_widget = Widget.create(color: 'red')
+    Widget.create!(child_widgets: [blue_widget, red_widget])
+
+    p "Widget.elastic_relation.filter.count = #{Widget.elastic_relation.count}"
+
+    widgets = Widget.elastic_relation.filter 'nested' => {
+      'path' => 'child_widgets',
+      'query' => {
+        'match' => {'child_widgets.color' => 'blue'}
+      },
+      'inner_hits' => {}
+    }
+
+    widgets = widgets.filter 'nested' => {
+      'path' => 'child_widgets',
+      'query' => {
+        'match' => {'child_widgets.color' => 'blue'}
+      },
+      'inner_hits' => {}
+    }
+
+    p widgets.search_hits
+  end
 end

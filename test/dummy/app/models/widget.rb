@@ -2,8 +2,9 @@ class Widget < ActiveRecord::Base
   include ElasticRecord::Model
   self.elastic_index.partial_updates = true
 
+  # validates :color, format: {with: /[a-z]/}
   belongs_to :warehouse
-  validates :color, format: {with: /[a-z]/}
+  has_many :child_widgets, class_name: 'Widget', foreign_key: :parent_id
 
   class WidgetPart
     include ElasticRecord::Model
@@ -31,6 +32,12 @@ class Widget < ActiveRecord::Base
       type: 'object',
       properties: {
         'name' => { type: 'keyword' }
+      }
+    },
+    'child_widgets' => {
+      type: 'nested',
+      properties: {
+        'color' => { type: 'keyword' }
       }
     }
   )

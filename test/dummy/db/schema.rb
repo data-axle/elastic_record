@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20180215140125) do
     t.string "name"
     t.string "color"
     t.integer "price"
-    t.jsonb "widget_part"
+    t.integer "parent_id"
   end
 
 end

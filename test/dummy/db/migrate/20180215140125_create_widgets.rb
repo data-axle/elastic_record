@@ -6,6 +6,7 @@ class CreateWidgets < ActiveRecord::Migration[5.1]
       t.string :color
       t.integer :price
       t.jsonb :widget_part
+      t.integer :parent_id
     end
   end
 end

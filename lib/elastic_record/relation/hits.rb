@@ -5,6 +5,10 @@ module ElasticRecord
         search_hits.to_ids
       end
 
+      def inner_hits(name)
+
+      end
+
       def search_hits
         SearchHits.from_response(klass, search_results)
       end
