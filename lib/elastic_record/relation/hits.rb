@@ -1,12 +1,14 @@
 module ElasticRecord
   class Relation
     module Hits
+      extend ActiveSupport::Concern
+
       def to_ids
         search_hits.to_ids
       end
 
       def search_hits
-        SearchHits.from_response(klass, search_results)
+        SearchHits.from_response(search_results)
       end
 
       def search_results

@@ -40,7 +40,15 @@ module ElasticRecord
     end
 
     def to_a
-      @records ||= search_hits.to_records
+      @records ||= find_hits(search_hits)
+    end
+
+    def find_hits(search_hits)
+      if klass.elastic_index.load_from_source
+        search_hits.hits.map { |hit| klass.from_search_hit(hit) }
+      else
+        klass.find search_hits.to_ids
+      end
     end
 
     def delete_all

@@ -25,7 +25,7 @@ module ElasticRecord
       end
 
       def request_more_hits
-        SearchHits.from_response(@elastic_index.model, request_next_scroll)
+        SearchHits.from_response(request_next_scroll)
       end
 
       def request_next_scroll

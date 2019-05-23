@@ -17,14 +17,14 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
   end
 
   def test_ranges
-    document = Project.elastic_relation.search_hits.to_records.first
+    document = Project.elastic_relation.first
 
     assert_equal 'foo', document.name
     assert_equal @project.estimated_start_date, document.estimated_start_date
   end
 
   def test_nested_ranges
-    document = Project.elastic_relation.search_hits.to_records.first
+    document = Project.elastic_relation.first
     team_members = document.team_members.sort_by { |member| member['name'] }
 
     assert_equal 26..29, team_members.first['estimated_age']
@@ -32,7 +32,7 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
   end
 
   def test_object_ranges
-    document = Project.elastic_relation.search_hits.to_records.first
+    document = Project.elastic_relation.first
 
     assert_equal 25..30, document.manager['estimated_age']
   end
