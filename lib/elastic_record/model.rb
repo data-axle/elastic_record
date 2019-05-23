@@ -1,15 +1,16 @@
 module ElasticRecord
   module Model
-    def self.included(base)
-      base.class_eval do
-        extend Searching
-        extend ClassMethods
-        extend FromSearchHit
-        include Callbacks
-        include AsDocument
+    extend ActiveSupport::Concern
 
-        singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
-      end
+    included do
+      extend Searching
+      extend ClassMethods
+      extend FromSearchHit
+      include Callbacks
+      include AsDocument
+
+      singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
+      mattr_accessor :elastic_connection_cache, instance_writer: false
     end
 
     module ClassMethods
@@ -36,7 +37,7 @@ module ElasticRecord
       end
 
       def elastic_connection
-        @elastic_connection ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
+        self.elastic_connection_cache ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
       end
     end
 
