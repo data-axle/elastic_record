@@ -9,7 +9,7 @@ module ElasticRecord
 
       def find_in_batches(options = {})
         find_hits_in_batches(options) do |hits|
-          yield hits.to_records
+          yield find_hits(hits)
         end
       end
 
@@ -21,7 +21,7 @@ module ElasticRecord
 
       def find_hits_in_batches(options = {})
         build_scroll_enumerator(options).each_slice do |hits|
-          yield SearchHits.new(klass, hits)
+          yield SearchHits.new(hits)
         end
       end
 
