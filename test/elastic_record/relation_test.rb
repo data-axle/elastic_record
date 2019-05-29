@@ -1,6 +1,19 @@
 require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Test
+  class SpecialRelation < ElasticRecord::Relation
+  end
+
+  def test_becomes
+    parent_relation = Widget.elastic_relation.filter(color: 'red')
+    became_relation = parent_relation.becomes(SpecialRelation)
+
+    assert_kind_of SpecialRelation, became_relation
+    assert_equal Widget, became_relation.klass
+    assert_equal parent_relation.values, became_relation.values
+    refute_equal parent_relation.values.object_id, became_relation.values.object_id
+  end
+
   def test_count
     original_count = Widget.elastic_relation.count
     Widget.create(color: 'red')

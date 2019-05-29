@@ -19,6 +19,18 @@ module ElasticRecord
       @values = values
     end
 
+    def initialize_copy(other)
+      @values = @values.dup
+      reset
+    end
+
+    def becomes(klass)
+      became = klass.allocate
+      became.instance_variable_set(:@klass, @klass)
+      became.instance_variable_set(:@values, @values.dup)
+      became
+    end
+
     def count
       search_results['hits']['total']
     end
@@ -32,11 +44,6 @@ module ElasticRecord
 
     def explain(id)
       klass.elastic_index.explain(id, as_elastic)
-    end
-
-    def initialize_copy(other)
-      @values = @values.dup
-      reset
     end
 
     def to_a
