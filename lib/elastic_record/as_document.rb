@@ -21,7 +21,7 @@ module ElasticRecord
     end
 
     def value_for_elastic_search(field, mapping, mapping_properties, is_update = false)
-      return unless (value = try(field))
+      return if (value = try(field)).nil?
 
       case mapping[:type]&.to_sym
       when :object
