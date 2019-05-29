@@ -4,7 +4,7 @@ module ElasticRecord
       mapping_properties.each_with_object({}) do |(field, mapping), result|
         value = value_for_elastic_search field, mapping, mapping_properties
 
-        unless value.nil?
+        if !value.nil? || provided?(field)
           result[field] = value
         end
       end
