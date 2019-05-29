@@ -14,7 +14,7 @@ module ElasticRecord
 
     attr_reader :klass, :values
 
-    def initialize(klass, values = {})
+    def initialize(klass, values: {})
       @klass = klass
       @values = values
     end
