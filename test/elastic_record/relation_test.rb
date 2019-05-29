@@ -91,6 +91,18 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_equal [].inspect, Widget.elastic_relation.filter(color: 'magenta').inspect
   end
 
+  class NestedRelation < ElasticRecord::Relation
+    def find_hits(search_hits)
+      klass.load_from_doc_cache search_hits
+    end
+  end
+
+  Widget.class_eval do
+    def nested_hits(nested_path)
+      NestedRelation.new elastic_search.klass, elastic_search.values
+    end
+  end
+
   def test_nested_hits
     blue_widget = Widget.create(color: 'blue')
     red_widget = Widget.create(color: 'red')
