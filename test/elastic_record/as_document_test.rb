@@ -21,6 +21,11 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     assert_equal 1, Widget.elastic_search.filter(color: 'grey').count
     assert_equal 1, Widget.elastic_search.filter('widget_part.name' => 'Doohicky').count
     assert_equal 0, Widget.elastic_search.filter(name: 'elmo').count
+
+    widget.widget_part = { name: nil }
+    widget.save!
+
+    assert_equal 1, Widget.elastic_search.filter('widget_part.name' => nil).count
   end
 
   class SpecialFieldsModel
