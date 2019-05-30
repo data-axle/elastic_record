@@ -28,6 +28,8 @@ module ElasticRecord
         object_mapping_properties = mapping_properties.dig(field, :properties)
         value_for_elastic_search_object(value, object_mapping_properties, is_update)
       when :nested
+        return nil if value.empty?
+
         object_mapping_properties = mapping_properties.dig(field, :properties)
         value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties, is_update) }
       when :integer_range, :float_range, :long_range, :double_range, :date_range
