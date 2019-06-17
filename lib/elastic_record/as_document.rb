@@ -31,7 +31,7 @@ module ElasticRecord
         return nil if value.empty?
 
         object_mapping_properties = mapping_properties.dig(field, :properties)
-        value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties, is_update) }
+        value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties, false) }
       when :integer_range, :float_range, :long_range, :double_range, :date_range
         value_for_elastic_search_range(value)
       else
