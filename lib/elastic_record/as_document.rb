@@ -15,23 +15,23 @@ module ElasticRecord
 
       changed_fields.each_with_object({}) do |field, result|
         if field_mapping = mapping_properties[field]
-          result[field] = value_for_elastic_search field, field_mapping, mapping_properties, true
+          result[field] = value_for_elastic_search(field, field_mapping, mapping_properties, partial: true)
         end
       end
     end
 
-    def value_for_elastic_search(field, mapping, mapping_properties, is_update = false)
+    def value_for_elastic_search(field, mapping, mapping_properties, partial: false)
       return if (value = try(field)).nil?
 
       case mapping[:type]&.to_sym
       when :object
         object_mapping_properties = mapping_properties.dig(field, :properties)
-        value_for_elastic_search_object(value, object_mapping_properties, is_update)
+        value_for_elastic_search_object(value, object_mapping_properties, partial: partial)
       when :nested
         return nil if value.empty?
 
         object_mapping_properties = mapping_properties.dig(field, :properties)
-        value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties, false) }
+        value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties) }
       when :integer_range, :float_range, :long_range, :double_range, :date_range
         value_for_elastic_search_range(value)
       else
@@ -39,8 +39,8 @@ module ElasticRecord
       end
     end
 
-    def value_for_elastic_search_object(object, nested_mapping, is_update)
-      method = is_update ? :as_partial_update_document : :as_search_document
+    def value_for_elastic_search_object(object, nested_mapping, partial: false)
+      method = partial ? :as_partial_update_document : :as_search_document
       object.respond_to?(method) ? object.public_send(method, nested_mapping) : object
     end
 
