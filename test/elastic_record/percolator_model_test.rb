@@ -5,22 +5,20 @@ class ElasticRecord::PercolatorModelTest < MiniTest::Test
     index = WidgetQuery.elastic_index
 
     expected_mapping = {
-      "widget"=> {
-        "properties"=> {
-          "color"=> {"type" => "keyword" },
-          "name"=> {
-            "type" => "text",
-            "fields" => {
-              "raw" => { "type" => "keyword" }
-            }
-          },
-          "price" => { "type" => "long" },
-          "query" => { "type" => "percolator" },
-          "warehouse_id" => { "type" => "keyword" },
-          "widget_part" => {
-            "properties" => {
-              "name" => { "type" => "keyword" }
-            }
+      "properties"=> {
+        "color"=> {"type" => "keyword" },
+        "name"=> {
+          "type" => "text",
+          "fields" => {
+            "raw" => { "type" => "keyword" }
+          }
+        },
+        "price" => { "type" => "long" },
+        "query" => { "type" => "percolator" },
+        "warehouse_id" => { "type" => "keyword" },
+        "widget_part" => {
+          "properties" => {
+            "name" => { "type" => "keyword" }
           }
         }
       }
