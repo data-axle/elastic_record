@@ -155,6 +155,16 @@ module ElasticRecord
         get url, elastic_query.update('_source' => load_from_source)
       end
 
+      def multi_search(elastic_queries)
+        url = "_msearch"
+
+        queries = elastic_queries.flat_map do |query|
+          ["{}", query.update('_source' => load_from_source).to_json]
+        end
+        queries = queries.join("\n") + "\n"
+        get url, queries
+      end
+
       def explain(id, elastic_query)
         get "_explain", elastic_query
       end
