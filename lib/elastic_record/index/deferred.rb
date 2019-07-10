@@ -40,7 +40,7 @@ module ElasticRecord
 
             if READ_METHODS.include?(method)
               flush_deferred_actions!
-              if method == :json_get && args.first =~ /^\/(.*)\/_search/
+              if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
                 index.real_connection.json_post("/#{$1.partition('/').first}/_refresh")
               end
 
