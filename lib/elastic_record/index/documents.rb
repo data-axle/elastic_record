@@ -148,11 +148,9 @@ module ElasticRecord
 
       def search(elastic_query, options = {})
         url = "_search"
-        if options.any?
-          url += "?#{options.to_query}"
-        end
+        url += "?#{options.to_query}" if options.any?
 
-        get url, elastic_query.update('_source' => load_from_source)
+        get url, elastic_query
       end
 
       def explain(id, elastic_query)
