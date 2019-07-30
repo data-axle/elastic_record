@@ -9,9 +9,7 @@ module ElasticRecord
 
       def create(index_name = new_index_name, setting_overrides: {})
         connection.json_put "/#{index_name}", {
-          "mappings" => {
-            mapping_type => mapping
-          },
+          "mappings" => mapping ,
           "settings" => settings.merge(setting_overrides)
         }
         index_name
