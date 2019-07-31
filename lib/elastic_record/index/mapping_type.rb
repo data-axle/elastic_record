@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ElasticRecord
   class Index
     # This module facilitates the removal of multiple mapping types from ElasticSearch.
@@ -6,10 +8,16 @@ module ElasticRecord
     #   * 6.x - Type defaults to _doc, but any type can be specified
     #   * 7.x - Only _doc will be supported, effectively removing the type concept.
     module MappingType
-      attr_accessor :mapping_type
+      attr_writer :mapping_type
+
+      DEFAULT_MAPPING_TYPE = '_doc'
 
       def mapping_type
-        @mapping_type || '_doc'
+        @mapping_type || DEFAULT_MAPPING_TYPE
+      end
+
+      def custom_mapping_type_name?
+        @custom_mapping_type_name ||= mapping_type != MappingType::DEFAULT_MAPPING_TYPE
       end
     end
   end
