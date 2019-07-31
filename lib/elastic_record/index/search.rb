@@ -45,7 +45,8 @@ module ElasticRecord
       end
 
       def total_hits
-        initial_search_response['hits']['total']
+        count = initial_search_response['hits']['total']
+        count.is_a?(Hash) ? count['value'] : count
       end
 
       def initial_search_response

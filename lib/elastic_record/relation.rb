@@ -32,7 +32,8 @@ module ElasticRecord
     end
 
     def count
-      search_results['hits']['total']['value']
+      count = search_results['hits']['total']
+      count.is_a?(Hash) ? count['value'] : count
     end
 
     def aggregations
