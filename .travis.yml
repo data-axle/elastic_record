@@ -15,7 +15,7 @@ before_script:
 
 env:
   global:
-  - ES_VERSION=6.4.3
+  - ES_VERSION=6.8.1
 
 services:
 - postgresql
