@@ -4,7 +4,7 @@ dist: xenial
 
 before_install:
 - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
-- tar -xzf elasticsearch-${ES_VERSION}.tar.gz
+- tar -xzf elasticsearch-${ES_VERSION}-linux-x86_64.tar.gz
 - ./elasticsearch-${ES_VERSION}/bin/elasticsearch -d
 
 before_script:
