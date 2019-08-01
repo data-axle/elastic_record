@@ -4,11 +4,11 @@ module ElasticRecord
 
     class << self
       def from_response(response)
-        new(hits: response['hits']['hits'], total: response['hits']['total'])
+        new(response['hits']['hits'], response['hits']['total'])
       end
     end
 
-    def initialize(hits:, total: nil)
+    def initialize(hits, total = nil)
       @hits  = hits
       @count = total.is_a?(Hash) ? total['value'] : total
     end
