@@ -21,7 +21,7 @@ module ElasticRecord
 
       def find_hits_in_batches(options = {})
         build_scroll_enumerator(options).each_slice do |hits|
-          yield SearchHits.new(hits)
+          yield SearchHits.new(hits: hits)
         end
       end
 
