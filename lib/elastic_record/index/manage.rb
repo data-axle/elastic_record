@@ -13,6 +13,7 @@ module ElasticRecord
           "settings" => settings.merge(setting_overrides)
         }
 
+        # TODO: Remove include_type_name when ES8 support is added
         connection.json_put "/#{index_name}?include_type_name=#{custom_mapping_type_name?}", mapping_params
         index_name
       end
