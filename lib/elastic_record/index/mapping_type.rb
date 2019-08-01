@@ -17,7 +17,7 @@ module ElasticRecord
       end
 
       def custom_mapping_type_name?
-        @custom_mapping_type_name ||= mapping_type != MappingType::DEFAULT_MAPPING_TYPE
+        mapping_type != MappingType::DEFAULT_MAPPING_TYPE
       end
     end
   end
