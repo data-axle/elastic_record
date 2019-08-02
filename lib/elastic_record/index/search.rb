@@ -45,7 +45,7 @@ module ElasticRecord
       end
 
       def total_hits
-        SearchHits.from_response(initial_search_response).count
+        SearchHits.from_response(initial_search_response).total
       end
 
       def initial_search_response

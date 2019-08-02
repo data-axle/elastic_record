@@ -1,6 +1,6 @@
 module ElasticRecord
   class SearchHits
-    attr_accessor :hits, :model, :count
+    attr_accessor :hits, :model, :total
 
     class << self
       def from_response(response)
@@ -10,7 +10,7 @@ module ElasticRecord
 
     def initialize(hits, total: nil)
       @hits  = hits
-      @count = total.is_a?(Hash) ? total['value'] : total
+      @total = total.is_a?(Hash) ? total['value'] : total
     end
 
     def to_ids
