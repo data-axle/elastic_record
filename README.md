@@ -2,7 +2,7 @@
 [![Build Status](https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0)](http://travis-ci.org/data-axle/elastic_record)
 [![Code Climate](https://codeclimate.com/github/data-axle/elastic_record.png)](https://codeclimate.com/github/data-axle/elastic_record)
 
-ElasticRecord is an Elasticsearch 6.x ORM.
+ElasticRecord is an Elasticsearch 6.x and 7.x ORM.
 
 ## Setup ##
 
