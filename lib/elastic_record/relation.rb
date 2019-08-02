@@ -32,7 +32,7 @@ module ElasticRecord
     end
 
     def count
-      search_results['hits']['total']
+      search_hits.total
     end
 
     def aggregations
