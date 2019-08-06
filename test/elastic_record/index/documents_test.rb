@@ -49,7 +49,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.update_document('abc', color: 'blue')
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
-    assert_equal expected, index.get('abc', index.mapping_type)['_source']
+    assert_equal expected, index.get('abc')['_source']
 
     assert_raises RuntimeError do
       index.update_document(nil, color: 'blue')
@@ -87,11 +87,11 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
       index.delete_document '3'
 
       expected = [
-        {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
+        {index: {_index: index.alias_name, _id: "5"}},
         {color: "green"},
-        {update: {_index: "widgets", _type: "widget", _id: "5", retry_on_conflict: 3}},
+        {update: {_index: "widgets", _id: "5", retry_on_conflict: 3}},
         {doc: {color: "blue"}, doc_as_upsert: true},
-        {delete: {_index: index.alias_name, _type: "widget", _id: "3", retry_on_conflict: 3}}
+        {delete: {_index: index.alias_name, _id: "3", retry_on_conflict: 3}}
       ]
       assert_equal expected, index.current_bulk_batch
     end
@@ -151,7 +151,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
         InheritedWidget.elastic_index.index_document '5', color: 'green'
 
         expected = [
-          {index: {_index: index.alias_name, _type: "widget", _id: "5"}},
+          {index: {_index: index.alias_name, _id: "5"}},
           {color: "green"}
         ]
         assert_equal expected, index.current_bulk_batch
