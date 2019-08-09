@@ -99,6 +99,32 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert_nil index.current_bulk_batch
   end
 
+
+  def test_bulk_es6_mode
+    ElasticRecord::Config.es6_mode = true
+    assert_nil index.current_bulk_batch
+
+    index.bulk do
+      index.index_document '5', color: 'green'
+      index.update_document '5', color: 'blue'
+      index.delete_document '3'
+
+      expected = [
+        {index: {_index: index.alias_name, _id: "5", _type: "_doc"}},
+        {color: "green"},
+        {update: {_index: "widgets", _id: "5", retry_on_conflict: 3, _type: "_doc"}},
+        {doc: {color: "blue"}, doc_as_upsert: true},
+        {delete: {_index: index.alias_name, _id: "3", retry_on_conflict: 3, _type: "_doc"}}
+      ]
+
+      ElasticRecord::Config.es6_mode = false
+
+      assert_equal expected, index.current_bulk_batch
+    end
+
+    assert_nil index.current_bulk_batch
+  end
+
   def test_bulk_nested
     expected_warehouse_count = Warehouse.count + 2
 
