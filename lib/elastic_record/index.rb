@@ -89,7 +89,7 @@ module ElasticRecord
 
     def get(end_path, json = nil)
       path = "/#{alias_name}"
-      path += "/#{mapping_type}" if custom_mapping_type_name?
+      path += "/#{mapping_type}" if ElasticRecord::Config.es6_mode
       path += "/#{end_path}"
 
       connection.json_get path, json

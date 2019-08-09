@@ -7,6 +7,7 @@ module ElasticRecord
     class_attribute :model_names,            default: []
     class_attribute :scroll_keep_alive,      default: '2m'
     class_attribute :index_suffix
+    class_attribute :es6_mode,               default: false
 
     class << self
       def models
@@ -31,6 +32,10 @@ module ElasticRecord
 
         if settings['scroll_keep_alive'].present?
           self.scroll_keep_alive = settings['scroll_keep_alive']
+        end
+
+        if settings['es6_mode'].present?
+          self.es6_mode = settings['es6_mode']
         end
       end
     end
