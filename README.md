@@ -27,7 +27,6 @@ end
 
 ```yaml
 # config/elasticsearch.yml:
-```yaml
 development:
   servers: es1.example.com:9200
   timeout: 10
@@ -36,7 +35,7 @@ development:
 
 ## ElasticSearch 6.x Compatibility ##
 
-In order to work correctly set the config option `set es6`_mode to true.
+In order to work correctly set the config option `set es6_mode` to true.
 ```ruby
 # config/initializers/elastic_search.rb
 ElasticRecord.configure do |config|
@@ -203,9 +202,9 @@ class Product
 end
 ```
 
-Mapping types are removed in ElasticSearch 7.x. While you can still set
-mapping type most associated behaviors have since been removed. When used with
-ElasticSearch 6.x, this gem will use '_doc'.
+Mapping types are removed in ElasticSearch 7.x. While you can still set mapping type, most
+associated behaviors have since been removed. When used with ElasticSearch 6.x, this gem will use
+'_doc'.
 
 ```ruby
 class Product
