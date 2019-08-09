@@ -88,6 +88,12 @@ module ElasticRecord
     end
 
     def get(end_path, json = nil)
+      path = "/#{alias_name}/#{end_path}"
+
+      connection.json_get path, json
+    end
+
+    def get_doc(end_path, json = nil)
       path = "/#{alias_name}/_doc/#{end_path}"
 
       connection.json_get path, json
