@@ -27,10 +27,21 @@ end
 
 ```yaml
 # config/elasticsearch.yml:
+```yaml
 development:
   servers: es1.example.com:9200
   timeout: 10
   retries: 2
+```
+
+## ElasticSearch 6.x Compatibility ##
+
+In order to work correctly set the config option `set es6`_mode to true.
+```ruby
+# config/initializers/elastic_search.rb
+ElasticRecord.configure do |config|
+  config.es6_mode = true
+end
 ```
 
 ## Search API ##
@@ -192,7 +203,9 @@ class Product
 end
 ```
 
-Mapping types will be removed in ElasticSearch 7.x.  To rename the default mapping type (`_doc`), use `elastic_index.mapping_type`:
+Mapping types are removed in ElasticSearch 7.x. While you can still set
+mapping type most associated behaviors have since been removed. When used with
+ElasticSearch 6.x, this gem will use '_doc'.
 
 ```ruby
 class Product
