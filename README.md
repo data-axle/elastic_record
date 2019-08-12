@@ -35,7 +35,7 @@ development:
 
 ## ElasticSearch 6.x Compatibility ##
 
-In order to work correctly set the config option `set es6_mode` to true.
+In order to work correctly set the config option `es6_mode` to true.
 ```ruby
 # config/initializers/elastic_search.rb
 ElasticRecord.configure do |config|
