@@ -17,6 +17,7 @@ module ElasticRecord
   autoload :Relation
   autoload :Searching
   autoload :SearchHits
+  autoload :Version
 
   module AggregationResponse
     extend ActiveSupport::Autoload

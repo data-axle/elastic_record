@@ -33,16 +33,6 @@ development:
   retries: 2
 ```
 
-## ElasticSearch 6.x Compatibility ##
-
-In order to work correctly set the config option `es6_mode` to true.
-```ruby
-# config/initializers/elastic_search.rb
-ElasticRecord.configure do |config|
-  config.es6_mode = true
-end
-```
-
 ## Search API ##
 
 ElasticRecord adds the method 'elastic_search' to your models. It works similar to active_record scoping:
