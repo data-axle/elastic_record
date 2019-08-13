@@ -12,6 +12,7 @@ module ElasticRecord
   autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
+  autoload :ElasticConnection
   autoload :Model
   autoload :PercolatorModel
   autoload :Relation

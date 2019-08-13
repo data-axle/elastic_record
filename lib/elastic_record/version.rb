@@ -1,11 +1,11 @@
 module ElasticRecord
   class Version
-    include Model
+    extend ElasticConnection
 
     def self.es6?
-      @es6_mode ||= elastic_connection.json_get('/')
+      @es6 ||= elastic_connection.json_get('/')
         .dig('version', 'number')
-        .start_with?('6.')
+        &.start_with?('6.')
     end
   end
 end
