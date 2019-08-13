@@ -1,6 +1,6 @@
 module ElasticRecord
   class Version
-    extend ElasticConnection
+    include ElasticConnection
 
     def self.es6?
       @es6 ||= elastic_connection.json_get('/')

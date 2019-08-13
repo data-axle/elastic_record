@@ -4,17 +4,15 @@ module ElasticRecord
 
     included do
       extend Searching
-      extend ClassMethods
       extend FromSearchHit
-      extend ElasticConnection
+      include ElasticConnection
       include Callbacks
       include AsDocument
 
       singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
-      mattr_accessor :elastic_connection_cache, instance_writer: false
     end
 
-    module ClassMethods
+    class_methods do
       def inherited(child)
         super
 
