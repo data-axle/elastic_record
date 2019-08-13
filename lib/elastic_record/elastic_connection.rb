@@ -1,6 +1,7 @@
 module ElasticRecord
   module ElasticConnection
     extend ActiveSupport::Concern
+
     included do
       mattr_accessor :elastic_connection_cache, instance_writer: false
     end
