@@ -192,18 +192,6 @@ class Product
 end
 ```
 
-Mapping types are removed in ElasticSearch 7.x. While you can still set mapping type, most
-associated behaviors have since been removed. When used with ElasticSearch 6.x, this gem will use
-'_doc'.
-
-```ruby
-class Product
-  include ElasticRecord::Model
-
-  elastic_index.mapping_type = 'product'
-end
-```
-
 ### Inheritance
 
 When one model inherits from another, ElasticRecord makes some assumptions about how the child index should be configured.  By default:
