@@ -192,16 +192,6 @@ class Product
 end
 ```
 
-Mapping types will be removed in ElasticSearch 7.x.  To rename the default mapping type (`_doc`), use `elastic_index.mapping_type`:
-
-```ruby
-class Product
-  include ElasticRecord::Model
-
-  elastic_index.mapping_type = 'product'
-end
-```
-
 ### Inheritance
 
 When one model inherits from another, ElasticRecord makes some assumptions about how the child index should be configured.  By default:

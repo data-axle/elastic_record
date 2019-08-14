@@ -12,11 +12,13 @@ module ElasticRecord
   autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
+  autoload :ElasticConnection
   autoload :Model
   autoload :PercolatorModel
   autoload :Relation
   autoload :Searching
   autoload :SearchHits
+  autoload :Version
 
   module AggregationResponse
     extend ActiveSupport::Autoload

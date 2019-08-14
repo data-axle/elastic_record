@@ -4,16 +4,15 @@ module ElasticRecord
 
     included do
       extend Searching
-      extend ClassMethods
       extend FromSearchHit
+      include ElasticConnection
       include Callbacks
       include AsDocument
 
       singleton_class.delegate :query, :filter, :aggregate, to: :elastic_search
-      mattr_accessor :elastic_connection_cache, instance_writer: false
     end
 
-    module ClassMethods
+    class_methods do
       def inherited(child)
         super
 
@@ -34,10 +33,6 @@ module ElasticRecord
 
       def elastic_index=(index)
         @elastic_index = index
-      end
-
-      def elastic_connection
-        self.elastic_connection_cache ||= ElasticRecord::Connection.new(ElasticRecord::Config.servers, ElasticRecord::Config.connection_options)
       end
     end
 

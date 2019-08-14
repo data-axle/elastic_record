@@ -22,7 +22,7 @@ class ElasticRecord::ModelTest < MiniTest::Test
     assert_equal Widget.elastic_index.mapping_type, InheritedModel.elastic_index.mapping_type
     assert_equal 'widgets', InheritedModel.elastic_index.alias_name
     assert_equal InheritedModel, InheritedModel.elastic_index.model
-    assert_equal 'widget', InheritedModel.elastic_index.mapping_type
+    assert_equal '_doc', InheritedModel.elastic_index.mapping_type
   end
 
   def test_index_to_elasticsearch

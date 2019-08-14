@@ -9,12 +9,12 @@ module ElasticRecord
 
       def create(index_name = new_index_name, setting_overrides: {})
         mapping_params = {
-          "mappings" => (custom_mapping_type_name? ? { mapping_type => mapping } : mapping),
+          "mappings" => mapping,
           "settings" => settings.merge(setting_overrides)
         }
 
         # TODO: Remove include_type_name when ES8 support is added
-        connection.json_put "/#{index_name}?include_type_name=#{custom_mapping_type_name?}", mapping_params
+        connection.json_put "/#{index_name}?include_type_name=false", mapping_params
         index_name
       end
 

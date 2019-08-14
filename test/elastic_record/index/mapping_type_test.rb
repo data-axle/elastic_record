@@ -8,6 +8,7 @@ class ElasticRecord::Index::MappingTypeTest < MiniTest::Test
   def test_writer
     index.mapping_type = 'widget'
     assert_equal 'widget', index.mapping_type
+    index.mapping_type = '_doc'
   end
 
   private

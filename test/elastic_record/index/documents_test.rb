@@ -49,7 +49,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.update_document('abc', color: 'blue')
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
-    assert_equal expected, index.get('abc')['_source']
+    assert_equal expected, index.get_doc('abc')['_source']
 
     assert_raises RuntimeError do
       index.update_document(nil, color: 'blue')
@@ -87,12 +87,13 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
       index.delete_document '3'
 
       expected = [
-        {index: {_index: index.alias_name, _id: "5"}},
+        {index: add_es6_params({_index: index.alias_name, _id: "5"})},
         {color: "green"},
-        {update: {_index: "widgets", _id: "5", retry_on_conflict: 3}},
+        {update: add_es6_params({_index: "widgets", _id: "5", retry_on_conflict: 3})},
         {doc: {color: "blue"}, doc_as_upsert: true},
-        {delete: {_index: index.alias_name, _id: "3", retry_on_conflict: 3}}
+        {delete: add_es6_params({_index: index.alias_name, _id: "3", retry_on_conflict: 3})}
       ]
+
       assert_equal expected, index.current_bulk_batch
     end
 
@@ -151,15 +152,21 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
         InheritedWidget.elastic_index.index_document '5', color: 'green'
 
         expected = [
-          {index: {_index: index.alias_name, _id: "5"}},
+          {index: add_es6_params({_index: index.alias_name, _id: "5"})},
           {color: "green"}
         ]
+
+
         assert_equal expected, index.current_bulk_batch
       end
     end
   end
 
   private
+
+    def add_es6_params(hash)
+      ElasticRecord::Version.es6? ? hash.merge!(_type: '_doc') : hash
+    end
 
     def without_deferring(index)
       index.disable_deferring!

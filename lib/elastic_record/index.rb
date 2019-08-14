@@ -88,11 +88,11 @@ module ElasticRecord
     end
 
     def get(end_path, json = nil)
-      path = "/#{alias_name}"
-      path += "/#{mapping_type}" if custom_mapping_type_name?
-      path += "/#{end_path}"
+      connection.json_get("/#{alias_name}/#{end_path}", json)
+    end
 
-      connection.json_get path, json
+    def get_doc(end_path, json = nil)
+      connection.json_get("/#{alias_name}/_doc/#{end_path}", json)
     end
 
     private
