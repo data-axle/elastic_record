@@ -15,7 +15,6 @@ before_script:
 
 env:
   matrix:
-  - ES_VERSION=6.8.2
   - ES_VERSION=7.1.1
     ES_VERSION_PATH=-linux-x86_64
 
