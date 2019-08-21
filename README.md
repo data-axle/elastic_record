@@ -2,7 +2,7 @@
 [![Build Status](https://secure.travis-ci.org/data-axle/elastic_record.png?rvm=2.0.0)](http://travis-ci.org/data-axle/elastic_record)
 [![Code Climate](https://codeclimate.com/github/data-axle/elastic_record.png)](https://codeclimate.com/github/data-axle/elastic_record)
 
-ElasticRecord is an Elasticsearch 6.x and 7.x ORM.
+ElasticRecord is an Elasticsearch 7.x ORM.
 
 ## Setup ##
 
@@ -198,7 +198,6 @@ When one model inherits from another, ElasticRecord makes some assumptions about
 
 * `alias_name` - Same as parent
 * `mapping` - Same as parent
-* `mapping_type` - Same as parent
 * `settings` - Same as parent
 
 These can all be overridden.  For instance, it might be desirable for the child documents to be in a separate index.

@@ -26,7 +26,6 @@ module ElasticRecord
       def index_document(id, document, parent: nil, index_name: alias_name)
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id }
-          instructions[:_type] = '_doc' if ElasticRecord::Version.es6?
           instructions[:parent] = parent if parent
 
           batch << { index: instructions }
@@ -49,7 +48,6 @@ module ElasticRecord
 
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
-          instructions[:_type] = '_doc' if ElasticRecord::Version.es6?
           instructions[:parent] = parent if parent
 
           batch << { update: instructions }
@@ -68,7 +66,6 @@ module ElasticRecord
 
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
-          instructions[:_type] = '_doc' if ElasticRecord::Version.es6?
           instructions[:parent] = parent if parent
           batch << { delete: instructions }
         else
