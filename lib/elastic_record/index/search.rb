@@ -70,10 +70,13 @@ module ElasticRecord
         get url, elastic_query
       end
 
-      def multi_search(headers_and_bodies)
+      def multi_search(headers_and_bodies, options = {})
+        url = "_search"
+        url += "?#{options.to_query}" if options.any?
+
         queries = headers_and_bodies.flat_map { |header, body| [header.to_json, body.to_json] }
         queries = queries.join("\n") + "\n"
-        get "_msearch", queries
+        get url, queries
       end
 
       def explain(id, elastic_query)
