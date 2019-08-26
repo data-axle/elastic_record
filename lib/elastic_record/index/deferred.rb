@@ -10,7 +10,7 @@ module ElasticRecord
 
         attr_accessor :index
         attr_accessor :deferred_actions
-        attr_accessor :writes_made
+        attr_accessor :writes_made_since_reset, :writes_made_since_refresh
         attr_accessor :bulk_actions
 
         def initialize(index)
@@ -20,17 +20,18 @@ module ElasticRecord
         end
 
         def reset!
-          if writes_made
+          if writes_made_since_reset
             begin
               index.disable_deferring!
-              index.refresh
+              index.refresh if writes_made_since_refresh
               index.delete_by_query query: {match_all: {}}
             ensure
               index.enable_deferring!
             end
           end
           self.deferred_actions = []
-          self.writes_made = false
+          self.writes_made_since_reset = false
+          self.writes_made_since_refresh = false
         end
 
         private
@@ -42,6 +43,7 @@ module ElasticRecord
               flush_deferred_actions!
               if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
                 index.real_connection.json_post("/#{$1.partition('/').first}/_refresh")
+                self.writes_made_since_refresh = false
               end
 
               index.real_connection.send(method, *args, &block)
@@ -52,9 +54,11 @@ module ElasticRecord
 
           def flush_deferred_actions!
             deferred_actions.each do |queued_action|
-              self.writes_made = true
+              self.writes_made_since_reset = true
+              self.writes_made_since_refresh = true
               queued_action.run(index.real_connection)
             end
+
             deferred_actions.clear
           end
       end
