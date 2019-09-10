@@ -13,13 +13,12 @@ module ElasticRecord
           "settings" => settings.merge(setting_overrides)
         }
 
-        # TODO: Remove include_type_name when ES8 support is added
-        connection.json_put "/#{index_name}?include_type_name=false", mapping_params
+        connection.json_put index_name, mapping_params
         index_name
       end
 
       def delete(index_name)
-        connection.json_delete "/#{index_name}"
+        connection.json_delete index_name
       end
 
       def delete_all
@@ -29,7 +28,7 @@ module ElasticRecord
       end
 
       def exists?(index_name)
-        connection.head("/#{index_name}") == '200'
+        connection.head(index_name) == '200'
       end
 
       def deploy(index_name)
