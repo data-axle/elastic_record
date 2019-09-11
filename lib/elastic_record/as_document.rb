@@ -1,10 +1,10 @@
 module ElasticRecord
   module AsDocument
-    def as_search_document(mapping_properties = elastic_index.mapping[:properties])
+    def as_search_document(mapping_properties = elastic_index.mapping[:properties], nested_document: false)
       mapping_properties.each_with_object({}) do |(field, mapping), result|
         value = value_for_elastic_search field, mapping, mapping_properties
 
-        unless value.nil?
+        if (!value.nil? || nested_document)
           result[field] = value
         end
       end
@@ -40,7 +40,7 @@ module ElasticRecord
     end
 
     def value_for_elastic_search_object(object, nested_mapping)
-      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping) : object
+      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping, nested_document: true) : object
     end
 
     def value_for_elastic_search_range(range)
