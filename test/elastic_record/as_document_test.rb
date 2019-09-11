@@ -30,47 +30,52 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
   class SpecialFieldsModel
     include TestModel
-    attr_accessor :meta, :book_length
+    attr_accessor :author, :book_length, :commenters, :meta,
 
     class Author
       include TestModel
       attr_accessor :name, :salary_estimate
+
+      def self.mapping_properties
+        {
+          name: { type: :string },
+          salary_estimate: { type: :integer_range }
+        }
+      end
     end
 
     self.elastic_index.mapping[:properties].update(
       author:      {
         type: :object,
-        properties: {
-          name: { type: :string },
-          salary_estimate: { type: :integer_range }
-        }
+        properties: Author.mapping_properties
       },
       commenters:  {
         type: :nested,
-        properties: {
-          name: { type: :string }
-        }
+        properties: Author.mapping_properties
       },
       meta:        { type: "object" },
       book_length: { type: :integer_range }
     )
+  end
 
-    def author
-      Author.new(name: 'Jonny', salary_estimate: 250..Float::INFINITY)
-    end
-
-    def commenters
-      [Author.new(name: 'Jonny'), Author.new(name: 'Jonny')]
-    end
+  def test_as_search_document_when_object_empty
+    record = SpecialFieldsModel.new
+    assert_equal({}, record.as_search_document)
   end
 
   def test_as_search_document_with_special_fields
     record = SpecialFieldsModel.new(meta: { some: "value" })
+    record.author = SpecialFieldsModel::Author.new(name: 'Jonny', salary_estimate: 250..Float::INFINITY)
+    record.commenters = [
+      SpecialFieldsModel::Author.new(name: 'Jonny'),
+      SpecialFieldsModel::Author.new(name: 'Jonny')
+    ]
 
     doc = record.as_search_document
 
     assert_equal({name: 'Jonny', salary_estimate: { 'gte' => 250, 'lte' => nil }}, doc[:author])
-    assert_equal([{name: 'Jonny'}, {name: 'Jonny'}], doc[:commenters])
+    expected_commenter = { name: 'Jonny', salary_estimate: nil }
+    assert_equal([expected_commenter, expected_commenter], doc[:commenters])
     assert_equal({some: 'value'}, doc[:meta])
   end
 
