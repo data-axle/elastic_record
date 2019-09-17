@@ -26,7 +26,7 @@ module ElasticRecord
       case mapping[:type]&.to_sym
       when :object
         object_mapping_properties = mapping_properties.dig(field, :properties)
-        value_for_elastic_search_object(value, object_mapping_properties)
+        value_for_elastic_search_object(value, object_mapping_properties, is_inner_object: true)
       when :nested
         return if value.empty?
 
@@ -39,8 +39,8 @@ module ElasticRecord
       end
     end
 
-    def value_for_elastic_search_object(object, nested_mapping)
-      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping, is_inner_object: true) : object
+    def value_for_elastic_search_object(object, nested_mapping, is_inner_object: nil)
+      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping, is_inner_object: is_inner_object) : object
     end
 
     def value_for_elastic_search_range(range)
