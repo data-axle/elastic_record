@@ -1,7 +1,7 @@
 class WidgetQuery
   include TestPercolatorModel
 
-  define_attributes [:name, :color]
+  define_attributes :name, :color
 
   self.percolates_model = Widget
 

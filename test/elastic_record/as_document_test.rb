@@ -30,31 +30,31 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
   class SpecialFieldsModel
     include TestModel
-    attr_accessor :author, :book_length, :commenters, :meta,
+    define_attributes :author, :book_length, :commenters, :meta
 
     class Author
       include TestModel
-      attr_accessor :name, :salary_estimate
+      define_attributes :name, :salary_estimate
 
       def self.mapping_properties
         {
-          name: { type: :string },
-          salary_estimate: { type: :integer_range }
+          'name' => { type: :string },
+          'salary_estimate' => { type: :integer_range }
         }
       end
     end
 
     self.elastic_index.mapping[:properties].update(
-      author:      {
+      'author' => {
         type: :object,
         properties: Author.mapping_properties
       },
-      commenters:  {
+      'commenters' => {
         type: :nested,
         properties: Author.mapping_properties
       },
-      meta:        { type: "object" },
-      book_length: { type: :integer_range }
+      'meta' => { type: "object" },
+      'book_length' => { type: :integer_range }
     )
   end
 

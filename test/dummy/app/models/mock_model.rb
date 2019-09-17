@@ -34,8 +34,8 @@ module MockModel
       record
     end
 
-    def define_attributes(attributes)
-      define_attribute_methods attributes
+    def define_attributes(*attributes)
+      define_attribute_methods *attributes
 
       attributes.each do |attribute|
         define_method attribute do
