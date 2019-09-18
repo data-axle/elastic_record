@@ -29,7 +29,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
   class DisablingModel
     include TestModel
 
-    define_attributes [:height]
+    define_attributes :height
 
     self.elastic_index.mapping[:properties].update(
       height: {
