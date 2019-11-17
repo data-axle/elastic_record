@@ -3,7 +3,7 @@ module ElasticRecord
     module FinderMethods
       def find(*ids)
         flattened_ids = ids.flatten
-        id_filter     = filter(arelastic.filter.ids(flattened_ids))
+        id_filter     = filter(arelastic.queries.ids(flattened_ids))
         id_filter     = id_filter.limit(flattened_ids.size) unless limit_value
 
         if ids.first.is_a?(Array)

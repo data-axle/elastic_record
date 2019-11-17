@@ -24,7 +24,7 @@ module ElasticRecord
       end
 
       def arelastic
-        Arelastic::Builders::Search
+        Arelastic
       end
 
       def elastic_index
@@ -41,7 +41,7 @@ module ElasticRecord
     end
 
     def arelastic
-      self.class.arelastic
+      Arelastic
     end
 
     def elastic_index
