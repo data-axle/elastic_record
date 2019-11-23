@@ -241,7 +241,7 @@ module ElasticRecord
                 when nil
                   nodes << arelastic[field].missing
                 else
-                  nodes << arelastic[field].eq(terms)
+                  nodes << arelastic[field].term(terms)
                 end
               end
             end
