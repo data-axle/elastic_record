@@ -45,7 +45,7 @@ module ElasticRecord
 
     def value_for_elastic_search_range(range)
       gte = range.begin unless range.begin == -Float::INFINITY
-      lte = range.end unless range.end == Float::INFINITY
+      lte = range.end
 
       {'gte' => gte, 'lte' => lte}
     end
