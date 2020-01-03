@@ -65,7 +65,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
 
   def test_as_search_document_with_special_fields
     record = SpecialFieldsModel.new(meta: { some: "value" })
-    record.author = SpecialFieldsModel::Author.new(name: 'Jonny', salary_estimate: 250..Float::INFINITY)
+    record.author = SpecialFieldsModel::Author.new(name: 'Jonny', salary_estimate: (250..))
     record.commenters = [
       SpecialFieldsModel::Author.new(name: 'Jonny'),
       SpecialFieldsModel::Author.new(name: 'Jonny')
@@ -92,7 +92,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
     doc = record.as_search_document
     assert_equal({ "gte" => nil, "lte" => 500 }, doc['book_length'])
 
-    record = SpecialFieldsModel.new(book_length: 250..Float::INFINITY)
+    record = SpecialFieldsModel.new(book_length: (250..))
     doc = record.as_search_document
     assert_equal({ "gte" => 250, "lte" => nil }, doc['book_length'])
   end
