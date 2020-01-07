@@ -193,8 +193,8 @@ module ElasticRecord
         end
 
         def build_query_and_filter
-          query = build_query
-          filter = build_filter
+          query = build_search_query
+          filter = build_search_filter
 
           query_and_filter = if filter
             arelastic.queries.bool(filter: filter, must: query)
@@ -207,7 +207,7 @@ module ElasticRecord
           Arelastic::Searches::Query.new query_and_filter
         end
 
-        def build_query
+        def build_search_query
           if query_value.is_a?(String)
             Arelastic::Queries::QueryString.new query_value
           else
@@ -215,8 +215,12 @@ module ElasticRecord
           end
         end
 
-        def build_filter
-          nodes = build_filter_nodes(filter_values)
+        def build_search_filter
+          build_filter(filter_values)
+        end
+
+        def build_filter(filters)
+          nodes = build_filter_nodes(filters)
 
           if nodes.size == 1
             nodes.first
