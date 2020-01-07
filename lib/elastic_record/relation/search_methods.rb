@@ -181,7 +181,7 @@ module ElasticRecord
       private
         def build_search
           searches = [
-            build_query_and_filter(query_value, filter_values),
+            build_query_and_filter,
             build_limit(limit_value),
             build_offset(offset_value),
             build_aggregations(aggregation_values),
@@ -192,9 +192,9 @@ module ElasticRecord
           Arelastic::Nodes::HashGroup.new searches
         end
 
-        def build_query_and_filter(query, filters)
-          query = build_query(query)
-          filter = build_filter(filters)
+        def build_query_and_filter
+          query = build_query
+          filter = build_filter
 
           query_and_filter = if filter
             arelastic.queries.bool(filter: filter, must: query)
@@ -207,16 +207,16 @@ module ElasticRecord
           Arelastic::Searches::Query.new query_and_filter
         end
 
-        def build_query(query)
-          if query.is_a?(String)
-            query = Arelastic::Queries::QueryString.new query
+        def build_query
+          if query_value.is_a?(String)
+            Arelastic::Queries::QueryString.new query_value
+          else
+            query_value
           end
-
-          query
         end
 
-        def build_filter(filters)
-          nodes = build_filter_nodes(filters)
+        def build_filter
+          nodes = build_filter_nodes(filter_values)
 
           if nodes.size == 1
             nodes.first
