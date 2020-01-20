@@ -249,4 +249,5 @@ Product.elastic_index.create_and_deploy  # Create a new index
 Product.elastic_index.reset              # Delete related indexes and deploy a new one
 Product.elastic_index.refresh            # Call the refresh API
 Product.elastic_index.get_mapping        # Get the index mapping defined by elastic search
+Product.elastic_index.update_mapping     # Update the elastic search mapping of the current index
 ```
