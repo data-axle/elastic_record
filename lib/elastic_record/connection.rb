@@ -14,7 +14,7 @@ module ElasticRecord
       self.request_count      = 0
       self.max_request_count  = 100
       self.options            = options.symbolize_keys
-      self.bulk_actions       = nil
+      self.bulk_actions       = {}
     end
 
     def head(path)

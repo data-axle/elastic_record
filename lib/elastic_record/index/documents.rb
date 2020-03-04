@@ -103,13 +103,17 @@ module ElasticRecord
       end
 
       def current_bulk_batch
-        connection.bulk_actions
+        connection.bulk_actions[thread_id]
       end
 
       private
 
+        def thread_id
+          Thread.current.object_id
+        end
+
         def start_new_bulk_batch(options, &block)
-          connection.bulk_actions = []
+          connection.bulk_actions[thread_id] = []
 
           yield
 
@@ -119,7 +123,7 @@ module ElasticRecord
             verify_bulk_results(results)
           end
         ensure
-          connection.bulk_actions = nil
+          connection.bulk_actions.delete thread_id
         end
 
         def verify_bulk_results(results)
