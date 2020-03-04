@@ -24,12 +24,12 @@ module ElasticRecord
       end
 
       def index_document(id, document, parent: nil, index_name: alias_name)
-        if batch = current_bulk_batch
+        if current_bulk_batch
           instructions = { _index: index_name, _id: id }
           instructions[:parent] = parent if parent
 
-          batch << { index: instructions }
-          batch << document
+          current_bulk_batch << { index: instructions }
+          current_bulk_batch << document
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?parent=#{parent}" if parent
@@ -46,12 +46,12 @@ module ElasticRecord
         raise "Cannot update a document with empty id" if id.blank?
         params = {doc: document, doc_as_upsert: true}
 
-        if batch = current_bulk_batch
+        if current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
 
-          batch << { update: instructions }
-          batch << params
+          current_bulk_batch << { update: instructions }
+          current_bulk_batch << params
         else
           path = "/#{index_name}/_update/#{id}?retry_on_conflict=3"
           path << "&parent=#{parent}" if parent
@@ -64,10 +64,10 @@ module ElasticRecord
         raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
-        if batch = current_bulk_batch
+        if current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
-          batch << { delete: instructions }
+          current_bulk_batch << { delete: instructions }
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "&parent=#{parent}" if parent
@@ -103,17 +103,13 @@ module ElasticRecord
       end
 
       def current_bulk_batch
-        connection.bulk_actions[thread_id]
+        Thread.current['bulk_actions']
       end
 
       private
 
-        def thread_id
-          Thread.current.object_id
-        end
-
         def start_new_bulk_batch(options, &block)
-          connection.bulk_actions[thread_id] = []
+          current_bulk_batch = []
 
           yield
 
@@ -123,7 +119,7 @@ module ElasticRecord
             verify_bulk_results(results)
           end
         ensure
-          connection.bulk_actions.delete thread_id
+          current_bulk_batch = nil
         end
 
         def verify_bulk_results(results)

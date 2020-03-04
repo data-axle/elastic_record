@@ -5,7 +5,7 @@ module ElasticRecord
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
     attr_accessor :max_request_count
-    attr_accessor :bulk_actions
+
     def initialize(servers, options = {})
       self.servers = Array(servers)
 
@@ -14,7 +14,6 @@ module ElasticRecord
       self.request_count      = 0
       self.max_request_count  = 100
       self.options            = options.symbolize_keys
-      self.bulk_actions       = {}
     end
 
     def head(path)
