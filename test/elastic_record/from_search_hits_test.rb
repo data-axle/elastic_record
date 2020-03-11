@@ -40,7 +40,7 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
   private
 
     def manager
-      Project::TeamMember.new(
+      TeamMember.new(
         name: 'Fred',
         estimated_age: 25..30
       )
@@ -48,8 +48,8 @@ class ElasticRecord::FromSearchHitsTest < MiniTest::Test
 
     def team_members
       [
-        Project::TeamMember.new(name: 'John', estimated_age: 25..30),
-        Project::TeamMember.new(name: 'Jill', estimated_age: 26..29)
+        TeamMember.new(name: 'John', estimated_age: 25..30),
+        TeamMember.new(name: 'Jill', estimated_age: 26..29)
       ]
     end
 end
