@@ -36,22 +36,20 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
       include TestModel
       define_attributes :name, :salary_estimate
 
-      def self.mapping_properties
-        {
-          'name' => { type: :string },
-          'salary_estimate' => { type: :integer_range }
-        }
-      end
+      elastic_index.mapping[:properties].update(
+        'name' => { type: :string },
+        'salary_estimate' => { type: :integer_range }
+      )
     end
 
-    self.elastic_index.mapping[:properties].update(
+    elastic_index.mapping[:properties].update(
       'author' => {
         type: :object,
-        properties: Author.mapping_properties
+        properties: Author.elastic_index.mapping[:properties]
       },
       'commenters' => {
         type: :nested,
-        properties: Author.mapping_properties
+        properties: Author.elastic_index.mapping[:properties]
       },
       'meta' => { type: "object" },
       'book_length' => { type: :integer_range }

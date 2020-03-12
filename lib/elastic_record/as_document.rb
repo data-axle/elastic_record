@@ -1,8 +1,8 @@
 module ElasticRecord
   module AsDocument
-    def as_search_document(mapping_properties = elastic_index.mapping[:properties], is_inner_object: false)
-      mapping_properties.each_with_object({}) do |(field, mapping), result|
-        value = value_for_elastic_search field, mapping, mapping_properties
+    def as_search_document(is_inner_object: false)
+      elastic_index.mapping[:properties].each_with_object({}) do |(field, mapping), result|
+        value = value_for_elastic_search field, mapping
 
         if (!value.nil? || is_inner_object)
           result[field] = value
@@ -10,28 +10,26 @@ module ElasticRecord
       end
     end
 
-    def as_partial_update_document(mapping_properties = elastic_index.mapping[:properties])
+    def as_partial_update_document
       changed_fields = respond_to?(:saved_changes) ? saved_changes.keys : changed
 
       changed_fields.each_with_object({}) do |field, result|
-        if field_mapping = mapping_properties[field]
-          result[field] = value_for_elastic_search(field, field_mapping, mapping_properties)
+        if mapping = elastic_index.mapping[:properties][field]
+          result[field] = value_for_elastic_search(field, mapping)
         end
       end
     end
 
-    def value_for_elastic_search(field, mapping, mapping_properties)
+    def value_for_elastic_search(field, mapping)
       return if (value = try(field)).nil?
 
       case mapping[:type]&.to_sym
       when :object
-        object_mapping_properties = mapping_properties.dig(field, :properties)
-        value_for_elastic_search_object(value, object_mapping_properties, is_inner_object: true)
+        value_for_elastic_search_object(value, is_inner_object: true)
       when :nested
         return if value.empty?
 
-        object_mapping_properties = mapping_properties.dig(field, :properties)
-        value.map { |entry| value_for_elastic_search_object(entry, object_mapping_properties) }
+        value.map { |entry| value_for_elastic_search_object(entry) }
       when :integer_range, :float_range, :long_range, :double_range, :date_range
         value_for_elastic_search_range(value)
       else
@@ -39,8 +37,8 @@ module ElasticRecord
       end
     end
 
-    def value_for_elastic_search_object(object, nested_mapping, is_inner_object: nil)
-      object.respond_to?(:as_search_document) ? object.as_search_document(nested_mapping, is_inner_object: is_inner_object) : object
+    def value_for_elastic_search_object(object, is_inner_object: nil)
+      object.respond_to?(:as_search_document) ? object.as_search_document(is_inner_object: is_inner_object) : object
     end
 
     def value_for_elastic_search_range(range)

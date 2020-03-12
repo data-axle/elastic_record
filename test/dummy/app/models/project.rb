@@ -1,3 +1,19 @@
+class TeamMember
+  include ActiveModel::Model
+  include ElasticRecord::Model
+
+  attr_accessor :name, :estimated_age
+
+  elastic_index.mapping = {
+    properties: {
+      'name' => { type: 'text' },
+      'estimated_age' => {
+        type: 'integer_range'
+      }
+    }
+  }
+end
+
 class Project
   class << self
     def base_class
@@ -18,21 +34,11 @@ class Project
       },
       'team_members' => {
         type: 'nested',
-        properties: {
-          'name' => { type: 'text' },
-          'estimated_age' => {
-            type: 'integer_range'
-          }
-        }
+        properties: TeamMember.elastic_index.mapping[:properties]
       },
       'manager' => {
         type: 'object',
-        properties: {
-          'name' => { type: 'text' },
-          'estimated_age' => {
-            type: 'integer_range'
-          }
-        }
+        properties: TeamMember.elastic_index.mapping[:properties]
       }
     }
   }
@@ -43,11 +49,4 @@ class Project
                 :team_members,
                 :manager
   alias_method :as_json, :as_search_document
-
-  class TeamMember
-    include ActiveModel::Model
-    include ElasticRecord::Model
-
-    attr_accessor :name, :estimated_age
-  end
 end
