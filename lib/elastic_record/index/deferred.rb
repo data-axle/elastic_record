@@ -11,9 +11,11 @@ module ElasticRecord
         attr_accessor :index
         attr_accessor :deferred_actions
         attr_accessor :writes_made
+        attr_accessor :bulk_actions
 
         def initialize(index)
           @index = index
+          @bulk_actions = nil
           reset!
         end
 
