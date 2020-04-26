@@ -54,7 +54,7 @@ module ElasticRecord
       if klass.elastic_index.load_from_source
         search_hits.hits.map { |hit| klass.from_search_hit(hit) }
       else
-        klass.find search_hits.to_ids
+        klass.where(klass.primary_key => search_hits.to_ids).to_a
       end
     end
 

@@ -227,6 +227,33 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     refute widgets.first.association(:warehouse).loaded?
   end
 
+  def test_joins
+    warehouse = Warehouse.create! name: 'Boeing'
+    Widget.create! name: '747', color: 'red', warehouse: warehouse
+
+    warehouse = Warehouse.create! name: 'Airbus'
+    Widget.create! name: 'A300', color: 'green', warehouse: warehouse
+    widget = Widget.create! name: 'A220', color: 'red', warehouse: warehouse
+
+    widgets = relation.filter(color: 'red').joins(:warehouse).where(warehouses: {name: 'Airbus'})
+    widgets = widgets.to_a
+
+    assert_equal 1, widgets.count
+    assert_equal widget, widgets.first
+  end
+
+  def test_where
+    Widget.create! name: '747', color: 'red'
+    Widget.create! name: 'A220', color: 'green'
+    widget = Widget.create! name: 'A220', color: 'red'
+
+    widgets = relation.filter(color: 'red').where(name: 'A220')
+    widgets = widgets.to_a
+
+    assert_equal 1, widgets.count
+    assert_equal widget, widgets.first
+  end
+
   def test_extending_with_block
     relation.extending! do
       def foo
