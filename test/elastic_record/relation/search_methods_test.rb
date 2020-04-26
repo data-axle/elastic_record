@@ -227,6 +227,17 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     refute widgets.first.association(:warehouse).loaded?
   end
 
+  def test_left_outer_joins
+    Widget.create! name: '747', color: 'blue'
+    widget = Widget.create! name: 'A220', color: 'red'
+
+    widgets = relation.filter(color: 'red').left_outer_joins(:warehouse).where('1=1')
+    widgets = widgets.to_a
+
+    assert_equal 1, widgets.count
+    assert_equal widget, widgets.first
+  end
+
   def test_extending_with_block
     relation.extending! do
       def foo

@@ -51,6 +51,7 @@ module ElasticRecord
       %i(
         includes
         joins
+        left_outer_joins
         select
         where
       ).each do |ar_method|
