@@ -5,7 +5,6 @@ module ElasticRecord
     included do
       extend Searching
       extend FromSearchHit
-      include ElasticConnection
       include Callbacks
       include AsDocument
 
@@ -33,6 +32,10 @@ module ElasticRecord
 
       def elastic_index=(index)
         @elastic_index = index
+      end
+
+      def elastic_connection
+        ConnectionHandler.connection
       end
     end
 

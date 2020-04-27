@@ -8,11 +8,12 @@ module ElasticRecord
   autoload :Callbacks
   autoload :Config
   autoload :Connection
+  autoload :DeferredConnection
+  autoload :ConnectionHandler
   autoload :Doctype
   autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
-  autoload :ElasticConnection
   autoload :Model
   autoload :PercolatorModel
   autoload :Relation

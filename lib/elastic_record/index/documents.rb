@@ -24,12 +24,12 @@ module ElasticRecord
       end
 
       def index_document(id, document, parent: nil, index_name: alias_name)
-        if batch = current_bulk_batch
+        if bulk_batch_present?
           instructions = { _index: index_name, _id: id }
           instructions[:parent] = parent if parent
 
-          batch << { index: instructions }
-          batch << document
+          add_to_bulk_batch({ index: instructions })
+          add_to_bulk_batch(document)
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?parent=#{parent}" if parent
@@ -46,12 +46,12 @@ module ElasticRecord
         raise "Cannot update a document with empty id" if id.blank?
         params = {doc: document, doc_as_upsert: true}
 
-        if batch = current_bulk_batch
+        if bulk_batch_present?
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
 
-          batch << { update: instructions }
-          batch << params
+          add_to_bulk_batch({ update: instructions })
+          add_to_bulk_batch(params)
         else
           path = "/#{index_name}/_update/#{id}?retry_on_conflict=3"
           path << "&parent=#{parent}" if parent
@@ -64,10 +64,10 @@ module ElasticRecord
         raise "Cannot delete document with empty id" if id.blank?
         index_name ||= alias_name
 
-        if batch = current_bulk_batch
+        if bulk_batch_present?
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:parent] = parent if parent
-          batch << { delete: instructions }
+          add_to_bulk_batch({ delete: instructions })
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "&parent=#{parent}" if parent
@@ -87,7 +87,7 @@ module ElasticRecord
       end
 
       def bulk(options = {}, &block)
-        if current_bulk_batch
+        if bulk_batch_present?
           yield
         else
           start_new_bulk_batch(options, &block)
@@ -102,24 +102,37 @@ module ElasticRecord
         end
       end
 
-      def current_bulk_batch
-        connection.bulk_actions
+      def bulk_batch_values
+        Thread.current['bulk_actions']
       end
 
       private
 
+        def bulk_batch_present?
+          bulk_batch_values
+        end
+
+        def reset_bulk_batch(val)
+          Thread.current['bulk_actions'] = val
+        end
+
+        def add_to_bulk_batch(val)
+          Thread.current['bulk_actions'] << val
+        end
+
         def start_new_bulk_batch(options, &block)
-          connection.bulk_actions = []
+          reset_bulk_batch([])
 
           yield
 
-          if current_bulk_batch.any?
-            body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
+          if bulk_batch_values.any?
+            body = bulk_batch_values.map { |action| "#{JSON.generate(action)}\n" }.join
             results = connection.json_post("/_bulk?#{options.to_query}", body)
+
             verify_bulk_results(results)
           end
         ensure
-          connection.bulk_actions = nil
+          reset_bulk_batch(nil)
         end
 
         def verify_bulk_results(results)

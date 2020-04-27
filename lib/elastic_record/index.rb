@@ -1,5 +1,4 @@
 require 'elastic_record/index/analyze'
-require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
@@ -32,7 +31,6 @@ module ElasticRecord
     include Manage
     include Mapping, Settings
     include Analyze
-    include Deferred
     include MappingType
 
     attr_accessor :disabled
@@ -83,9 +81,9 @@ module ElasticRecord
       self.load_from_source = false
     end
 
-    def real_connection
-      model.elastic_connection
-    end
+    # def real_connection
+    #   model.elastic_connection
+    # end
 
     def get(end_path, json = nil)
       connection.json_get("/#{alias_name}/#{end_path}", json)
@@ -93,6 +91,10 @@ module ElasticRecord
 
     def get_doc(end_path, json = nil)
       connection.json_get("/#{alias_name}/_doc/#{end_path}", json)
+    end
+
+    def connection
+      ConnectionHandler.connection
     end
 
     private

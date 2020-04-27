@@ -79,7 +79,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_bulk
-    assert_nil index.current_bulk_batch
+    assert_nil index.bulk_batch_values
 
     index.bulk do
       index.index_document '5', color: 'green'
@@ -94,10 +94,10 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
         {delete: {_index: index.alias_name, _id: "3", retry_on_conflict: 3}}
       ]
 
-      assert_equal expected, index.current_bulk_batch
+      assert_equal expected, index.bulk_batch_values
     end
 
-    assert_nil index.current_bulk_batch
+    assert_nil index.bulk_batch_values
   end
 
   def test_bulk_nested
@@ -156,8 +156,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
           {color: "green"}
         ]
 
-
-        assert_equal expected, index.current_bulk_batch
+        assert_equal expected, index.bulk_batch_values
       end
     end
   end
