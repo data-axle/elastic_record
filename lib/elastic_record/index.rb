@@ -81,10 +81,6 @@ module ElasticRecord
       self.load_from_source = false
     end
 
-    # def real_connection
-    #   model.elastic_connection
-    # end
-
     def get(end_path, json = nil)
       connection.json_get("/#{alias_name}/#{end_path}", json)
     end
