@@ -16,15 +16,11 @@ module MiniTest
     def setup
       WebMock.reset!
 
-      ElasticRecord::Config.models.each do |model|
-        model.elastic_index.enable_deferring!
-      end
+      ElasticRecord::ConnectionHandler.enable_deferring!
     end
 
     def teardown
-      ElasticRecord::Config.models.each do |model|
-        model.elastic_index.reset_deferring!
-      end
+      ElasticRecord::ConnectionHandler.reset_deferring!
     end
   end
 end

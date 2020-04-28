@@ -164,10 +164,10 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   private
 
     def without_deferring(index)
-      index.disable_deferring!
+      ElasticRecord::ConnectionHandler.disable_deferring!
       yield
       index.reset
-      index.enable_deferring!
+      ElasticRecord::ConnectionHandler.enable_deferring!
     end
 
     def index

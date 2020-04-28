@@ -5,6 +5,8 @@ class ElasticRecord::ModelTest < MiniTest::Test
   end
 
   def test_elastic_connection
+    ElasticRecord::ConnectionHandler.disable_deferring!
+
     connection = Widget.elastic_connection
 
     assert_equal ElasticRecord::Config.servers, connection.servers

@@ -11,10 +11,6 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
     ElasticRecord::LogSubscriber.attach_to :elastic_record
   end
 
-  # def set_logger(logger)
-  #   ElasticRecord::Model.logger = logger
-  # end
-
   def test_request_notification
     stub_request(:any, '/test').to_return(status: 200, body: Oj.dump('the' => 'response'))
     Widget.elastic_connection.json_get "/widgets", {'foo' => 'bar'}
@@ -27,7 +23,7 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   end
 
   def test_request_notification_escaping
-    stub_request(:any, "#{Widget.elastic_connection.servers.first}/widgets?v=%DB").to_return(status: 200, body: Oj.dump('the' => 'response', 'has %DB' => 'odd %DB stuff'))
+    stub_request(:any, "#{ElasticRecord::ConnectionHandler.real_connection.servers.first}/widgets?v=%DB").to_return(status: 200, body: Oj.dump('the' => 'response', 'has %DB' => 'odd %DB stuff'))
     Widget.elastic_connection.json_get "/widgets?v=%DB", {'foo' => 'bar', 'escape %DB ' => 'request %DB'}
 
     wait
