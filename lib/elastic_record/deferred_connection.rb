@@ -18,7 +18,6 @@ module ElasticRecord
         begin
           ConnectionHandler.disable_deferring!
           refresh_indices
-          clear_indices
         ensure
           ConnectionHandler.enable_deferring!
         end
@@ -32,6 +31,8 @@ module ElasticRecord
       READ_METHODS = [:json_get, :head]
 
       def method_missing(method, *args, &block)
+        super unless ConnectionHandler.real_connection.respond_to?(method)
+
         if READ_METHODS.include?(method)
           flush_deferred_actions!
 
@@ -55,10 +56,6 @@ module ElasticRecord
 
       def refresh_indices
         ConnectionHandler.real_connection.json_post("/_refresh")
-      end
-
-      def clear_indices
-        ConnectionHandler.real_connection.json_post("/_all/_delete_by_query", query: {match_all: {}})
       end
   end
 end

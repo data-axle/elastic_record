@@ -21,6 +21,7 @@ module MiniTest
 
     def teardown
       ElasticRecord::ConnectionHandler.reset_deferring!
+      ElasticRecord::ConnectionHandler.real_connection.json_post("/_all/_delete_by_query", query: {match_all: {}})
     end
   end
 end
