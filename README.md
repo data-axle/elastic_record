@@ -70,6 +70,8 @@ search.filter(Product.arelastic[:name].prefix("Sca").negate)
 search.filter(Product.arelastic[:size].gt(5))
 ```
 
+Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/queries.rb.
+
 ### Querying ###
 
 To create a query string, pass a string to search.query:
