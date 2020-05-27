@@ -70,7 +70,7 @@ search.filter(Product.arelastic[:name].prefix("Sca").negate)
 search.filter(Product.arelastic[:size].gt(5))
 ```
 
-Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/filter.rb.
+Helpful Arel builders can be found at https://github.com/matthuhiggins/arelastic/blob/master/lib/arelastic/builders/queries.rb.
 
 ### Querying ###
 
