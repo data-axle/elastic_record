@@ -37,7 +37,7 @@ class ElasticRecord::CallbacksTest < MiniTest::Test
       }
     )
 
-    def as_search_document
+    def as_search_document(**)
       raise StandardError.new("Should never be called!")
       super
     end

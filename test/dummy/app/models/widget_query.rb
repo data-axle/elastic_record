@@ -5,7 +5,7 @@ class WidgetQuery
 
   self.percolates_model = Widget
 
-  def as_search_document
+  def as_search_document(**)
     filters = {}
     filters[:name] = name if name
     filters[:color] = color if color

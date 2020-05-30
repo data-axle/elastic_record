@@ -161,7 +161,7 @@ class ProductQuery
 
   self.percolates_model = Product
 
-  def as_search_document
+  def as_search_document(**)
     Product.filter(status: status).as_elastic
   end
 end
