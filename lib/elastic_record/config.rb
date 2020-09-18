@@ -13,6 +13,10 @@ module ElasticRecord
         @models ||= model_names.map { |model_name| model_name.constantize }
       end
 
+      def class_for(index_alias)
+        models.find { |model| model.elastic_index.alias_name == index_alias }
+      end
+
       def servers
         @servers
       end
