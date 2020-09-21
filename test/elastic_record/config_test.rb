@@ -11,6 +11,13 @@ class ElasticRecord::ConfigTest < MiniTest::Test
     assert_equal [Warehouse, Widget, WidgetQuery, Project], ElasticRecord::Config.models
   end
 
+  def test_class_for
+    ElasticRecord::Config.model_names = %w(Widget)
+
+    refute ElasticRecord::Config.class_for('not_an_index')
+    assert_equal Widget, ElasticRecord::Config.class_for('widgets')
+  end
+
   def test_servers
     with_servers ['abc.com', 'xyz.com'] do
       assert_equal ['abc.com', 'xyz.com'], ElasticRecord::Config.servers
