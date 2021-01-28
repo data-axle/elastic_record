@@ -251,3 +251,16 @@ Product.elastic_index.refresh            # Call the refresh API
 Product.elastic_index.get_mapping        # Get the index mapping defined by elastic search
 Product.elastic_index.update_mapping     # Update the elastic search mapping of the current index
 ```
+
+
+## Development
+
+```bash
+# Setup the database
+$ cp test/dummy/.env.example test/dummy/.env
+$ bundle exec rake app:db:setup
+$ bundle exec rake app:db:setup RAILS_ENV=test
+
+# Run tests
+$ bundle exec rake
+```
