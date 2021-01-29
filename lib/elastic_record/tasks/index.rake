@@ -32,6 +32,19 @@ namespace :index do
   desc "Recreate index for CLASS or all models."
   task reset: ['index:drop', 'index:create']
 
+  desc "Create index for all models that don't already have one"
+  task create_missing: :environment do
+    ElasticRecord::Task.get_models.each do |model|
+      index = model.elastic_index
+      if (all_names = index.all_names).empty?
+        index_name = index.create_and_deploy
+        puts "Created #{model.name} index (#{index_name})"
+      else
+        puts "#{model.name} already has an index (#{all_names.last})"
+      end
+    end
+  end
+
   task update_mapping: :environment do
     ElasticRecord::Task.get_models.each do |model|
       model.elastic_index.create_and_deploy
