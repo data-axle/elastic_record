@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.summary = 'An Elasticsearch querying ORM'
   s.description = 'Find your records with Elasticsearch'
 
-  s.required_ruby_version     = '>= 1.9.3'
-  s.required_rubygems_version = ">= 1.8.11"
+  s.required_ruby_version     = '>= 2.7'
+  s.required_rubygems_version = ">= 3.0"
 
   s.license           = 'MIT'
   s.authors           = ['Infogroup', 'Matthew Higgins']
