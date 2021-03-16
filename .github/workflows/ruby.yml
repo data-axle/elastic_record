@@ -42,5 +42,9 @@ jobs:
       uses: elastic/elastic-github-actions/elasticsearch@master
       with:
         stack-version: 7.6.0
+    - name: Create database
+      run: bundle exec rake app:db:setup RAILS_ENV=test
+    - name: Create Indexes
+      run: bundle exec rake app:index:create RAILS_ENV=test
     - name: Run tests
       run: bundle exec rake
