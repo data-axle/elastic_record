@@ -16,6 +16,8 @@ module ElasticRecord
       end
 
       def update_mapping(index_name = alias_name)
+        Rails.logger.info "ELASTIC_RECORD: called updating_mapping #{index_name}"
+        Rails.logger.info "#{mapping}"
         connection.json_put "/#{index_name}/_mapping", mapping
       end
 
