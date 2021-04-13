@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-20.04
 
+    strategy:
+      matrix:
+        ruby: [ '2.7', '3.0' ]
+
     services:
       postgres:
         image: postgres
@@ -30,7 +34,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.2
+        ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
     - name: Configure sysctl limits
       run: |

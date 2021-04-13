@@ -2,8 +2,8 @@ require "helper"
 
 class ElasticRecord::Index::SearchTest < MiniTest::Test
   def test_build_scroll_enumerator
-    index.index_document('bob', name: 'bob')
-    index.index_document('joe', name: 'joe')
+    index.index_document('bob', { name: 'bob' })
+    index.index_document('joe', { name: 'joe' })
 
     scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: 'name:bob'}}})
 
@@ -12,8 +12,8 @@ class ElasticRecord::Index::SearchTest < MiniTest::Test
   end
 
   def test_expired_scroll_error
-    index.index_document('bob', name: 'bob')
-    index.index_document('bobs', name: 'bob')
+    index.index_document('bob', { name: 'bob' })
+    index.index_document('bobs', { name: 'bob' })
 
     scroll_enumerator = index.build_scroll_enumerator(
       search: { 'query' => { query_string: { query: 'name:bob' } } },
@@ -29,7 +29,7 @@ class ElasticRecord::Index::SearchTest < MiniTest::Test
   end
 
   def test_each_slice
-    10.times { |i| index.index_document("bob#{i}", color: 'red') }
+    10.times { |i| index.index_document("bob#{i}", { color: 'red' }) }
     batches = []
 
     scroll_enumerator = index.build_scroll_enumerator(search: {'query' => {query_string: {query: 'color:red'}}}, batch_size: 1)

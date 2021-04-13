@@ -28,7 +28,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_index_document
-    index.index_document('abc', color: 'red')
+    index.index_document('abc', { color: 'red' })
 
     assert index.record_exists?('abc')
     refute index.record_exists?('xyz')
@@ -37,7 +37,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   def test_index_document_without_id
     index = Warehouse.elastic_index
     without_deferring(index) do
-      result = index.index_document(nil, name: 'red')
+      result = index.index_document(nil, { name: 'red' })
 
       assert index.record_exists?(result['_id'])
       refute index.record_exists?('xyz')
@@ -45,19 +45,19 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_update_document
-    index.index_document('abc', warehouse_id: '5', color: 'red')
-    index.update_document('abc', color: 'blue')
+    index.index_document('abc', { warehouse_id: '5', color: 'red' })
+    index.update_document('abc', { color: 'blue' })
 
     expected = {'warehouse_id' => '5', 'color' => 'blue'}
     assert_equal expected, index.get_doc('abc')['_source']
 
     assert_raises RuntimeError do
-      index.update_document(nil, color: 'blue')
+      index.update_document(nil, { color: 'blue' })
     end
   end
 
   def test_delete_document
-    index.index_document('abc', color: 'red')
+    index.index_document('abc', { color: 'red' })
     assert index.record_exists?('abc')
 
     index.delete_document('abc')
@@ -69,8 +69,8 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   def test_delete_by_query
-    index.index_document('bob', name: 'bob')
-    index.index_document('joe', name: 'joe')
+    index.index_document('bob', { name: 'bob' })
+    index.index_document('joe', { name: 'joe' })
 
     index.delete_by_query('query' => {query_string: {query: 'name:bob'}})
 
@@ -82,8 +82,8 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     assert_nil index.current_bulk_batch
 
     index.bulk do
-      index.index_document '5', color: 'green'
-      index.update_document '5', color: 'blue'
+      index.index_document '5', { color: 'green' }
+      index.update_document '5', { color: 'blue' }
       index.delete_document '3'
 
       expected = [
@@ -135,8 +135,8 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     without_deferring(index) do
       begin
         index.bulk do
-          index.index_document '5', color: 'green'
-          index.index_document '3', color: {'bad' => 'stuff'}
+          index.index_document '5', { color: 'green' }
+          index.index_document '3', { color: {'bad' => 'stuff'} }
         end
         refute index.record_exists?('3')
         assert false, 'Expected ElasticRecord::BulkError'
@@ -149,7 +149,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   def test_bulk_inheritance
     without_deferring(index) do
       index.bulk do
-        InheritedWidget.elastic_index.index_document '5', color: 'green'
+        InheritedWidget.elastic_index.index_document '5', { color: 'green' }
 
         expected = [
           {index: {_index: index.alias_name, _id: "5"}},
