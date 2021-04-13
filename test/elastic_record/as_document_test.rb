@@ -14,7 +14,7 @@ class ElasticRecord::AsDocumentTest < MiniTest::Test
   def test_as_partial_update_document
     widget = Widget.create(name: 'elmo', color: 'green')
 
-    Widget.elastic_index.update_document widget.id, name: 'wilbur'
+    Widget.elastic_index.update_document widget.id, { name: 'wilbur' }
 
     widget.update! color: 'grey', widget_part: { name: 'Doohicky' }
 
