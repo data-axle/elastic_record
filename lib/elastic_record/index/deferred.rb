@@ -34,14 +34,13 @@ module ElasticRecord
         end
 
         private
-          READ_METHODS = [:json_get, :head]
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
-            if READ_METHODS.include?(method)
+            if read_request?(method, args)
               flush_deferred_actions!
-              if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
-                index.real_connection.json_post("/#{$1.partition('/').first}/_refresh")
+              if index_name = search_request(method, args)
+                index.real_connection.json_post("/#{index_name}/_refresh")
               end
 
               index.real_connection.send(method, *args, &block)
@@ -56,6 +55,17 @@ module ElasticRecord
               queued_action.run(index.real_connection)
             end
             deferred_actions.clear
+          end
+
+          def search_request(method, args)
+            if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
+              $1.partition('/').first
+            end
+          end
+
+          READ_METHODS = [:json_get, :head]
+          def read_request?(method, args)
+            READ_METHODS.include?(method) || (method == :json_post && args.first =~ /^\/_search\/scroll/)
           end
       end
 

@@ -88,8 +88,8 @@ module ElasticRecord
       end
 
       def scroll(scroll_id, scroll_keep_alive)
-        options = {scroll_id: scroll_id, scroll: scroll_keep_alive}
-        connection.json_get("/_search/scroll?#{options.to_query}")
+        options = { scroll_id: scroll_id, scroll: scroll_keep_alive }
+        connection.json_post("/_search/scroll", options)
       rescue ElasticRecord::ConnectionError => e
         case e.status_code
         when '400' then raise ElasticRecord::InvalidScrollError, e.message
