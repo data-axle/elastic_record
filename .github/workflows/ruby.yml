@@ -24,6 +24,17 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      elasticsearch:
+        image: elasticsearch
+        options: >-
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 9200:9200
+        env:
+          discovery.type: single-node
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -31,16 +42,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Configure sysctl limits
-      run: |
-        sudo swapoff -a
-        sudo sysctl -w vm.swappiness=1
-        sudo sysctl -w fs.file-max=262144
-        sudo sysctl -w vm.max_map_count=262144
-    - name: Runs Elasticsearch
-      uses: elastic/elastic-github-actions/elasticsearch@master
-      with:
-        stack-version: 7.6.0
     - name: Create database
       run: bundle exec rake app:db:setup RAILS_ENV=test
     - name: Create Indexes
