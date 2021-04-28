@@ -1,19 +1,15 @@
 name: Ruby
-
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   test:
     runs-on: ubuntu-20.04
-
     strategy:
       matrix:
         ruby: [ '2.7', '3.0' ]
-
     services:
       postgres:
         image: postgres
@@ -28,7 +24,6 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
