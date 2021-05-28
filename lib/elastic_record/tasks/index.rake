@@ -11,12 +11,16 @@ module ElasticRecord
 end
 
 namespace :index do
-  desc "Create index for CLASS or all models."
+  desc "Create index for all models that don't already have one"
   task create: :environment do
     ElasticRecord::Task.get_models.each do |model|
       index = model.elastic_index
-      index_name = index.create_and_deploy
-      puts "Created #{model.name} index (#{index_name})"
+      if (all_names = index.all_names).empty?
+        index_name = index.create_and_deploy
+        puts "Created #{model.name} index (#{index_name})"
+      else
+        puts "#{model.name} already has an index (#{all_names.last})"
+      end
     end
   end
 
@@ -32,22 +36,10 @@ namespace :index do
   desc "Recreate index for CLASS or all models."
   task reset: ['index:drop', 'index:create']
 
-  desc "Create index for all models that don't already have one"
-  task create_missing: :environment do
-    ElasticRecord::Task.get_models.each do |model|
-      index = model.elastic_index
-      if (all_names = index.all_names).empty?
-        index_name = index.create_and_deploy
-        puts "Created #{model.name} index (#{index_name})"
-      else
-        puts "#{model.name} already has an index (#{all_names.last})"
-      end
-    end
-  end
-
+  desc "Updates the mappings for all models"
   task update_mapping: :environment do
     ElasticRecord::Task.get_models.each do |model|
-      model.elastic_index.create_and_deploy
+      model.elastic_index.update_mapping
       puts "Updated mapping for #{model.name}"
     end
   end
