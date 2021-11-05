@@ -16,14 +16,13 @@ class ElasticRecord::LogSubscriberTest < ActiveSupport::TestCase
   # end
 
   def test_request_notification
-    stub_request(:any, '/test').to_return(status: 200, body: Oj.dump('the' => 'response'))
-    Widget.elastic_connection.json_get "/widgets", {'foo' => 'bar'}
+    Widget.elastic_connection.json_get "/widgets/_search", { query: { term: { color: "blue" } } }
 
     wait
 
     assert_equal 1, @logger.logged(:debug).size
-    assert_match /GET (.*)widgets/, @logger.logged(:debug)[0]
-    assert_match %r['#{Oj.dump('foo' => 'bar')}'], @logger.logged(:debug)[0]
+    assert_match /GET (.*)widgets\/_search/, @logger.logged(:debug)[0]
+    assert_match /'{\"query\":{\"term\":{\"color\":\"blue\"}}}'/, @logger.logged(:debug)[0]
   end
 
   def test_request_notification_escaping
