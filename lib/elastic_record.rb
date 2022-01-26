@@ -4,20 +4,25 @@ require 'active_model'
 
 module ElasticRecord
   extend ActiveSupport::Autoload
-  autoload :AsDocument
-  autoload :Callbacks
   autoload :Config
   autoload :Connection
   autoload :Doctype
-  autoload :FromSearchHit
   autoload :Index
   autoload :Lucene
-  autoload :ElasticConnection
   autoload :Model
   autoload :PercolatorModel
   autoload :Relation
-  autoload :Searching
   autoload :SearchHits
+
+  module Model
+    extend ActiveSupport::Autoload
+
+    autoload :AsDocument
+    autoload :Callbacks
+    autoload :ElasticConnection
+    autoload :FromSearchHit
+    autoload :Searching
+  end
 
   module AggregationResponse
     extend ActiveSupport::Autoload

@@ -1,4 +1,5 @@
 module ElasticRecord
+  module Model
   module FromSearchHit
 
     def from_search_hit(hit)
@@ -58,4 +59,5 @@ module ElasticRecord
         Date.parse(value['gte'])..Date.parse(value['lte'])
       end
   end
+end
 end

@@ -1,4 +1,5 @@
 module ElasticRecord
+  module Model
   module AsDocument
     def as_search_document(is_nested_object: false)
       elastic_index.mapping[:properties].each_with_object({}) do |(field, mapping), result|
@@ -48,4 +49,5 @@ module ElasticRecord
       {'gte' => gte, 'lte' => lte}
     end
   end
+end
 end

@@ -1,4 +1,5 @@
 module ElasticRecord
+  module Model
   module ElasticConnection
     extend ActiveSupport::Concern
 
@@ -12,4 +13,5 @@ module ElasticRecord
       end
     end
   end
+end
 end

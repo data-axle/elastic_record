@@ -1,4 +1,5 @@
 module ElasticRecord
+  module Model
   module Callbacks
     def self.included(base)
       return unless base.respond_to?(:after_save) &&  base.respond_to?(:after_destroy)
@@ -22,4 +23,5 @@ module ElasticRecord
         self.class.elastic_index.delete_document id
       end
   end
+end
 end

@@ -1,4 +1,5 @@
 module ElasticRecord
+  module Model
   module Searching
     def elastic_relation
       ElasticRecord::Relation.new(self)
@@ -32,4 +33,5 @@ module ElasticRecord
       Thread.current["#{self}_current_elastic_search"] = relation
     end
   end
+end
 end
