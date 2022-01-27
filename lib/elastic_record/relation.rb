@@ -52,7 +52,13 @@ module ElasticRecord
 
     def find_hits(search_hits)
       if klass.elastic_index.load_from_source
+        if klass.respond_to?(:es_join_field)
+          raise "Loading parent/child joins from source is not currently supported!"
+        end
         search_hits.hits.map { |hit| klass.from_search_hit(hit) }
+      elsif klass.respond_to?(:es_join_field)
+        ids = search_hits.hits.filter_map { |hit| hit['_id'] if hit.dig('_source', klass.es_join_field, 'name') == klass.es_join_name }
+        klass.find(ids)
       else
         klass.find search_hits.to_ids
       end

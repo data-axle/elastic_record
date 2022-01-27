@@ -21,6 +21,7 @@ module ElasticRecord
     autoload :Callbacks
     autoload :ElasticConnection
     autoload :FromSearchHit
+    autoload :Joining
     autoload :Searching
   end
 
