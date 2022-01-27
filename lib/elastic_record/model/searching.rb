@@ -1,37 +1,37 @@
 module ElasticRecord
   module Model
-  module Searching
-    def elastic_relation
-      ElasticRecord::Relation.new(self)
-    end
-
-    def elastic_search
-      if current_elastic_search
-        current_elastic_search.clone
-      else
-        elastic_relation
+    module Searching
+      def elastic_relation
+        ElasticRecord::Relation.new(self)
       end
-    end
-    alias es elastic_search
 
-    def elastic_scope(name, body, &block)
-      extension = Module.new(&block) if block
-
-      singleton_class.send(:define_method, name) do |*args|
-        relation = body.call(*args)
-        relation = elastic_search.merge(relation)
-
-        extension ? relation.extending(extension) : relation
+      def elastic_search
+        if current_elastic_search
+          current_elastic_search.clone
+        else
+          elastic_relation
+        end
       end
-    end
+      alias es elastic_search
 
-    def current_elastic_search #:nodoc:
-      Thread.current["#{self}_current_elastic_search"]
-    end
+      def elastic_scope(name, body, &block)
+        extension = Module.new(&block) if block
 
-    def current_elastic_search=(relation) #:nodoc:
-      Thread.current["#{self}_current_elastic_search"] = relation
+        singleton_class.send(:define_method, name) do |*args|
+          relation = body.call(*args)
+          relation = elastic_search.merge(relation)
+
+          extension ? relation.extending(extension) : relation
+        end
+      end
+
+      def current_elastic_search #:nodoc:
+        Thread.current["#{self}_current_elastic_search"]
+      end
+
+      def current_elastic_search=(relation) #:nodoc:
+        Thread.current["#{self}_current_elastic_search"] = relation
+      end
     end
   end
-end
 end
