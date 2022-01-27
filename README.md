@@ -258,8 +258,8 @@ Product.elastic_index.update_mapping     # Update the elastic search mapping of 
 ```bash
 # Setup the database
 $ cp test/dummy/.env.example test/dummy/.env
-$ bundle exec rake app:db:setup
-$ bundle exec rake app:db:setup RAILS_ENV=test
+$ bundle exec rake app:db:prepare app:index:reset
+$ bundle exec rake app:db:prepare RAILS_ENV=test
 
 # Run tests
 $ bundle exec rake
