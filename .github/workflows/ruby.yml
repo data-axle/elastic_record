@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         ruby: [ '2.7', '3.0', '3.1' ]
+        elasticsearch: [ '7.12.1', '7.16.3' ]
     services:
       postgres:
         image: postgres
@@ -27,7 +28,7 @@ jobs:
           POSTGRES_USER: runner
           POSTGRES_HOST_AUTH_METHOD: trust
       elasticsearch:
-        image: elasticsearch:7.12.0
+        image: elasticsearch:${{ matrix.elasticsearch }}
         options: >-
           --health-cmd "curl http://localhost:9200/_cluster/health"
           --health-interval 10s
