@@ -4,13 +4,19 @@ module ElasticRecord
       class JoinChild
         attr_reader :klass, :name, :children, :parent_id_accessor
 
-        def initialize(klass:, name: nil, children: [], parent_id_accessor: nil)
+        def initialize(klass:, name: nil, children: [], parent_id_accessor: nil, parent_accessor: nil)
           unless klass < ElasticRecord::Model
             raise "JoinChild#klass must be instances of `ElasticRecord::Model`. Cannot be #{klass}!"
           end
 
           if klass.instance_methods.include?(:es_join_name)
             raise "Cannot initialize a #{self.class} with a klass that is already a parent!  Remove the call to has_es_children from #{klass}."
+          end
+
+          if parent_accessor
+            unless parent_accessor.respond_to?(:call) || (klass.instance_methods + klass.private_instance_methods).include?(parent_accessor.to_sym)
+              raise "parent_accessor must be callable for #{klass}"
+            end
           end
 
           if parent_id_accessor
@@ -45,6 +51,17 @@ module ElasticRecord
             raise "Naming your join field '#{join_field}' on #{parent} will clobber an existing #{klass} method with that name!  Choose a different name!"
           end
 
+          if parent.instance_methods.include?(:routing)
+            parent_accessor = self.parent_accessor
+
+            if parent_accessor.nil?
+              parent_accessor = parent.es_join_name
+              unless (klass.instance_methods + klass.private_instance_methods).include?(parent_accessor.to_sym)
+                raise "#{klass} does not respond to #{parent_accessor}.  Please specify a parent_accessor for #{self.class}(klass: #{klass})!"
+              end
+            end
+          end
+
           name = self.name
           parent_id_accessor = self.parent_id_accessor
 
@@ -63,8 +80,9 @@ module ElasticRecord
             { 'name' => es_join_name.to_s, 'parent' => parent_id }
           end
           klass.define_method(:routing) do
-            if parent.respond_to?(:routing)
-              parent.routing
+            if parent.instance_methods.include?(:routing)
+              parent_instance = parent_accessor.respond_to?(:call) ? instance_exec(&parent_accessor) : send(parent_accessor)
+              parent_instance.routing
             else
               parent_id_accessor.respond_to?(:call) ? instance_exec(&parent_id_accessor) : send(parent_id_accessor)
             end
