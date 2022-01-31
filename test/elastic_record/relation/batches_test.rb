@@ -3,6 +3,7 @@ require 'helper'
 class ElasticRecord::Relation::BatchesTest < MiniTest::Test
   def setup
     super
+    Widget.destroy_all
     @red_widget   = Widget.create!(color: 'red')
     @blue_widget  = Widget.create!(color: 'blue')
     @green_widget = Widget.create!(color: 'green')
