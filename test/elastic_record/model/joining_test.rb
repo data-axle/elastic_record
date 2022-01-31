@@ -85,4 +85,32 @@ class ElasticRecord::Model::JoiningTest < MiniTest::Test
     assert_equal [mother.name], Mother.filter(Mother.arelastic.queries.match_all).to_a.map(&:name)
     assert_equal [son.name], Son.filter(Son.arelastic.queries.match_all).to_a.map(&:name)
   end
+
+  def test_bulk_insert_with_parent_join
+    mother = Mother.new(id: 9, name: 'Queen Victoria')
+    Mother.insert_all([mother.attributes])
+
+    son = Son.new(id: 10, name: 'King Edward VII', mother: mother)
+    Son.insert_all([son.attributes])
+
+    index = Mother.elastic_index
+    assert_nil index.current_bulk_batch
+
+    index.bulk do
+      index.index_record(mother)
+      index.index_record(son)
+
+      expected = [
+        {index: {_index: index.alias_name, _id: 9}},
+        {"name" => "Queen Victoria", "arbitrary" => {"name" => "mother"}},
+        {index: {_index: index.alias_name, _id: 10, routing: "9"}},
+        {"name" => "King Edward VII", "warehouse_id" => "9", "arbitrary" => {"name" => "son", "parent" => "9"}}
+
+      ]
+
+      assert_equal expected, index.current_bulk_batch
+    end
+
+    assert_nil index.current_bulk_batch
+  end
 end
