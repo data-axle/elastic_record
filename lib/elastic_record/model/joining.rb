@@ -19,7 +19,7 @@ module ElasticRecord
             end
           end
 
-          name ||= klass.to_s.underscore
+          name ||= klass.to_s.demodulize.underscore
 
           children = Array.wrap(children)
           children.each do |child|
@@ -89,7 +89,7 @@ module ElasticRecord
           raise "Naming your join field '#{join_field}' will clobber an existing #{self} method with that name!  Choose a different name!"
         end
 
-        name ||= to_s.underscore
+        name ||= to_s.demodulize.underscore
         klass = self
         define_singleton_method(:es_root) { klass }
         define_singleton_method(:es_join_field) { join_field }
