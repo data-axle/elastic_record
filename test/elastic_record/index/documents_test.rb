@@ -1,6 +1,12 @@
 require 'helper'
 
 class ElasticRecord::Index::DocumentsTest < MiniTest::Test
+  def setup
+    super
+    Widget.destroy_all
+    Warehouse.destroy_all
+  end
+
   class InheritedWidget < Widget
     def self.base_class
       Widget
