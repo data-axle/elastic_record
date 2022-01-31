@@ -1,6 +1,12 @@
 require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Test
+  def setup
+    super
+    Widget.destroy_all
+    Warehouse.destroy_all
+  end
+
   class SpecialRelation < ElasticRecord::Relation
   end
 
@@ -16,15 +22,15 @@ class ElasticRecord::RelationTest < MiniTest::Test
 
   def test_count
     original_count = Widget.elastic_relation.count
-    Widget.create(color: 'red')
-    Widget.create(color: 'blue')
+    Widget.create!(color: 'red')
+    Widget.create!(color: 'blue')
 
     assert_equal 2, Widget.elastic_relation.count - original_count
   end
 
   def test_aggregations
-    Widget.create(color: 'red', price: 5)
-    Widget.create(color: 'blue', price: 10)
+    Widget.create!(color: 'red', price: 5)
+    Widget.create!(color: 'blue', price: 10)
 
     aggregations = Widget.elastic_relation.aggregate('popular_colors' => {'terms' => {'field' => 'color'}}).aggregations
 
@@ -36,14 +42,14 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_explain
-    Widget.create(color: 'blue')
+    Widget.create!(color: 'blue')
 
     # explain = Widget.elastic_relation.filter(color: 'blue').explain('10')
   end
 
   def test_to_a
-    Widget.create(color: 'red')
-    Widget.create(color: 'red')
+    Widget.create!(color: 'red')
+    Widget.create!(color: 'red')
 
     array = Widget.elastic_relation.to_a
 
@@ -78,8 +84,8 @@ class ElasticRecord::RelationTest < MiniTest::Test
   end
 
   def test_equal
-    Widget.create(color: 'red')
-    Widget.create(color: 'blue')
+    Widget.create!(color: 'red')
+    Widget.create!(color: 'blue')
 
     assert_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'red')
     refute_equal Widget.elastic_relation.filter(color: 'red'), Widget.elastic_relation.filter(color: 'blue')
