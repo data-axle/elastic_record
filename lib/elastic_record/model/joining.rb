@@ -74,7 +74,7 @@ module ElasticRecord
           klass.elastic_index.disable_index_creation = true
           parent.es_root.elastic_index.mapping.merge!(klass.elastic_index.mapping)
 
-          children.each { |child| assign_to_parent!(parent: klass) }
+          children.each { |child| child.assign_to_parent!(parent: klass) }
         end
 
         def relations
