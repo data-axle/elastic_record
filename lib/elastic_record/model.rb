@@ -5,6 +5,7 @@ module ElasticRecord
     included do
       extend Searching
       extend FromSearchHit
+      extend Joining
       include ElasticConnection
       include Callbacks
       include AsDocument

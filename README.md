@@ -202,6 +202,37 @@ When one model inherits from another, ElasticRecord makes some assumptions about
 
 These can all be overridden.  For instance, it might be desirable for the child documents to be in a separate index.
 
+### Join fields
+ElasticSearch supports declaring a join field that specifies a parent-child relationship between documents of different types in the same index ([docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/parent-join.html)).
+ElasticRecord provides a short-(but not-so-short)-cut for declaring the mapping:
+
+```ruby
+class State
+  include ElasticRecord::Model
+end
+
+class Country
+  include ElasticRecord::Model
+
+  has_es_children(
+    join_field: 'pick_a_name_for_the_join_field',
+    children: ::ElasticRecord::Model::Joining::JoinChild.new(klass: State)
+  )
+end
+```
+
+`has_es_children` accepts an optional `name` argument, with a sane default. In the above example, it would default to `country`. The name can later be used to construct `has_parent` queries.
+ElasticRecord will define a getter method with the same name as the value provided to `join_field` on both the parent and all children (and grandchildren).
+
+`::ElasticRecord::Model::Joining::JoinChild.new` optional arguments:
+* `name`: defaults to the snake case version of the value provided to `klass` (e.g. `state` in the example above). Can be used to construct `has_child` queries.
+* `children`: Another instance of `::ElasticRecord::Model::Joining::JoinChild` or an Array of instances. Defaults to an empty Array.  Theoretically, an arbitrary number of layers of parent-child joins can be achieved this way.
+* `parent_id_accessor`: Determines how the ID of the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country_id`.
+* `parent_accessor`: Determines how the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country`.  The is used to retrieve routing for multi-layered parent-child joins.
+Notes:
+* Creating, deleting and updating mapping on the index must be handled via the Top-Level parent.  Running `rake index:create CLASS=State` has no effect.
+* The `load_from_source` configuration is not currently supported for indices with a join field.
+
 ### Load Documents from Source
 
 To fetch documents without an additional request to a backing ActiveRecord database you can load the documents from `_source`.

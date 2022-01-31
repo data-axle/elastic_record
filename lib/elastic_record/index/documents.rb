@@ -8,6 +8,7 @@ module ElasticRecord
           index_document(
             record.try(:id),
             record.as_search_document,
+            routing: record.try(:routing),
             index_name: index_name
           )
         end
@@ -18,21 +19,22 @@ module ElasticRecord
           update_document(
             record.id,
             record.as_partial_update_document,
+            routing: record.try(:routing),
             index_name: index_name
           )
         end
       end
 
-      def index_document(id, document, parent: nil, index_name: alias_name)
+      def index_document(id, document, routing: nil, index_name: alias_name)
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id }
-          instructions[:parent] = parent if parent
+          instructions[:routing] = routing if routing
 
           batch << { index: instructions }
           batch << document
         else
           path = "/#{index_name}/_doc/#{id}"
-          path << "?parent=#{parent}" if parent
+          path << "?routing=#{routing}" if routing
 
           if id
             connection.json_put path, document
@@ -42,35 +44,34 @@ module ElasticRecord
         end
       end
 
-      def update_document(id, document, parent: nil, index_name: alias_name)
+      def update_document(id, document, routing: nil, index_name: alias_name)
         raise "Cannot update a document with empty id" if id.blank?
         params = {doc: document, doc_as_upsert: true}
 
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
-          instructions[:parent] = parent if parent
+          instructions[:routing] = routing if routing
 
           batch << { update: instructions }
           batch << params
         else
           path = "/#{index_name}/_update/#{id}?retry_on_conflict=3"
-          path << "&parent=#{parent}" if parent
+          path << "&routing=#{routing}" if routing
 
           connection.json_post path, params
         end
       end
 
-      def delete_document(id, parent: nil, index_name: alias_name)
+      def delete_document(id, routing: nil, index_name: alias_name)
         raise "Cannot delete document with empty id" if id.blank?
-        index_name ||= alias_name
 
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
-          instructions[:parent] = parent if parent
+          instructions[:routing] = routing if routing
           batch << { delete: instructions }
         else
           path = "/#{index_name}/_doc/#{id}"
-          path << "&parent=#{parent}" if parent
+          path << "&routing=#{routing}" if routing
 
           connection.json_delete path
         end

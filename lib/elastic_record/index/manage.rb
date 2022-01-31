@@ -1,6 +1,8 @@
 module ElasticRecord
   class Index
     module Manage
+      attr_accessor :disable_index_creation
+
       def create_and_deploy(index_name = new_index_name)
         create(index_name)
         deploy(index_name)
@@ -8,6 +10,8 @@ module ElasticRecord
       end
 
       def create(index_name = new_index_name, setting_overrides: {})
+        return if disable_index_creation
+
         mapping_params = {
           "mappings" => mapping,
           "settings" => settings.merge(setting_overrides)
@@ -18,10 +22,14 @@ module ElasticRecord
       end
 
       def delete(index_name)
+        return if disable_index_creation
+
         connection.json_delete index_name
       end
 
       def delete_all
+        return if disable_index_creation
+
         all_names.each do |index_name|
           delete index_name
         end
@@ -32,6 +40,8 @@ module ElasticRecord
       end
 
       def deploy(index_name)
+        return if disable_index_creation
+
         actions = [
           {
             add: {

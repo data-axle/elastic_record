@@ -9,7 +9,7 @@ class ElasticRecord::SearchingTest < MiniTest::Test
   end
 
   def test_elastic_search
-    widget = Widget.create(color: 'red')
+    widget = Widget.create!(color: 'red')
     assert_equal widget, Widget.elastic_search.filter(color: 'red').first
     assert_equal widget, Widget.es.filter(color: 'red').first
   end
@@ -23,6 +23,7 @@ class ElasticRecord::SearchingTest < MiniTest::Test
   end
 
   def test_elastic_scope
+    ScopedWidget.create!(color: :blue)
     relation = ScopedWidget.by_color('blue')
 
     assert_equal ScopedWidget.elastic_relation.filter(color: 'blue'), relation
