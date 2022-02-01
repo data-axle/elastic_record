@@ -90,6 +90,7 @@ module ElasticRecord
 
           klass.elastic_index.alias_name = parent.es_root.elastic_index.alias_name
           klass.elastic_index.disable_index_creation = true
+          klass.elastic_index.mapping[:properties][join_field] = parent.es_root.elastic_index.mapping[:properties][join_field]
           parent.es_root.elastic_index.mapping[:properties].merge!(klass.elastic_index.mapping[:properties])
 
           children.each { |child| child.assign_to_parent!(parent: klass) }
@@ -124,9 +125,9 @@ module ElasticRecord
           { 'name' => es_join_name.to_s }
         end
 
-        children.each { |child| child.assign_to_parent!(parent: self)}
         relations = children.map(&:relations).inject({ name => children.map(&:name) }, :merge).keep_if { |k, v| v.present? }
         elastic_index.mapping[:properties][join_field] = { type: "join", relations: relations }
+        children.each { |child| child.assign_to_parent!(parent: self)}
       end
     end
   end
