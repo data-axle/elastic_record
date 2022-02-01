@@ -90,7 +90,7 @@ module ElasticRecord
 
           klass.elastic_index.alias_name = parent.es_root.elastic_index.alias_name
           klass.elastic_index.disable_index_creation = true
-          parent.es_root.elastic_index.mapping.merge!(klass.elastic_index.mapping)
+          parent.es_root.elastic_index.mapping[:properties].merge!(klass.elastic_index.mapping[:properties])
 
           children.each { |child| child.assign_to_parent!(parent: klass) }
         end
