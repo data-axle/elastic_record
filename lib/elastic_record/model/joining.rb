@@ -14,13 +14,13 @@ module ElasticRecord
           end
 
           if parent_accessor
-            unless parent_accessor.respond_to?(:call) || (klass.instance_methods + klass.private_instance_methods).include?(parent_accessor.to_sym)
+            unless parent_accessor.respond_to?(:call) || callable_methods(klass).include?(parent_accessor.to_sym)
               raise "parent_accessor must be callable for #{klass}"
             end
           end
 
           if parent_id_accessor
-            unless parent_id_accessor.respond_to?(:call) || (klass.instance_methods + klass.private_instance_methods).include?(parent_id_accessor.to_sym)
+            unless parent_id_accessor.respond_to?(:call) || callable_methods(klass).include?(parent_id_accessor.to_sym)
               raise "parent_id_accessor must be callable for #{klass}"
             end
           end
@@ -47,7 +47,7 @@ module ElasticRecord
           end
 
           join_field = parent.es_join_field
-          if (klass.instance_methods + klass.private_instance_methods).include?(join_field.to_sym)
+          if callable_methods.include?(join_field.to_sym)
             raise "Naming your join field '#{join_field}' on #{parent} will clobber an existing #{klass} method with that name!  Choose a different name!"
           end
 
@@ -56,7 +56,7 @@ module ElasticRecord
 
             if parent_accessor.nil?
               parent_accessor = parent.es_join_name
-              unless (klass.instance_methods + klass.private_instance_methods).include?(parent_accessor.to_sym)
+              unless callable_methods.include?(parent_accessor.to_sym)
                 raise "#{klass} does not respond to #{parent_accessor}.  Please specify a parent_accessor for #{self.class}(klass: #{klass})!"
               end
             end
@@ -67,7 +67,7 @@ module ElasticRecord
 
           if parent_id_accessor.nil?
             parent_id_accessor = "#{parent.es_join_name}_id"
-            unless (klass.instance_methods + klass.private_instance_methods).include?(parent_id_accessor.to_sym)
+            unless callable_methods.include?(parent_id_accessor.to_sym)
               raise "#{klass} does not respond to #{parent_id_accessor}.  Please specify a parent_id_accessor for #{self.class}(klass: #{klass})!"
             end
           end
@@ -98,6 +98,13 @@ module ElasticRecord
         def relations
           children.map(&:relations).inject({ name => children.map(&:name) }, :merge)
         end
+
+        private
+          def callable_methods(klass: self.klass)
+            (klass.instance_methods + klass.private_instance_methods).tap do |result|
+              result.concat(klass.attribute_names.map(&:to_sym)) if klass < ActiveRecord::AttributeMethods
+            end
+          end
       end
 
       def has_es_children(join_field:, name: nil, children:)
