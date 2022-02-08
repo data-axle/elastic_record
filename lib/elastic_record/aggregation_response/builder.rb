@@ -27,6 +27,7 @@ module ElasticRecord
           cardinality
           max
           min
+          sum
           value_count
         ),
         MultiValueAggregation => %w(
