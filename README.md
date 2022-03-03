@@ -215,8 +215,8 @@ class Country
   include ElasticRecord::Model
 
   has_es_children(
-    join_field: 'pick_a_name_for_the_join_field',
-    children: ::ElasticRecord::Model::Joining::JoinChild.new(klass: State)
+    children:   State,
+    join_field: 'pick_a_name_for_the_join_field'
   )
 end
 ```
@@ -224,7 +224,9 @@ end
 `has_es_children` accepts an optional `name` argument, with a sane default. In the above example, it would default to `country`. The name can later be used to construct `has_parent` queries.
 ElasticRecord will define a getter method with the same name as the value provided to `join_field` on both the parent and all children (and grandchildren).
 
-`::ElasticRecord::Model::Joining::JoinChild.new` optional arguments:
+The `children` argument expects a Class, Array of Classes, or, for complex nestings, an instance of `::ElasticRecord::Model::Joining::JoinChild.new`.
+
+`::ElasticRecord::Model::Joining::JoinChild.new` accepts additional, optional arguments:
 * `name`: defaults to the snake case version of the value provided to `klass` (e.g. `state` in the example above). Can be used to construct `has_child` queries.
 * `children`: Another instance of `::ElasticRecord::Model::Joining::JoinChild` or an Array of instances. Defaults to an empty Array.  Theoretically, an arbitrary number of layers of parent-child joins can be achieved this way.
 * `parent_id_accessor`: Determines how the ID of the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country_id`.
