@@ -5,13 +5,8 @@ module ElasticRecord
         attr_reader :klass, :name, :children, :parent_id_accessor
 
         def self.build_children(user_input)
-          case user_input
-          when Class, Array
-            Array.wrap(user_input).map { |child| new(klass: child) }
-          when ElasticRecord::Model::Joining::JoinChild
-            Array.wrap(user_input)
-          else
-            raise "Expected a Class, Array, or ElasticRecord::Model::Joining::JoinChild instance as first arg to has_es_children. Received #{user_input} instead."
+          Array.wrap(user_input).map do |join_child|
+            join_child.is_a?(self) ? join_child : new(klass: join_child)
           end
         end
 
