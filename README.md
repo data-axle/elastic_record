@@ -211,12 +211,19 @@ class State
   include ElasticRecord::Model
 end
 
+class City
+  include ElasticRecord::Model
+end
+
 class Country
   include ElasticRecord::Model
 
   has_es_children(
-    children:   State,
-    join_field: 'pick_a_name_for_the_join_field'
+    join_field: 'pick_a_name_for_the_join_field',
+    children:   [
+      State,
+      ElasticRecord::Model::Joining::JoinChild.new(klass: City, parent_id_accessor: :country_code)
+    ]
   )
 end
 ```
