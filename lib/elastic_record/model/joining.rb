@@ -133,7 +133,7 @@ module ElasticRecord
 
         relations = join_children.map(&:relations).inject({ name => join_children.map(&:name) }, :merge).keep_if { |k, v| v.present? }
         elastic_index.mapping[:properties][join_field] = { type: "join", relations: relations }
-        children.each { |child| child.assign_to_parent!(parent: self)}
+        join_children.each { |child| child.assign_to_parent!(parent: self)}
       end
     end
   end
