@@ -1,6 +1,11 @@
 require 'helper'
 
 class ElasticRecord::SearchingTest < MiniTest::Test
+  def setup
+    super
+    Widget.destroy_all
+  end
+
   def test_elastic_relation
     relation = Widget.elastic_relation
 
