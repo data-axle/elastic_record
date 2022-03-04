@@ -4,8 +4,14 @@ module ElasticRecord
       class JoinChild
         attr_reader :klass, :name, :children, :parent_id_accessor
 
+        def self.build_children(user_input)
+          Array.wrap(user_input).map do |join_child|
+            join_child.is_a?(self) ? join_child : new(klass: join_child)
+          end
+        end
+
         def initialize(klass:, name: nil, children: [], parent_id_accessor: nil, parent_accessor: nil)
-          unless klass < ElasticRecord::Model
+          unless klass.is_a?(Class) && klass < ElasticRecord::Model
             raise "JoinChild#klass must be instances of `ElasticRecord::Model`. Cannot be #{klass}!"
           end
 
@@ -109,7 +115,7 @@ module ElasticRecord
       end
 
       def has_es_children(join_field:, name: nil, children:)
-        children = Array.wrap(children)
+        join_children = ElasticRecord::Model::Joining::JoinChild.build_children(children)
 
         if (instance_methods + private_instance_methods).include?(join_field.to_sym)
           raise "Naming your join field '#{join_field}' will clobber an existing #{self} method with that name!  Choose a different name!"
@@ -125,9 +131,9 @@ module ElasticRecord
           { 'name' => es_join_name.to_s }
         end
 
-        relations = children.map(&:relations).inject({ name => children.map(&:name) }, :merge).keep_if { |k, v| v.present? }
+        relations = join_children.map(&:relations).inject({ name => join_children.map(&:name) }, :merge).keep_if { |k, v| v.present? }
         elastic_index.mapping[:properties][join_field] = { type: "join", relations: relations }
-        children.each { |child| child.assign_to_parent!(parent: self)}
+        join_children.each { |child| child.assign_to_parent!(parent: self)}
       end
     end
   end
