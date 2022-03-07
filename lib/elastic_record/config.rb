@@ -14,7 +14,9 @@ module ElasticRecord
       end
 
       def class_for(index_alias)
-        models.find { |model| model.elastic_index.alias_name == index_alias }
+        models.find do |model|
+          !model.elastic_index.disable_index_creation && model.elastic_index.alias_name == index_alias
+        end
       end
 
       def servers

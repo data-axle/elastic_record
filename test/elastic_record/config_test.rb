@@ -16,6 +16,9 @@ class ElasticRecord::ConfigTest < MiniTest::Test
 
     refute ElasticRecord::Config.class_for('not_an_index')
     assert_equal Widget, ElasticRecord::Config.class_for('widgets')
+
+    Widget.elastic_index.disable_index_creation = true
+    refute ElasticRecord::Config.class_for('widgets')
   end
 
   def test_servers
