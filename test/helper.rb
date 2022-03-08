@@ -19,6 +19,8 @@ module MiniTest
       ElasticRecord::Config.models.each do |model|
         model.elastic_index.enable_deferring!
       end
+      Widget.destroy_all
+      Warehouse.destroy_all
     end
 
     def teardown
