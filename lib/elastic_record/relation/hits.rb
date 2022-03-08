@@ -15,13 +15,7 @@ module ElasticRecord
         @search_results ||= begin
           options = { typed_keys: true, track_total_hits: true }
           options[:search_type] = search_type_value if search_type_value
-          options[:_source] = if klass.elastic_index.load_from_source
-            true
-          elsif klass.respond_to?(:es_join_field)
-            klass.es_join_field
-          else
-            false
-          end
+          options[:_source] = klass.elastic_index.load_from_source
 
           klass.elastic_index.search(as_elastic, options)
         end

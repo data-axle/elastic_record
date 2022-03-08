@@ -38,6 +38,12 @@ module ElasticRecord
         end
       end
 
+      def initialize(*)
+        if klass.respond_to?(:es_join_field)
+          filter!(klass.es_join_field => klass.es_join_name)
+        end
+      end
+
       Relation::SINGLE_VALUE_METHODS.each do |name|
         define_method "#{name}_value" do
           @values[name]
