@@ -3,7 +3,12 @@ require 'helper'
 class ElasticRecord::SearchingTest < MiniTest::Test
   def setup
     super
-    Widget.destroy_all
+    ScopedWidget.elastic_index.enable_deferring!
+  end
+
+  def teardown
+    super
+    ScopedWidget.elastic_index.reset_deferring!
   end
 
   def test_elastic_relation

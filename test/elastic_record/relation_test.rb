@@ -1,12 +1,6 @@
 require 'helper'
 
 class ElasticRecord::RelationTest < MiniTest::Test
-  def setup
-    super
-    Widget.destroy_all
-    Warehouse.destroy_all
-  end
-
   class SpecialRelation < ElasticRecord::Relation
   end
 

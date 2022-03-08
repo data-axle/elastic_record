@@ -1,11 +1,6 @@
 require 'helper'
 
 class ElasticRecord::Relation::CalculationsTest < MiniTest::Test
-  def setup
-    super
-    Widget.destroy_all
-  end
-
   def test_calculate
     Widget.create!(color: 'red')
     Widget.create!(color: 'red')

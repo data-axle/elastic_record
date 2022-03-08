@@ -19,8 +19,14 @@ class ElasticRecord::Model::JoiningTest < MiniTest::Test
 
   def setup
     super
-    Mother.destroy_all
-    Son.destroy_all
+    Mother.elastic_index.enable_deferring!
+    Son.elastic_index.enable_deferring!
+  end
+
+  def teardown
+    super
+    Mother.elastic_index.reset_deferring!
+    Son.elastic_index.reset_deferring!
   end
 
   def test_elastic_index_model
