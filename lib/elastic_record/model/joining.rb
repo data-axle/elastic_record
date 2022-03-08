@@ -6,8 +6,15 @@ module ElasticRecord
 
         def self.build_children(user_input)
           Array.wrap(user_input).map do |join_child|
-            join_child.is_a?(self) ? join_child : new(klass: join_child)
-          end
+            case join_child
+            when Hash
+              join_child.map { |name, klass| new(name: name, klass: klass) }
+            when self
+              join_child
+            else
+              new(klass: join_child)
+            end
+          end.tap(&:flatten!)
         end
 
         def initialize(klass:, name: nil, children: [], parent_id_accessor: nil, parent_accessor: nil)
