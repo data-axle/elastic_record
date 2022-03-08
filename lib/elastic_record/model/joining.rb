@@ -106,6 +106,10 @@ module ElasticRecord
           children.map(&:relations).inject({ name => children.map(&:name) }, :merge)
         end
 
+        def es_descendants
+          @es_descendants ||= children.map { |child| child.es_descendants + [child.klass] }.tap(&:uniq!).freeze
+        end
+
         private
           def callable_methods(klass: self.klass)
             (klass.instance_methods + klass.private_instance_methods).tap do |result|
@@ -126,6 +130,9 @@ module ElasticRecord
         define_singleton_method(:es_root) { klass }
         define_singleton_method(:es_join_field) { join_field }
         define_singleton_method(:es_join_name) { name }
+        define_singleton_method(:es_descendants) do
+          join_children.map { |child| child.es_descendants + [child.klass] }.tap(&:flatten!).tap(&:uniq!).freeze
+        end
         define_method(:es_join_name) { name }
         define_method(join_field) do
           { 'name' => es_join_name.to_s }
