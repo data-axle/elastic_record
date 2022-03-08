@@ -31,6 +31,7 @@ class ElasticRecord::SearchingTest < MiniTest::Test
     ScopedWidget.create!(color: :blue)
     relation = ScopedWidget.by_color('blue')
 
+    ScopedWidget.elastic_index.refresh
     assert_equal ScopedWidget.elastic_relation.filter(color: 'blue'), relation
     assert_equal -5, relation.offset(5).negative_offset
   end
