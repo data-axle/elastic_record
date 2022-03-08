@@ -215,6 +215,10 @@ class City
   include ElasticRecord::Model
 end
 
+class PostalCode
+  include ElasticRecord::Model
+end
+
 class Country
   include ElasticRecord::Model
 
@@ -222,6 +226,7 @@ class Country
     join_field: 'pick_a_name_for_the_join_field',
     children:   [
       State,
+      { zip: PostalCode },
       ElasticRecord::Model::Joining::JoinChild.new(klass: City, parent_id_accessor: :country_code)
     ]
   )
@@ -231,16 +236,19 @@ end
 `has_es_children` accepts an optional `name` argument, with a sane default. In the above example, it would default to `country`. The name can later be used to construct `has_parent` queries.
 ElasticRecord will define a getter method with the same name as the value provided to `join_field` on both the parent and all children (and grandchildren).
 
-The `children` argument expects a Class or, for complex nestings, an instance of `::ElasticRecord::Model::Joining::JoinChild.new`.  You can also pass an Array, each element of which is either a `Class` or a `::ElasticRecord::Model::Joining::JoinChild.new`.
+The `children` argument can be:
+* a `Class` that includes `ElasticRecord::Model`
+* a `Hash` (with names as keys and classes as values)
+* an instance of `::ElasticRecord::Model::Joining::JoinChild.new` (when you need to override any of the options below besides `name`)
+* or an Array containing any combination thereof.
 
 `::ElasticRecord::Model::Joining::JoinChild.new` accepts additional, optional arguments:
 * `name`: defaults to the snake case version of the value provided to `klass` (e.g. `state` in the example above). Can be used to construct `has_child` queries.
 * `children`: Another instance of `::ElasticRecord::Model::Joining::JoinChild` or an Array of instances. Defaults to an empty Array.  Theoretically, an arbitrary number of layers of parent-child joins can be achieved this way.
 * `parent_id_accessor`: Determines how the ID of the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country_id`.
 * `parent_accessor`: Determines how the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country`.  The is used to retrieve routing for multi-layered parent-child joins.
-Notes:
-* Creating, deleting and updating mapping on the index must be handled via the Top-Level parent.  Running `rake index:create CLASS=State` has no effect.
-* The `load_from_source` configuration is not currently supported for indices with a join field.
+
+**Note**: Creating, deleting and updating mapping on the index must be handled via the Top-Level parent.  In the above example, running `rake index:create CLASS=State` would have no effect.
 
 ### Load Documents from Source
 
