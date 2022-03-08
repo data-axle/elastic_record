@@ -238,9 +238,8 @@ The `children` argument expects a Class or, for complex nestings, an instance of
 * `children`: Another instance of `::ElasticRecord::Model::Joining::JoinChild` or an Array of instances. Defaults to an empty Array.  Theoretically, an arbitrary number of layers of parent-child joins can be achieved this way.
 * `parent_id_accessor`: Determines how the ID of the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country_id`.
 * `parent_accessor`: Determines how the parent is retrieved. Can be a proc, which will be executed in the context of the child object, or a symbol corresponding to the name of a method defined on the child object.  In the above example, it would default to `country`.  The is used to retrieve routing for multi-layered parent-child joins.
-Notes:
-* Creating, deleting and updating mapping on the index must be handled via the Top-Level parent.  Running `rake index:create CLASS=State` has no effect.
-* The `load_from_source` configuration is not currently supported for indices with a join field.
+
+**Note**: Creating, deleting and updating mapping on the index must be handled via the Top-Level parent.  Running `rake index:create CLASS=State` has no effect.
 
 ### Load Documents from Source
 

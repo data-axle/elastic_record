@@ -53,9 +53,6 @@ module ElasticRecord
 
     def find_hits(search_hits)
       if klass.elastic_index.load_from_source
-        if klass.respond_to?(:es_join_field)
-          raise "Loading parent/child joins from source is not currently supported!"
-        end
         search_hits.hits.map { |hit| klass.from_search_hit(hit) }
       else
         klass.find search_hits.to_ids
