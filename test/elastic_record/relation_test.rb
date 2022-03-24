@@ -63,7 +63,7 @@ class ElasticRecord::RelationTest < MiniTest::Test
     array = relation.to_a
 
     assert_equal 1, array.size
-    assert array.first.is_a?(Widget)
+    assert_equal 'red', array.first.color
   end
 
   def test_to_a_from_source
