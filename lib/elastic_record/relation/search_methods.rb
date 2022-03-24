@@ -38,12 +38,6 @@ module ElasticRecord
         end
       end
 
-      def initialize(*)
-        if klass.respond_to?(:es_join_field)
-          filter!(klass.es_join_field => klass.es_join_name)
-        end
-      end
-
       Relation::SINGLE_VALUE_METHODS.each do |name|
         define_method "#{name}_value" do
           @values[name]
@@ -232,7 +226,13 @@ module ElasticRecord
         end
 
         def build_filter_nodes(filters)
-          filters.each_with_object([]) do |filter, nodes|
+          nodes = []
+
+          if klass.respond_to?(:es_join_field)
+            nodes << arelastic[klass.es_join_field].term(klass.es_join_name)
+          end
+
+          filters.each_with_object(nodes) do |filter, nodes|
             if filter.is_a?(Arelastic::Nodes::Node)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
