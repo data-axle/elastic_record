@@ -51,16 +51,20 @@ module ElasticRecord
       @records ||= find_hits(search_hits)
     end
 
-    def load_safe_hits
-      @records ||= find_hits(search_hits, safe: true)
+    def safe!
+      @safe = true
     end
 
-    def find_hits(search_hits, safe: false)
+    def safe?
+      @safe
+    end
+
+    def find_hits(search_hits)
       if klass.elastic_index.load_from_source
         search_hits.hits.map { |hit| klass.from_search_hit(hit) }
       else
         ids = search_hits.to_ids
-        if safe
+        if safe?
           klass.where(id: ids).to_a
         else
           klass.find search_hits.to_ids

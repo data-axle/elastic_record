@@ -51,7 +51,7 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert array.first.is_a?(Widget)
   end
 
-  def test_load_safe_hits
+  def test_safe_load
     Widget.create!(color: 'red')
     Widget.elastic_index.index_record(Widget.new(color: 'blue'))
 
@@ -59,9 +59,10 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_raises ActiveRecord::RecordNotFound do
       relation.to_a
     end
-    relation.load_safe_hits
+    relation.safe!
     array = relation.to_a
 
+    assert relation.safe?
     assert_equal 1, array.size
     assert_equal 'red', array.first.color
   end
