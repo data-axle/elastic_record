@@ -17,7 +17,6 @@ module ElasticRecord
     def initialize(klass, values: {})
       @klass = klass
       @values = values
-      super
     end
 
     def initialize_copy(other)
