@@ -51,6 +51,22 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert array.first.is_a?(Widget)
   end
 
+  def test_safe_load
+    Widget.create!(color: 'red')
+    Widget.elastic_index.index_record(Widget.new(color: 'blue'))
+
+    relation = Widget.elastic_relation
+    assert_raises ActiveRecord::RecordNotFound do
+      relation.to_a
+    end
+    relation.safe!
+    array = relation.to_a
+
+    assert relation.safe?
+    assert_equal 1, array.size
+    assert_equal 'red', array.first.color
+  end
+
   def test_to_a_from_source
     warehouses = [Project.new(name: 'Latte'), Project.new(name: 'Americano')]
     Project.elastic_index.bulk_add(warehouses)
