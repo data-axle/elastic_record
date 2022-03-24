@@ -67,7 +67,7 @@ module ElasticRecord
         if safe?
           klass.where(id: ids).to_a
         else
-          klass.find search_hits.to_ids
+          klass.find ids
         end
       end
     end
