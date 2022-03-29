@@ -19,7 +19,7 @@ module ElasticRecord
         end
 
         def add_filter_nodes_to_scope(filters)
-          filter_value = @scope.send(:build_filter_nodes, filters).map do |filter_node|
+          filter_value = @scope.send(:build_filter_nodes, filters, false).map do |filter_node|
             yield filter_node
           end
 
@@ -225,10 +225,10 @@ module ElasticRecord
           end
         end
 
-        def build_filter_nodes(filters)
+        def build_filter_nodes(filters, add_join_field_filter = true)
           nodes = []
 
-          if klass.respond_to?(:es_join_field)
+          if klass.respond_to?(:es_join_field) && add_join_field_filter
             nodes << arelastic[klass.es_join_field].term(klass.es_join_name)
           end
 
