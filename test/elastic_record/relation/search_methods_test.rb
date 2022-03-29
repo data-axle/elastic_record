@@ -61,42 +61,63 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
 
   def test_filter_with_negation
     scope = relation.filter.not("prefix" => {"name" => "Jo"})
+    negated_filter = {
+      "bool" => {
+        "must_not" => {
+          "prefix" => {
+            "name" => "Jo"
+          }
+        }
+      }
+    }
+
+    expected = { "bool" => { "filter" => negated_filter } }
+
+    assert_equal expected, scope.as_elastic['query']
+
+    scope = Mother.elastic_relation.filter.not('prefix' => {'name' => 'Jo'})
 
     expected = {
       "bool" => {
         "filter" => {
           "bool" => {
-            "must_not" => {
-              "prefix" => {
-                "name" => "Jo"
-              }
-            }
+            "must" => [
+              { "term" => { "arbitrary" => "mother" } },
+              negated_filter
+            ]
           }
         }
       }
     }
-
     assert_equal expected, scope.as_elastic['query']
   end
 
   def test_filter_with_nested
     scope = relation.filter.nested("contacts", "prefix" => {"contacts.name" => "Jo"})
+    nested_filter = {
+      "nested" => {
+        "path"  => "contacts",
+        "query" => {
+          "prefix" => { "contacts.name" => "Jo" }
+        }
+      }
+    }
+    expected = { "bool" => { "filter" => nested_filter } }
+    assert_equal expected, scope.as_elastic['query']
 
+    scope = Son.elastic_relation.filter.nested('contacts', 'prefix' => {'contacts.name' => 'Jo'})
     expected = {
       "bool" => {
         "filter" => {
-          "nested" => {
-            "path" => "contacts",
-            "query" => {
-              "prefix" => {
-                "contacts.name" => "Jo"
-              }
-            }
+          "bool" => {
+            "must" => [
+              { "term" => { "arbitrary" => "son" } },
+              nested_filter
+            ]
           }
         }
       }
     }
-
     assert_equal expected, scope.as_elastic['query']
   end
 
