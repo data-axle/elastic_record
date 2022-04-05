@@ -3,9 +3,10 @@ module ElasticRecord
   end
 
   class ConnectionError < Error
-    attr_reader :status_code
-    def initialize(status_code, message)
+    attr_reader :status_code, :payload
+    def initialize(status_code, message, payload = nil)
       @status_code = status_code
+      message = "#{message} (for payload '#{payload}')" if payload
       super(message)
     end
   end
