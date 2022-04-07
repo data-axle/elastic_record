@@ -14,6 +14,7 @@ class ElasticRecord::Model::JoiningTest < MiniTest::Test
   end
 
   def test_es_root
+    assert_equal Widget, Widget.es_root
     assert_equal Mother, Mother.es_root
     assert_equal Mother, Son.es_root
   end
