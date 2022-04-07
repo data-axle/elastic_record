@@ -35,6 +35,10 @@ module ElasticRecord
       def elastic_index=(index)
         @elastic_index = index
       end
+
+      def es_root
+        self
+      end
     end
 
     def index_to_elasticsearch

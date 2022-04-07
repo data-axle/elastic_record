@@ -13,6 +13,12 @@ class ElasticRecord::Model::JoiningTest < MiniTest::Test
     Son.elastic_index.reset_deferring!
   end
 
+  def test_es_root
+    assert_equal Widget, Widget.es_root
+    assert_equal Mother, Mother.es_root
+    assert_equal Mother, Son.es_root
+  end
+
   def test_es_children
     assert_equal [Son], Mother.es_descendants
   end
