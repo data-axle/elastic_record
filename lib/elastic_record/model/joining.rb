@@ -84,7 +84,7 @@ module ElasticRecord
               raise "#{klass} does not respond to #{parent_id_accessor}.  Please specify a parent_id_accessor for #{self.class}(klass: #{klass})!"
             end
           end
-          klass.define_singleton_method(:es_root) { parent.es_root }
+          klass.redefine_singleton_method(:es_root) { parent.es_root }
           klass.define_singleton_method(:es_join_field) { join_field }
           klass.define_singleton_method(:es_join_name) { name }
           klass.define_method(:es_join_name) { name }
@@ -133,8 +133,6 @@ module ElasticRecord
         end
 
         name ||= to_s.demodulize.underscore
-        klass = self
-        define_singleton_method(:es_root) { klass }
         define_singleton_method(:es_join_field) { join_field }
         define_singleton_method(:es_join_name) { name }
         define_singleton_method(:es_descendants) do
