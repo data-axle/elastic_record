@@ -57,7 +57,7 @@ module ElasticRecord
         define_method ar_method do |*args, &block|
           result = klass.send(ar_method, *args, &block)
           if result.is_a?(ActiveRecord::Relation)
-            self.class.new(result, values: values)
+            metamorphose(result)
           else
             result
           end
