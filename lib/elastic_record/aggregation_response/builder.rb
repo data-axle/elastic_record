@@ -11,6 +11,9 @@ module ElasticRecord
           reverse_nested
           global
         ),
+        ParentAggregation => %w(
+          parent
+        ),
         MultiBucketAggregation => %w(
           composite
           date_histogram

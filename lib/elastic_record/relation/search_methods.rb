@@ -216,7 +216,7 @@ module ElasticRecord
         end
 
         def build_filter(filters)
-          nodes = build_filter_nodes(filters)
+          nodes = build_filter_nodes(filters).uniq
 
           if nodes.size == 1
             nodes.first

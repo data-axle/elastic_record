@@ -12,8 +12,8 @@ jobs:
       RAILS_ENV: test
     strategy:
       matrix:
-        ruby: [ '2.7', '3.0', '3.1' ]
-        elasticsearch: [ '7.12.1', '7.16.3' ]
+        ruby: [ '3.1' ]
+        elasticsearch: [ '7.17.1' ]
     services:
       postgres:
         image: postgres
