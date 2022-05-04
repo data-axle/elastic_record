@@ -236,7 +236,14 @@ module ElasticRecord
             if filter.is_a?(Arelastic::Nodes::Node)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
-              nodes << Arelastic::Queries::HasChild.new(filter.elastic_index.mapping_type, filter.as_elastic['query'])
+              join_type = if klass.in?(Array.wrap(filter.klass.try(:es_descendants)))
+                 Arelastic::Queries::HasParent
+              elsif filter.klass.in?(Array.wrap(klass.try(:es_descendants)))
+                 Arelastic::Queries::HasChild
+              else
+                raise "You can't filter a #{filter.klass.name} ('#{filter.as_elastic}') inside a #{klass.name}"
+              end
+              nodes << join_type.new(filter.es_join_name, filter.as_elastic['query'])
             else
               filter.each do |field, terms|
                 case terms
