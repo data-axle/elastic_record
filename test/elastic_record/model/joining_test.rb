@@ -84,6 +84,9 @@ class ElasticRecord::Model::JoiningTest < MiniTest::Test
 
     assert_equal [mother.name], Mother.filter(Mother.arelastic.queries.match_all).to_a.map(&:name)
     assert_equal [son.name], Son.filter(Son.arelastic.queries.match_all).to_a.map(&:name)
+
+    assert_equal [mother.name], Mother.filter(Son.query(Arelastic.queries.match(:name, 'King Edward VII'))).to_a.map(&:name)
+    assert_equal [son.name], Son.filter(Mother.query(Arelastic.queries.match(:name, 'Queen Victoria'))).to_a.map(&:name)
   end
 
   def test_bulk_insert_with_parent_join

@@ -12,11 +12,8 @@ class ElasticRecord::AggregationResponse::ParentAggregationTest < MiniTest::Test
     assert_equal %w(fill_count), agg.aggregations.keys.sort
     assert_equal 7, agg.doc_count
 
-    error = assert_raises { agg.value }
-    assert_match(/\ANot valid for /, error.message)
-
-    error = assert_raises { agg.buckets }
-    assert_match(/\ANot valid for /, error.message)
+    refute agg.respond_to?(:value)
+    refute agg.respond_to?(:buckets)
   end
 
   def test_parent_aggregation_response_for_value_count
@@ -31,8 +28,7 @@ class ElasticRecord::AggregationResponse::ParentAggregationTest < MiniTest::Test
     assert_equal 10, agg.doc_count
     assert_equal 7, agg.value
 
-    error = assert_raises { agg.buckets }
-    assert_match(/\ANot valid for /, error.message)
+    refute agg.respond_to?(:buckets)
   end
 
   def test_parent_aggregation_response_for_terms
@@ -59,7 +55,6 @@ class ElasticRecord::AggregationResponse::ParentAggregationTest < MiniTest::Test
     assert_equal 4, agg.buckets.first.doc_count
     assert_equal 'WA', agg.buckets.first.key
 
-    error = assert_raises { agg.value }
-    assert_match(/\ANot valid for /, error.message)
+    refute agg.respond_to?(:value)
   end
 end
