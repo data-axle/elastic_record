@@ -16,7 +16,7 @@ module ElasticRecord
           hits.each_slice(batch_size, &block)
         end
 
-        @elastic_index.delete_point_in_time(point_in_time_id) if point_in_time_id
+        delete_pit
       end
 
       def request_more_ids
@@ -28,18 +28,18 @@ module ElasticRecord
       end
 
       def request_next_page
-        if @last_sort_values
+        if use_point_in_time && point_in_time_id.nil?
+          @point_in_time_id = @elastic_index.create_point_in_time(keep_alive)['id']
+        end
+
+        if @last_sort_values.nil?
+          response = initial_search_response
+        else
           response = search_after
 
           if response['pit_id'] && response['pit_id'] != point_in_time_id
-            @elastic_index.delete_point_in_time(point_in_time_id)
+            delete_pit
           end
-        else
-          if use_point_in_time && point_in_time_id.nil?
-            refresh_point_in_time
-          end
-
-          response = initial_search_response
         end
 
         @point_in_time_id = response['pit_id']
@@ -71,8 +71,8 @@ module ElasticRecord
           )
         end
 
-        def refresh_point_in_time
-          @point_in_time_id = @elastic_index.create_point_in_time(keep_alive)['id']
+        def delete_pit
+          @elastic_index.delete_point_in_time(point_in_time_id) if point_in_time_id
         end
     end
   end
