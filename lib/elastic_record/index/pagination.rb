@@ -21,8 +21,12 @@ module ElasticRecord
       end
 
       def build_search_after(search: nil, point_in_time_id: nil, use_point_in_time: false, batch_size: 100, keep_alive: ElasticRecord::Config.scroll_keep_alive)
-        SearchAfter.new(
-          self, search: search, point_in_time_id: point_in_time_id, batch_size: batch_size, keep_alive: keep_alive, use_point_in_time: use_point_in_time
+        SearchAfter.new(self,
+          search:            search,
+          point_in_time_id:  point_in_time_id,
+          batch_size:        batch_size,
+          keep_alive:        keep_alive,
+          use_point_in_time: use_point_in_time
         )
       end
 
