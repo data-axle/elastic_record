@@ -16,6 +16,14 @@ class ElasticRecord::Relation::BatchesTest < MiniTest::Test
   #   assert_equal [@red_widget, @blue_widget, @green_widget].to_set, results.to_set
   # end
 
+  def test_find_each_with_search_after
+    results = []
+    Widget.elastic_relation.filter(color: %w(red blue)).find_each(paginator: :search_after) do |widget|
+      results << widget
+    end
+    assert_equal [@red_widget, @blue_widget].to_set, results.to_set
+  end
+
   def test_find_ids_in_batches
     results = []
     Widget.elastic_relation.find_ids_in_batches do |ids|
