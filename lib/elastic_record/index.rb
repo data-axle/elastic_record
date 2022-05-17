@@ -98,6 +98,14 @@ module ElasticRecord
       connection.json_get("/#{alias_name}/_doc/#{end_path}", json)
     end
 
+    def record_exists?(id)
+      get_doc(id)['found']
+    end
+
+    def explain(id, elastic_query)
+      get "_explain", elastic_query
+    end
+
     private
 
       def add_suffix(name)
