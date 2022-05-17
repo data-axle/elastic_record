@@ -4,6 +4,7 @@ require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
 require 'elastic_record/index/pagination'
+require 'elastic_record/index/scrolling'
 require 'elastic_record/index/scroll_enumerator'
 require 'elastic_record/index/search_after'
 require 'elastic_record/index/search'
@@ -31,7 +32,7 @@ module ElasticRecord
   # [update_mapping]
   #   Update elastic search's mapping
   class Index
-    include Documents, Search, Pagination
+    include Documents, Search, Scrolling, Pagination
     include Manage
     include Mapping, Settings
     include Analyze
