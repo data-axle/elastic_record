@@ -26,6 +26,18 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
     end
   end
 
+  def test_invalid_point_in_time_error
+    search_after = index.build_search_after(
+      keep_alive:       '1m',
+      point_in_time_id: 'foobar',
+      search:           { 'query' => { query_string: { query: 'name:bob' } } },
+      batch_size:       2,
+    )
+    assert_raises ElasticRecord::InvalidPointInTimeError do
+      search_after.request_more_hits
+    end
+  end
+
   private
 
     def index
