@@ -57,6 +57,21 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
     end
   end
 
+  def test_each_slice_with_few_records
+    index.index_document("joe1", { color: 'pink' })
+    batches = []
+
+    search_after = index.build_search_after(
+      search:            { 'query' => { query_string: { query: 'color:pink' } } },
+      batch_size:        4,
+      use_point_in_time: true
+    )
+    search_after.each_slice do |slice|
+      batches << slice
+    end
+    assert_equal 1, batches.size
+  end
+
   private
 
     def index
