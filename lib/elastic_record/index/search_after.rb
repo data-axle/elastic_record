@@ -28,10 +28,6 @@ module ElasticRecord
       end
 
       def request_next_page
-        if use_point_in_time && point_in_time_id.nil?
-          @point_in_time_id = @elastic_index.create_point_in_time(keep_alive)['id']
-        end
-
         if @last_sort_values.nil?
           response = initial_search_response
         else
@@ -42,10 +38,12 @@ module ElasticRecord
           end
         end
 
-        @point_in_time_id = response['pit_id']
+        @point_in_time_id = response['pit_id'] if response['pit_id']
         @last_sort_values =
           if last_hit = SearchHits.from_response(response).hits.last
             last_hit['sort']
+          else
+            false
           end
 
         response
@@ -56,7 +54,13 @@ module ElasticRecord
       end
 
       def initial_search_response
-        @initial_search_response ||= search_after
+        @initial_search_response ||= begin
+          if use_point_in_time && point_in_time_id.nil?
+            @point_in_time_id = @elastic_index.create_point_in_time(keep_alive)['id']
+          end
+
+          search_after
+        end
       end
 
       private

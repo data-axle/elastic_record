@@ -37,7 +37,7 @@ module ElasticRecord
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
-            if read_request?(method, args)
+            if expedite_request?(method, args)
               flush_deferred_actions!
               if index_name = search_request(method, args)
                 index.real_connection.json_post("/#{index_name}/_refresh")
@@ -64,8 +64,12 @@ module ElasticRecord
           end
 
           READ_METHODS = [:json_get, :head]
-          def read_request?(method, args)
-            READ_METHODS.include?(method) || (method == :json_post && args.first =~ /^\/_search\/scroll/)
+          def expedite_request?(method, args)
+            READ_METHODS.include?(method) || (method == :json_post && expedited_json_post?(args.first))
+          end
+
+          def expedited_json_post?(arg)
+            arg =~ /^\/_search\/scroll/ || arg =~ /^(.*)\/_pit/
           end
       end
 
