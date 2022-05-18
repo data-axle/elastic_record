@@ -18,11 +18,12 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
     assert_equal 1, search_after.request_more_hits.hits.length
     assert_equal 3, search_after.total_hits
 
-    index.disable_deferring!
-    search_after = index.build_search_after(**options, use_point_in_time: true)
-    assert_equal 2, search_after.request_more_hits.hits.length
-    assert_equal 1, search_after.request_more_hits.hits.length
-    assert_equal 3, search_after.total_hits
+    without_deferring(index) do
+      search_after = index.build_search_after(**options, use_point_in_time: true)
+      assert_equal 2, search_after.request_more_hits.hits.length
+      assert_equal 1, search_after.request_more_hits.hits.length
+      assert_equal 3, search_after.total_hits
+    end
   end
 
   private
