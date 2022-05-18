@@ -3,6 +3,10 @@ require 'elastic_record/index/deferred'
 require 'elastic_record/index/documents'
 require 'elastic_record/index/manage'
 require 'elastic_record/index/mapping'
+require 'elastic_record/index/pagination'
+require 'elastic_record/index/scrolling'
+require 'elastic_record/index/scroll_enumerator'
+require 'elastic_record/index/search_after'
 require 'elastic_record/index/search'
 require 'elastic_record/index/settings'
 require 'elastic_record/index/mapping_type'
@@ -28,7 +32,7 @@ module ElasticRecord
   # [update_mapping]
   #   Update elastic search's mapping
   class Index
-    include Documents, Search
+    include Documents, Search, Scrolling, Pagination
     include Manage
     include Mapping, Settings
     include Analyze
@@ -93,6 +97,14 @@ module ElasticRecord
 
     def get_doc(end_path, json = nil)
       connection.json_get("/#{alias_name}/_doc/#{end_path}", json)
+    end
+
+    def record_exists?(id)
+      get_doc(id)['found']
+    end
+
+    def explain(id, elastic_query)
+      get "_explain", elastic_query
     end
 
     private
