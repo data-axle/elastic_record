@@ -28,5 +28,12 @@ module MiniTest
         model.elastic_index.reset_deferring!
       end
     end
+
+    def without_deferring(index)
+      index.disable_deferring!
+      yield
+      index.reset
+      index.enable_deferring!
+    end
   end
 end
