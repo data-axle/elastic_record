@@ -41,8 +41,6 @@ module ElasticRecord
               flush_deferred_actions!
               if index_name = index_name_from_uri_path(method, args)
                 index.real_connection.json_post("/#{index_name}/_refresh")
-              elsif method == :json_post
-                index.real_connection.json_post("/*/_refresh")
               end
 
               index.real_connection.send(method, *args, &block)
@@ -60,9 +58,14 @@ module ElasticRecord
           end
 
           def index_name_from_uri_path(http_method, args)
-            if http_method == :json_get && args.first =~ /^\/(.*)\/_m?search/
-              $1.partition('/').first
-            end
+            regex =
+              case http_method
+              when :json_get
+                 /^\/(.*)\/_m?search/
+              when :json_post
+                 /^\/(.*)\/_pit/
+              end
+            $1.partition('/').first if regex && args.first =~ regex
           end
 
           READ_METHODS = [:json_get, :head]
