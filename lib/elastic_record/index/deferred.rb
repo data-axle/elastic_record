@@ -37,9 +37,9 @@ module ElasticRecord
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
-            if expedite_request?(method, args)
+            if flush_deferred_actions?(method, args)
               flush_deferred_actions!
-              if index_name = index_from_request(method, args)
+              if index_name = index_name_from_uri_path(method, args)
                 index.real_connection.json_post("/#{index_name}/_refresh")
               elsif method == :json_post
                 index.real_connection.json_post("/*/_refresh")
@@ -59,19 +59,23 @@ module ElasticRecord
             deferred_actions.clear
           end
 
-          def index_from_request(method, args)
-            if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
+          def index_name_from_uri_path(http_method, args)
+            if http_method == :json_get && args.first =~ /^\/(.*)\/_m?search/
               $1.partition('/').first
             end
           end
 
           READ_METHODS = [:json_get, :head]
-          def expedite_request?(method, args)
-            READ_METHODS.include?(method) || (method == :json_post && expedited_json_post?(args.first))
+          def flush_deferred_actions?(method, args)
+            READ_METHODS.include?(method) || flush_deferred_actions_for_json_post?(method, args.first)
           end
 
-          def expedited_json_post?(arg)
-            arg =~ /^\/_search\/scroll/ || arg =~ /^(.*)\/_pit/
+          POST_PATHS_THAT_REQUIRE_FLUSH = [
+            /^\/_search\/scroll/,
+            /^(.*)\/_pit/
+          ].freeze
+          def flush_deferred_actions_for_json_post?(method, arg)
+            method == :json_post && POST_PATHS_THAT_REQUIRE_FLUSH.any? { |path| arg =~ path }
           end
       end
 
