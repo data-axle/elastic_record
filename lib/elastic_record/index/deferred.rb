@@ -73,12 +73,12 @@ module ElasticRecord
             READ_METHODS.include?(method) || flush_deferred_actions_for_json_post?(method, args.first)
           end
 
-          POST_PATHS_THAT_REQUIRE_FLUSH = [
+          POST_PATHS_THAT_TRIGGER_FLUSH = [
             /^\/_search\/scroll/,
             /^(.*)\/_pit/
           ].freeze
           def flush_deferred_actions_for_json_post?(method, arg)
-            method == :json_post && POST_PATHS_THAT_REQUIRE_FLUSH.any? { |path| arg =~ path }
+            method == :json_post && POST_PATHS_THAT_TRIGGER_FLUSH.any? { |path| arg =~ path }
           end
       end
 
