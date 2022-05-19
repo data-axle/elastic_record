@@ -40,7 +40,6 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
 
   def test_each_slice
     10.times { |i| index.index_document("bob#{i}", { color: 'red' }) }
-    Widget.filter(Arelastic.queries.match_all).count # necessary for these documents to appear for some reason??
     batches = []
 
     search_after = index.build_search_after(
@@ -60,7 +59,6 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
 
   def test_each_slice_with_few_records
     index.index_document("joe1", { color: 'pink' })
-    Widget.filter(Arelastic.queries.match_all).count # necessary for these documents to appear for some reason??
     batches = []
 
     search_after = index.build_search_after(

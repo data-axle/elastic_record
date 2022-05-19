@@ -39,8 +39,10 @@ module ElasticRecord
 
             if expedite_request?(method, args)
               flush_deferred_actions!
-              if index_name = search_request(method, args)
+              if index_name = index_from_request(method, args)
                 index.real_connection.json_post("/#{index_name}/_refresh")
+              elsif method == :json_post
+                index.real_connection.json_post("/*/_refresh")
               end
 
               index.real_connection.send(method, *args, &block)
@@ -57,7 +59,7 @@ module ElasticRecord
             deferred_actions.clear
           end
 
-          def search_request(method, args)
+          def index_from_request(method, args)
             if method == :json_get && args.first =~ /^\/(.*)\/_m?search/
               $1.partition('/').first
             end
