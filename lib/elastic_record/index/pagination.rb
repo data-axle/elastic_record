@@ -28,10 +28,10 @@ module ElasticRecord
         else
           get '_search', elastic_query
         end
-      rescue ElasticRecord::ConnectionError => e
+      rescue ConnectionError => e
         case e.status_code
-        when '400' then raise ElasticRecord::InvalidPointInTimeError, e.message
-        when '404' then raise ElasticRecord::ExpiredPointInTime, e.message
+        when '400' then raise InvalidPointInTimeError, e.message
+        when '404' then raise ExpiredPointInTime, e.message
         else raise
         end
       end
