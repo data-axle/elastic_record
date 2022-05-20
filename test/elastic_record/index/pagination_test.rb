@@ -26,6 +26,52 @@ class ElasticRecord::Index::PaginationTest < MiniTest::Test
     end
   end
 
+  def test_invalid_point_in_time_error
+    search_after = index.build_search_after(
+      keep_alive:       '1m',
+      point_in_time_id: 'foobar',
+      search:           { 'query' => { query_string: { query: 'name:bob' } } },
+      batch_size:       2,
+    )
+    assert_raises ElasticRecord::InvalidPointInTimeError do
+      search_after.request_more_hits
+    end
+  end
+
+  def test_each_slice
+    10.times { |i| index.index_document("bob#{i}", { color: 'red' }) }
+    batches = []
+
+    search_after = index.build_search_after(
+      search:            { 'query' => { query_string: { query: 'color:red' } } },
+      batch_size:        2,
+      use_point_in_time: true
+    )
+    search_after.each_slice do |slice|
+      batches << slice
+    end
+    assert_equal 5, batches.size
+
+    assert_raises ElasticRecord::ExpiredPointInTime do
+      search_after.request_more_hits
+    end
+  end
+
+  def test_each_slice_with_few_records
+    index.index_document("joe1", { color: 'pink' })
+    batches = []
+
+    search_after = index.build_search_after(
+      search:            { 'query' => { query_string: { query: 'color:pink' } } },
+      batch_size:        4,
+      use_point_in_time: true
+    )
+    search_after.each_slice do |slice|
+      batches << slice
+    end
+    assert_equal 1, batches.size
+  end
+
   private
 
     def index
