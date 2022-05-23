@@ -2,7 +2,7 @@ module ElasticRecord
   class Index
     class SearchAfter
       attr_reader :keep_alive, :batch_size, :point_in_time_id, :last_sort_values, :use_point_in_time
-      def initialize(elastic_index, search: nil, point_in_time_id: nil, use_point_in_time: false, keep_alive:, batch_size:)
+      def initialize(elastic_index, search: nil, point_in_time_id: nil, use_point_in_time: true, keep_alive:, batch_size:)
         @elastic_index     = elastic_index
         @search            = search
         @point_in_time_id  = point_in_time_id

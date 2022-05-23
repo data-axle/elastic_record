@@ -1,7 +1,7 @@
 module ElasticRecord
   class Index
     module Pagination
-      def build_search_after(search: nil, point_in_time_id: nil, use_point_in_time: false, batch_size: 100, keep_alive: ElasticRecord::Config.scroll_keep_alive)
+      def build_search_after(search: nil, point_in_time_id: nil, use_point_in_time: true, batch_size: 100, keep_alive: ElasticRecord::Config.scroll_keep_alive)
         SearchAfter.new(self,
           search:            search,
           point_in_time_id:  point_in_time_id,
