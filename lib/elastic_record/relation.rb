@@ -70,7 +70,7 @@ module ElasticRecord
       else
         ids = search_hits.to_ids
         if safe?
-          klass.where(id: ids).to_a
+          klass.where(id: ids).to_a.sort_by { |doc| ids.index { |i| i.to_s == doc.id.to_s } }
         else
           klass.find ids
         end
