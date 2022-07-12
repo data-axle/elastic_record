@@ -34,6 +34,7 @@ module ElasticRecord
     autoload :HasAggregations
     autoload :MultiBucketAggregation
     autoload :MultiValueAggregation
+    autoload :ParentAggregation
     autoload :SingleBucketAggregation
     autoload :SingleValueAggregation
   end

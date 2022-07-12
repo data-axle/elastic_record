@@ -1,7 +1,7 @@
 require 'helper'
 
 class ElasticRecord::AggregationResponse::SingleBucketAggregationTest < MiniTest::Test
-  def test_single
+  def test_single_bucket_aggregation_response
     agg = ElasticRecord::AggregationResponse::SingleBucketAggregation.new 'resellers', {
       'doc_count' => 0,
       'min#min_price' => {

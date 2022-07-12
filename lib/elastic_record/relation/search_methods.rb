@@ -216,7 +216,7 @@ module ElasticRecord
         end
 
         def build_filter(filters)
-          nodes = build_filter_nodes(filters)
+          nodes = build_filter_nodes(filters).uniq
 
           if nodes.size == 1
             nodes.first
@@ -236,7 +236,14 @@ module ElasticRecord
             if filter.is_a?(Arelastic::Nodes::Node)
               nodes << filter
             elsif filter.is_a?(ElasticRecord::Relation)
-              nodes << Arelastic::Queries::HasChild.new(filter.elastic_index.mapping_type, filter.as_elastic['query'])
+              join_type = if es_descendant?(descendant: klass, of: filter.klass)
+                 Arelastic::Queries::HasParent
+              elsif es_descendant?(descendant: filter.klass, of: klass)
+                 Arelastic::Queries::HasChild
+              else
+                raise "You can't filter a #{filter.klass.name} inside a #{klass.name}"
+              end
+              nodes << join_type.new(filter.es_join_name, filter.as_elastic['query'])
             else
               filter.each do |field, terms|
                 case terms
@@ -252,6 +259,10 @@ module ElasticRecord
               end
             end
           end
+        end
+
+        def es_descendant?(descendant:, of:)
+          descendant.in?(Array.wrap(of.try(:es_descendants)))
         end
 
         def build_limit(limit)

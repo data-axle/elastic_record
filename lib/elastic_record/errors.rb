@@ -17,6 +17,12 @@ module ElasticRecord
   class ExpiredScrollError < Error
   end
 
+  class ExpiredPointInTime < Error
+  end
+
   class InvalidScrollError < Error
+  end
+
+  class InvalidPointInTimeError < Error
   end
 end

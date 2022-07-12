@@ -71,7 +71,7 @@ module ElasticRecord
           batch << { delete: instructions }
         else
           path = "/#{index_name}/_doc/#{id}"
-          path << "&routing=#{routing}" if routing
+          path << "?routing=#{routing}" if routing
 
           connection.json_delete path
         end
@@ -82,7 +82,9 @@ module ElasticRecord
 
         scroll_enumerator.each_slice do |hits|
           bulk do
-            hits.each { |hit| delete_document hit['_id'] }
+            hits.each do |hit|
+              delete_document hit['_id'], routing: hit['_routing']
+            end
           end
         end
       end

@@ -60,7 +60,7 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     index.index_document('abc', { color: 'red' })
     assert index.record_exists?('abc')
 
-    index.delete_document('abc')
+    index.delete_document('abc', routing: 'abc')
     refute index.record_exists?('abc')
 
     assert_raises RuntimeError do
@@ -163,13 +163,6 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
   end
 
   private
-
-    def without_deferring(index)
-      index.disable_deferring!
-      yield
-      index.reset
-      index.enable_deferring!
-    end
 
     def index
       @index ||= Widget.elastic_index

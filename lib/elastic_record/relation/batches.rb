@@ -20,7 +20,7 @@ module ElasticRecord
       end
 
       def find_hits_in_batches(options = {})
-        build_scroll_enumerator(options).each_slice do |hits|
+        build_paginator(options).each_slice do |hits|
           yield SearchHits.new(hits)
         end
       end
@@ -29,11 +29,25 @@ module ElasticRecord
         elastic_index.build_scroll_enumerator(search: as_elastic, **options)
       end
 
+      def build_search_after(options)
+        elastic_index.build_search_after(search: as_elastic, **options)
+      end
+
       def reindex
         relation.find_in_batches do |batch|
           elastic_index.bulk_add(batch)
         end
       end
+
+      private
+
+        def build_paginator(options)
+          if options.delete(:paginator) == :search_after
+            build_search_after(options)
+          else
+            build_scroll_enumerator(options)
+          end
+        end
     end
   end
 end
