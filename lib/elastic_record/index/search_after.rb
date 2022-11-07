@@ -32,13 +32,13 @@ module ElasticRecord
           response = initial_search_response
         else
           response = search_after
-
-          if response['pit_id'] && response['pit_id'] != point_in_time_id
-            delete_pit
-          end
         end
 
-        @point_in_time_id = response['pit_id'] if response['pit_id']
+        if response['pit_id'] && response['pit_id'] != point_in_time_id
+          delete_pit
+          @point_in_time_id = response['pit_id']
+        end
+
         @last_sort_values =
           if last_hit = SearchHits.from_response(response).hits.last
             last_hit['sort']
