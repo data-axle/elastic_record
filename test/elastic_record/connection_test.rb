@@ -35,10 +35,14 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     stub_es_request(:get, "/error").to_return(status: 404, body: JSON.generate(response_json))
 
     error = assert_raises ElasticRecord::ConnectionError do
-      connection.json_get("/error")
+      connection.json_get("/error", '{"some":"payload"}')
     end
 
-    assert_equal '{"error":"Doing it wrong","elastic_record_payload":{}}', error.message
+    expected = JSON.generate(
+      error: 'Doing it wrong',
+      elastic_record_payload: { some: 'payload' }
+    )
+    assert_equal expected, error.message
   end
 
   def test_retry_server_exceptions
