@@ -38,34 +38,32 @@ module ElasticRecord
     end
 
     def json_request(method, path, payload)
-      request_body = payload.is_a?(Hash) ? JSON.generate(payload) : payload
+      payload = JSON.generate(payload) if payload.is_a?(Hash)
 
-      response = http_request_with_retry(method, path, request_body)
+      response = http_request_with_retry(method, path, payload)
 
       response_body = JSON.parse(response.body)
-      raise ConnectionError.new(response.code, response_body['error'], request_body) if response_body['error']
-
-      response_body
+      response_body['error'] ? raise_connection_error(response, payload) : response_body
     end
 
-    def http_request_with_retry(*args)
+    def http_request_with_retry(method, path, payload = nil)
       with_retry do
-        response = http_request(*args)
+        response = http_request(method, path, payload)
 
-        raise ConnectionError.new(response.code, response.body) if response.code.to_i >= 500
+        raise_connection_error(response, payload) if response.code.to_i >= 500
 
         response
       end
     end
 
-    def http_request(method, path, body = nil)
-      request = new_request(method, path, body)
-      http = new_http
+    def http_request(method, path, payload = nil)
+      request = new_request(method, path, payload)
+      http    = new_http
 
-      ActiveSupport::Notifications.instrument("request.elastic_record") do |payload|
-        payload[:http]      = http
-        payload[:request]   = request
-        payload[:response]  = http.request(request)
+      ActiveSupport::Notifications.instrument("request.elastic_record") do |notification|
+        notification[:http]      = http
+        notification[:request]   = request
+        notification[:response]  = http.request(request)
       end
     end
 
@@ -128,6 +126,10 @@ module ElasticRecord
             raise
           end
         end
+      end
+
+      def raise_connection_error(response, payload)
+        raise ConnectionError.new(response.code, response.body, payload)
       end
   end
 end
