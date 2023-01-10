@@ -16,14 +16,14 @@ module ElasticRecord
     private
 
       def build_message(json_error, json_payload)
-        error   = { error:   parse_or_return(json_error)   }
-        payload = { payload: parse_or_return(json_payload) }
+        error   = { elasticsearch_response: parse_or_return(json_error) }
+        payload = { request_payload:        parse_or_return(json_payload) }
 
         error.merge(payload).to_json
       end
 
       def parse_or_return(json)
-        JSON.parse(json)
+        JSON.parse(json.to_s)
       rescue JSON::ParserError
         json
       end
