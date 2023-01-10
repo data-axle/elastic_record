@@ -6,24 +6,26 @@ module ElasticRecord
     attr_reader :status_code, :payload
 
     def initialize(status_code, json_error, json_payload = nil)
-      @status_code  = status_code
-      error_message = build_message_hash(json_error, json_payload).to_json
+      @status_code = status_code
 
-      super(error_message)
+      message = build_message(json_error, json_payload)
+
+      super(message)
     end
 
     private
 
-      def build_message_hash(json_error, json_payload)
-        error   = JSON.parse(json_error)
-        payload = JSON.parse(json_payload || '{}')
+      def build_message(json_error, json_payload)
+        error   = { error:   parse_or_return(json_error)   }
+        payload = { payload: parse_or_return(json_payload) }
 
-        error.merge!('payload' => payload)
+        error.merge(payload).to_json
+      end
+
+      def parse_or_return(json)
+        JSON.parse(json)
       rescue JSON::ParserError
-        {
-          'error'   => json_error,
-          'payload' => json_payload
-        }
+        json
       end
   end
 
