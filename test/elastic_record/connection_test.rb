@@ -67,7 +67,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
 
   def test_retry_server_500_errors
     response_1 = { 'error' => 'temporarily_unavailable' }
-    response_2 = {'hello' => 'world'}
+    response_2 = { 'hello' => 'world' }
     responses = [
       { status: %w(500 OK), body: response_1.to_json },
       { status: %w(200 OK), body: response_2.to_json }
