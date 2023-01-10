@@ -31,14 +31,20 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
   end
 
   def test_json_request_with_valid_error_status
-    response_json = {'error' => 'Doing it wrong'}
-    stub_es_request(:get, "/error").to_return(status: 404, body: JSON.generate(response_json))
+    request  = { 'some' => 'payload' }
+    response = { 'error' => 'Doing it wrong' }
+
+    stub_es_request(:get, "/error").to_return(status: 404, body: response.to_json)
 
     error = assert_raises ElasticRecord::ConnectionError do
-      connection.json_get("/error")
+      connection.json_get("/error", request.to_json)
     end
 
-    assert_equal 'Doing it wrong', error.message
+    expected = {
+      elasticsearch_response: response,
+      request_payload:        request,
+    }.to_json
+    assert_equal expected, error.message
   end
 
   def test_retry_server_exceptions
@@ -60,9 +66,11 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
   end
 
   def test_retry_server_500_errors
+    response_1 = { 'error' => 'temporarily_unavailable' }
+    response_2 = { 'hello' => 'world' }
     responses = [
-      {status: ["500", "OK"], body: {'error' => 'temporarily_unavailable'}.to_json},
-      {status: ["200", "OK"], body: {'hello' => 'world'}.to_json}
+      { status: %w(500 OK), body: response_1.to_json },
+      { status: %w(200 OK), body: response_2.to_json }
     ]
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 0).tap do |connection|
@@ -73,13 +81,16 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
       end
 
       assert_equal '500', error.status_code
-      assert_equal '{"error":"temporarily_unavailable"}', error.message
+      expected = {
+        elasticsearch_response: response_1,
+        request_payload:        nil
+      }.to_json
+      assert_equal expected, error.message
     end
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|
       stub_es_request(:get, "/error").to_return(*responses)
-      json = connection.json_get("/error")
-      assert_equal({'hello' => 'world'}, json)
+      assert_equal response_2, connection.json_get("/error")
     end
   end
 
