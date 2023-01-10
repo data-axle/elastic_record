@@ -5,19 +5,25 @@ module ElasticRecord
   class ConnectionError < Error
     attr_reader :status_code, :payload
 
-    def initialize(status_code, message, payload = nil)
-      @status_code = status_code
-      super(combine(message, payload))
+    def initialize(status_code, json_error, json_payload = nil)
+      @status_code  = status_code
+      error_message = build_message_hash(json_error, json_payload).to_json
+
+      super(error_message)
     end
 
     private
 
-      def combine(message, payload)
-        JSON.parse(message).merge(
-          {
-            'elastic_record_payload' => JSON.parse(payload || '{}')
-          }
-        ).to_json
+      def build_message_hash(json_error, json_payload)
+        error   = JSON.parse(json_error)
+        payload = JSON.parse(json_payload || '{}')
+
+        error.merge!('payload' => payload)
+      rescue JSON::ParserError
+        {
+          'error'   => json_error,
+          'payload' => json_payload
+        }
       end
   end
 

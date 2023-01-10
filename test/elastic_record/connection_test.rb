@@ -39,8 +39,8 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
     end
 
     expected = JSON.generate(
-      error: 'Doing it wrong',
-      elastic_record_payload: { some: 'payload' }
+      error:   'Doing it wrong',
+      payload: { some: 'payload' }
     )
     assert_equal expected, error.message
   end
@@ -77,7 +77,7 @@ class ElasticRecord::ConnectionTest < MiniTest::Test
       end
 
       assert_equal '500', error.status_code
-      assert_equal '{"error":"temporarily_unavailable","elastic_record_payload":{}}', error.message
+      assert_equal '{"error":"temporarily_unavailable","payload":{}}', error.message
     end
 
     ElasticRecord::Connection.new(ElasticRecord::Config.servers, retries: 1).tap do |connection|
