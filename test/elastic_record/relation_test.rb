@@ -22,6 +22,18 @@ class ElasticRecord::RelationTest < MiniTest::Test
     assert_equal 2, Widget.elastic_relation.count - original_count
   end
 
+  def test_exists
+    refute Widget.elastic_relation.exists?
+    refute Widget.elastic_relation.exists?(color: 'red')
+    refute Widget.elastic_relation.exists?(color: 'blue')
+
+    Widget.create!(color: 'red')
+
+    assert Widget.elastic_relation.exists?
+    assert Widget.elastic_relation.exists?(color: 'red')
+    refute Widget.elastic_relation.exists?(color: 'blue')
+  end
+
   def test_aggregations
     Widget.create!(color: 'red', price: 5)
     Widget.create!(color: 'blue', price: 10)

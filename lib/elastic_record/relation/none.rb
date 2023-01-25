@@ -13,6 +13,10 @@ module ElasticRecord
         {}
       end
 
+      def exists?(**conditions)
+        false
+      end
+
       def as_elastic
         Arelastic::Queries::MatchAll.new.negate.as_elastic
       end
