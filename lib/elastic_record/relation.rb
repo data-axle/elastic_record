@@ -41,6 +41,10 @@ module ElasticRecord
       search_hits.total
     end
 
+    def exists?(**conditions)
+      (conditions.empty? ? self : filter(**conditions)).count > 0
+    end
+
     def aggregations
       @aggregations ||= begin
         results = search_results['aggregations']
