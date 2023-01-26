@@ -13,7 +13,7 @@ module ElasticRecord
         {}
       end
 
-      def exists?(**conditions)
+      def exists?(*_args)
         false
       end
 

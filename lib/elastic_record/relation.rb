@@ -41,8 +41,8 @@ module ElasticRecord
       search_hits.total
     end
 
-    def exists?(**conditions)
-      (conditions.empty? ? self : filter(**conditions)).count > 0
+    def exists?(*args)
+      (args.empty? ? self : filter(*args)).count > 0
     end
 
     def aggregations
