@@ -1,3 +1,2 @@
-Gemfile.lock
 test/dummy/log/*.log
 test/dummy/.env

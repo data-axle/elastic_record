@@ -41,6 +41,8 @@ jobs:
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v2
+    - name: Remove Gemfile.lock to ensure no dependency breakages
+      run: rm Gemfile.lock
     - name: Install Ruby, bundler and the bundle
       uses: ruby/setup-ruby@v1
       with:
