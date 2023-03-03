@@ -2,12 +2,12 @@ module ElasticRecord
   module Model
     module Callbacks
       def self.included(base)
-        return unless base.respond_to?(:after_save) &&  base.respond_to?(:after_destroy)
+        return unless base.respond_to?(:after_commit)
 
         base.class_eval do
-          after_create :index_to_elasticsearch
-          after_update :update_index_document, if: -> { respond_to?(:saved_changes?) ? saved_changes? : changed? }
-          after_destroy :delete_index_document
+          after_commit :index_to_elasticsearch, on: :create
+          after_commit :update_index_document, on: :update, if: -> { respond_to?(:saved_changes?) ? saved_changes? : changed? }
+          after_commit :delete_index_document, on: :destroy
         end
       end
 
