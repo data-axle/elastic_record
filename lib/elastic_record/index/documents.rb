@@ -117,7 +117,7 @@ module ElasticRecord
           yield
 
           if current_bulk_batch.any?
-            body = current_bulk_batch.map { |action| "#{JSON.generate(action)}\n" }.join
+            body = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
             results = connection.json_post("/_bulk?#{options.to_query}", body)
             verify_bulk_results(results)
           end

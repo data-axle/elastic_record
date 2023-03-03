@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'arelastic', '>= 3.4.0'
   s.add_dependency 'activemodel'
+  s.add_dependency 'activesupport'
 end
