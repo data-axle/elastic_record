@@ -38,11 +38,11 @@ module ElasticRecord
     end
 
     def json_request(method, path, payload)
-      payload = JSON.generate(payload) if payload.is_a?(Hash)
+      payload = ActiveSupport::JSON.encode(payload) if payload.is_a?(Hash)
 
       response = http_request_with_retry(method, path, payload)
 
-      response_body = JSON.parse(response.body)
+      response_body = ActiveSupport::JSON.decode(response.body)
       response_body['error'] ? raise_connection_error(response, payload) : response_body
     end
 
