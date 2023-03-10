@@ -162,6 +162,14 @@ class ElasticRecord::Index::DocumentsTest < MiniTest::Test
     end
   end
 
+  def test_bulk_return_value
+    return_value = index.bulk do
+      42
+    end
+
+    assert_equal 42, return_value
+  end
+
   private
 
     def index

@@ -114,12 +114,12 @@ module ElasticRecord
         def start_new_bulk_batch(options, &block)
           connection.bulk_actions = []
 
-          yield
-
-          if current_bulk_batch.any?
-            body = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-            results = connection.json_post("/_bulk?#{options.to_query}", body)
-            verify_bulk_results(results)
+          yield.tap do
+            if current_bulk_batch.any?
+              body = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+              results = connection.json_post("/_bulk?#{options.to_query}", body)
+              verify_bulk_results(results)
+            end
           end
         ensure
           connection.bulk_actions = nil
