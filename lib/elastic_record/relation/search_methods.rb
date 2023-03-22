@@ -178,9 +178,19 @@ module ElasticRecord
         build_search.as_elastic
       end
 
+      def runtime_mapping!(mapping)
+        self.runtime_mapping_values += [mapping]
+        self
+      end
+
+      def runtime_mapping(mapping)
+        clone.runtime_mapping! mapping
+      end
+
       private
         def build_search
           searches = [
+            build_runtime_mappings(runtime_mapping_values),
             build_query_and_filter(query_value, filter_values),
             build_limit(limit_value),
             build_offset(offset_value),
@@ -190,6 +200,10 @@ module ElasticRecord
           ].compact
 
           Arelastic::Nodes::HashGroup.new searches
+        end
+
+        def build_runtime_mappings(mapping_values)
+          Arelastic::Searches::RuntimeMappings.new(mapping_values.reduce(&:merge)) unless mapping_values.empty?
         end
 
         def build_query_and_filter(query, filters)

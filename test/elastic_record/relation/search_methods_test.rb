@@ -151,6 +151,19 @@ class ElasticRecord::Relation::SearchMethodsTest < MiniTest::Test
     assert_equal expected, relation.as_elastic['query']
   end
 
+  def test_runtime_mappings
+    script = "emit(doc['color'].value + ' ' + doc['warehouse_id'].value);"
+    mapping1 = { foo: { type: 'keyword', script: script } }
+    mapping2 = { bar: { type: 'keyword', script: script } }
+
+    relation.runtime_mapping!(mapping1)
+    mutated = relation.runtime_mapping(mapping2)
+
+    expected = { **mapping1, **mapping2 }
+
+    assert_equal expected, mutated.as_elastic['runtime_mappings']
+  end
+
   def test_aggregation_with_bang
     relation.aggregate!("tags" => {"terms" => {"field" => "tags"}})
 
