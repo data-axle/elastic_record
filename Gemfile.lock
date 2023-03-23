@@ -4,7 +4,7 @@ PATH
     elastic_record (5.6.2)
       activemodel
       activesupport
-      arelastic (>= 3.4.0)
+      arelastic (>= 3.4.1)
 
 GEM
   remote: https://rubygems.org/
@@ -66,7 +66,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
-    arelastic (3.4.0)
+    arelastic (3.4.1)
     builder (3.2.4)
     concurrent-ruby (1.2.2)
     crack (0.4.5)
