@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'dotenv-rails'
-gem 'arelastic', github: 'data-axle/arelastic', branch: 'runtime-mappings'
+gem 'arelastic'
 gem 'oj'
 gem 'pg'
 gem 'rails', '~> 6.0.0'

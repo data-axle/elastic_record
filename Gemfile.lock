@@ -1,10 +1,3 @@
-GIT
-  remote: https://github.com/data-axle/arelastic.git
-  revision: 345500f93dfbc1d78eeb2510f8ce84693711291d
-  branch: runtime-mappings
-  specs:
-    arelastic (3.4.0)
-
 PATH
   remote: .
   specs:
@@ -73,6 +66,7 @@ GEM
       zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
+    arelastic (3.4.0)
     builder (3.2.4)
     concurrent-ruby (1.2.2)
     crack (0.4.5)
@@ -175,7 +169,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  arelastic!
+  arelastic
   dotenv-rails
   elastic_record!
   oj
