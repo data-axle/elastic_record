@@ -57,7 +57,7 @@ module ElasticRecord
         define_method ar_method do |*args, &block|
           result = klass.send(ar_method, *args, &block)
           if result.is_a?(ActiveRecord::Relation)
-            metamorphose(result)
+            self.class.new(result, values: values)
           else
             result
           end
@@ -102,6 +102,14 @@ module ElasticRecord
 
       def offset(value)
         clone.offset! value
+      end
+
+      def safe!
+        self.safe_value = true
+      end
+
+      def safe?
+        safe_value
       end
 
       def search_options!(options)

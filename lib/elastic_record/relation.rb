@@ -31,12 +31,6 @@ module ElasticRecord
       became
     end
 
-    def metamorphose(new_klass)
-      result = self.class.new(new_klass, values: values.dup)
-      result.safe! if safe?
-      result
-    end
-
     def count
       search_hits.total
     end
@@ -58,14 +52,6 @@ module ElasticRecord
 
     def to_a
       @records ||= find_hits(search_hits)
-    end
-
-    def safe!
-      @safe = true
-    end
-
-    def safe?
-      @safe
     end
 
     def find_hits(search_hits)
