@@ -31,6 +31,10 @@ module ElasticRecord
       became
     end
 
+    def metamorphose(new_klass)
+      self.class.new(new_klass, values: values.dup)
+    end
+
     def count
       search_hits.total
     end
