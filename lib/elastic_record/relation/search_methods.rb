@@ -104,6 +104,14 @@ module ElasticRecord
         clone.offset! value
       end
 
+      def safe!
+        self.safe_value = true
+      end
+
+      def safe?
+        safe_value
+      end
+
       def search_options!(options)
         self.search_options_value ||= {}
         self.search_options_value.merge! options
