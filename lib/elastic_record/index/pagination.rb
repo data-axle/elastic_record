@@ -21,7 +21,7 @@ module ElasticRecord
 
       def search_after(search:, keep_alive:, batch_size:, search_after: nil, point_in_time_id: nil)
         options = search_after_options(keep_alive, batch_size, search_after, point_in_time_id)
-        elastic_query = search.merge(options).reverse_merge('sort' => '_doc')
+        elastic_query = search.merge(options)
 
         if point_in_time_id
           connection.json_get('/_search', elastic_query)
