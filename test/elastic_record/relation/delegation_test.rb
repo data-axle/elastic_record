@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::DelegationTest < MiniTest::Test
+class ElasticRecord::Relation::DelegationTest < Minitest::Test
   def test_delegate_to_array
     Widget.create! color: 'red'
 

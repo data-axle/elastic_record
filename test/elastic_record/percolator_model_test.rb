@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::PercolatorModelTest < MiniTest::Test
+class ElasticRecord::PercolatorModelTest < Minitest::Test
   def test_elastic_index
     index = WidgetQuery.elastic_index
 

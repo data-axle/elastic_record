@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::BatchesTest < MiniTest::Test
+class ElasticRecord::Relation::BatchesTest < Minitest::Test
   def setup
     super
     @red_widget   = Widget.create!(color: 'red')

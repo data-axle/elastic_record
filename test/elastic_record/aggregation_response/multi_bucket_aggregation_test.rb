@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < MiniTest::Test
+class ElasticRecord::AggregationResponse::MultiBucketAggregationTest < Minitest::Test
   def test_multi_bucket_aggregation_response
     agg = ElasticRecord::AggregationResponse::MultiBucketAggregation.new 'states', {
       "buckets" => [

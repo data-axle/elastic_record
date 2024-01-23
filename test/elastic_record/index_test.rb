@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::IndexTest < MiniTest::Test
+class ElasticRecord::IndexTest < Minitest::Test
   def test_copy
     copied = index.dup
 
