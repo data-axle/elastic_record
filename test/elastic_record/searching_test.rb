@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::SearchingTest < MiniTest::Test
+class ElasticRecord::SearchingTest < Minitest::Test
   def setup
     super
     ScopedWidget.elastic_index.enable_deferring!

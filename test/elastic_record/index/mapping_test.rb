@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::MappingTest < MiniTest::Test
+class ElasticRecord::Index::MappingTest < Minitest::Test
   def test_get_mapping
     expected = {
       "properties" => {

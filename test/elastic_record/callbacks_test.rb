@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::CallbacksTest < MiniTest::Test
+class ElasticRecord::CallbacksTest < Minitest::Test
   def test_added_to_index
     widget = Widget.new color: 'green'
 

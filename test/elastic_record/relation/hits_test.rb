@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::HitsTest < MiniTest::Test
+class ElasticRecord::Relation::HitsTest < Minitest::Test
   def test_to_ids
     red_widget = Widget.create(color: 'red')
     blue_widget = Widget.create(color: 'red')

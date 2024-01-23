@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::MappingTypeTest < MiniTest::Test
+class ElasticRecord::Index::MappingTypeTest < Minitest::Test
   def test_default
     assert_equal '_doc', index.mapping_type
   end
