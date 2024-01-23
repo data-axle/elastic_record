@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::ActiveRecordTest < Minitest::Test
+class ElasticRecord::ActiveRecordTest < MiniTest::Test
   def test_ordering
     poo_product = Warehouse.create! name: "Poo"
     bear_product = Warehouse.create! name: "Bear"

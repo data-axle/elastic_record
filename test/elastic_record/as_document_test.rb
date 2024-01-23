@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::AsDocumentTest < Minitest::Test
+class ElasticRecord::AsDocumentTest < MiniTest::Test
   def test_as_search_document
     Widget.new(color: 'green').tap do |widget|
       assert_equal({"color" => "green"}, widget.as_search_document)

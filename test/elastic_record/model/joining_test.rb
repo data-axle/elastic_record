@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Model::JoiningTest < Minitest::Test
+class ElasticRecord::Model::JoiningTest < MiniTest::Test
   def setup
     super
     Mother.elastic_index.enable_deferring!

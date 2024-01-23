@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::ConfigTest < Minitest::Test
+class ElasticRecord::ConfigTest < MiniTest::Test
   def test_defaults
     assert_equal '2m', ElasticRecord::Config.scroll_keep_alive
   end

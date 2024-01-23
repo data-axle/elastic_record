@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::RelationTest < Minitest::Test
+class ElasticRecord::RelationTest < MiniTest::Test
   class SpecialRelation < ElasticRecord::Relation
   end
 

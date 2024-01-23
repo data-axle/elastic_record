@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Index::AnalyzeTest < Minitest::Test
+class ElasticRecord::Index::AnalyzeTest < MiniTest::Test
   def test_analyze
     tokens = Widget.elastic_index.analyze(
       'analyzer' => 'standard',

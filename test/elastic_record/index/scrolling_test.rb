@@ -1,6 +1,6 @@
 require "helper"
 
-class ElasticRecord::Index::ScrollingTest < Minitest::Test
+class ElasticRecord::Index::ScrollingTest < MiniTest::Test
   def test_build_scroll_enumerator
     index.index_document('bob', { name: 'bob' })
     index.index_document('joe', { name: 'joe' })

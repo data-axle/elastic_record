@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::ConnectionTest < Minitest::Test
+class ElasticRecord::ConnectionTest < MiniTest::Test
   def test_servers
     assert_equal ['foo'], ElasticRecord::Connection.new('foo').servers
     assert_equal ['foo', 'bar'], ElasticRecord::Connection.new(['foo', 'bar']).servers

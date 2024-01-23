@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::CalculationsTest < Minitest::Test
+class ElasticRecord::Relation::CalculationsTest < MiniTest::Test
   def test_calculate
     Widget.create!(color: 'red')
     Widget.create!(color: 'red')

@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::MergingTest < Minitest::Test
+class ElasticRecord::Relation::MergingTest < MiniTest::Test
   def test_merge_single_values
     relation = Widget.elastic_relation.limit(5)
     other = Widget.elastic_relation.limit(10)

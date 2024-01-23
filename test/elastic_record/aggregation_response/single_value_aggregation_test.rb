@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::AggregationResponse::SingleValueAggregationTest < Minitest::Test
+class ElasticRecord::AggregationResponse::SingleValueAggregationTest < MiniTest::Test
   def test_value
     agg = ElasticRecord::AggregationResponse::SingleValueAggregation.new 'average_price', 'value' => 4
 

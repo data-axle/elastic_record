@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::AggregationResponse::ParentAggregationTest < Minitest::Test
+class ElasticRecord::AggregationResponse::ParentAggregationTest < MiniTest::Test
   def test_parent_aggregation_response_for_fill_count
     agg = ElasticRecord::AggregationResponse::ParentAggregation.new 'fill_count', {
       "doc_count" => 10,
