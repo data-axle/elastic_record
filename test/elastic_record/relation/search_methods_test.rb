@@ -105,14 +105,15 @@ class ElasticRecord::Relation::SearchMethodsTest < Minitest::Test
     expected = { "bool" => { "filter" => nested_filter } }
     assert_equal expected, scope.as_elastic['query']
 
+    Mother # establish parent-child relationship
     scope = Son.elastic_relation.filter.nested('contacts', 'prefix' => {'contacts.name' => 'Jo'})
     expected = {
       "bool" => {
         "filter" => {
           "bool" => {
             "must" => [
+              nested_filter,
               { "term" => { "arbitrary" => "son" } },
-              nested_filter
             ]
           }
         }
