@@ -30,7 +30,7 @@ module ElasticRecord
       end
 
       def build_search_after(options)
-        elastic_index.build_search_after(search: order('_shard_doc').as_elastic, **options)
+        elastic_index.build_search_after(search: as_elastic, **options)
       end
 
       def reindex

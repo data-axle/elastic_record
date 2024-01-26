@@ -39,7 +39,7 @@ class ElasticRecord::Index::PaginationTest < Minitest::Test
   end
 
   def test_each_slice
-    10.times { |i| index.index_document("bob#{i}", { color: 'red' }) }
+    10.times { |i| index.index_document("0000#{i}", { color: 'red' }) }
     batches = []
 
     search_after = index.build_search_after(
