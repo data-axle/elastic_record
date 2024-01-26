@@ -1,13 +1,15 @@
 require 'helper'
 
-class ElasticRecord::Index::ManageTest < MiniTest::Test
+class ElasticRecord::Index::ManageTest < Minitest::Test
   class Felon
     include TestModel
   end
 
   def setup
     super
-    Felon.elastic_index.delete('felons*')
+    index.delete('felons_foo') rescue nil
+    index.delete('felons_default') rescue nil
+    index.delete('felons_override') rescue nil
   end
 
   def test_create

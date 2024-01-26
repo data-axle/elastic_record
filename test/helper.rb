@@ -7,11 +7,11 @@ Bundler.require(Rails.env)
 require 'webmock/minitest'
 WebMock.disable_net_connect!(allow_localhost: true)
 
-def MiniTest.filter_backtrace(bt)
+def Minitest.filter_backtrace(bt)
   bt
 end
 
-module MiniTest
+module Minitest
   class Test
     def setup
       WebMock.reset!

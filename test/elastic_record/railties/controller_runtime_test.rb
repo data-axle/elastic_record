@@ -1,7 +1,7 @@
 require 'helper'
 require "elastic_record/railties/controller_runtime"
 
-class ElasticRecord::Railties::ControllerRuntimeTest < MiniTest::Test
+class ElasticRecord::Railties::ControllerRuntimeTest < Minitest::Test
   class TestRuntime
     def self.log_process_action(payload)
       ['sweet']

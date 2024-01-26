@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::Relation::FinderMethodsTest < MiniTest::Test
+class ElasticRecord::Relation::FinderMethodsTest < Minitest::Test
   def setup
     super
     @red_widget = Widget.create(color: 'red')

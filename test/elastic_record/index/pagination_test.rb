@@ -1,6 +1,6 @@
 require "helper"
 
-class ElasticRecord::Index::PaginationTest < MiniTest::Test
+class ElasticRecord::Index::PaginationTest < Minitest::Test
   def test_search_after
     index.index_document('bob1', { name: 'bob' })
     index.index_document('bob2', { name: 'bob' })
