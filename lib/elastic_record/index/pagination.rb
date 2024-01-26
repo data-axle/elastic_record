@@ -20,13 +20,12 @@ module ElasticRecord
       end
 
       def search_after(search:, keep_alive:, batch_size:, search_after: nil, point_in_time_id: nil)
-        options = search_after_options(keep_alive, batch_size, search_after, point_in_time_id)
-        elastic_query = search.merge(options).reverse_merge('sort' => '_doc')
+        payload = build_search_after_payload(search, keep_alive, batch_size, search_after, point_in_time_id)
 
         if point_in_time_id
-          connection.json_get('/_search', elastic_query)
+          connection.json_get('/_search', payload)
         else
-          get '_search', elastic_query
+          get '_search', payload
         end
       rescue ConnectionError => e
         case e.status_code
@@ -38,11 +37,14 @@ module ElasticRecord
 
       private
 
-        def search_after_options(keep_alive, batch_size, search_after, point_in_time_id)
-          search_options                = { size: batch_size }
-          search_options[:pit]          = { id: point_in_time_id, keep_alive: keep_alive } if point_in_time_id
-          search_options[:search_after] = search_after if search_after
-          search_options
+        def build_search_after_payload(search, keep_alive, batch_size, search_after, point_in_time_id)
+          payload                = { size: batch_size }
+          payload[:pit]          = { id: point_in_time_id, keep_alive: keep_alive } if point_in_time_id
+          payload[:search_after] = search_after if search_after
+          payload.merge!(search)
+          payload['sort'] ||= Array.wrap(payload['sort'])
+          payload['sort'] << '_shard_doc' unless payload['sort'].include?('_shard_doc')
+          payload
         end
     end
   end
