@@ -1,6 +1,6 @@
 require 'helper'
 
-class ElasticRecord::FromSearchHitsTest < Minitest::Test
+class ElasticRecord::FromSearchHitTest < Minitest::Test
   def setup
     super
     @project = Project.new(
