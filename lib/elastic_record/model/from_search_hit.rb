@@ -3,15 +3,16 @@ module ElasticRecord
     module FromSearchHit
 
       def from_search_hit(hit)
-        hit = hit['_source'].merge('id' => hit['_id'])
+        attrs         = hit['_source']
+        attrs['id'] ||= hit['_id']
 
-        attrs = value_from_search_hit_object(hit)
+        cast_attrs = value_from_search_hit_object(attrs)
 
         if respond_to?(:instantiate)
-          instantiate(attrs)
+          instantiate(cast_attrs)
         else
           self.new.tap do |record|
-            attrs.each do |k, v|
+            cast_attrs.each do |k, v|
               record.send("#{k}=", v) if record.respond_to?("#{k}=")
             end
           end
