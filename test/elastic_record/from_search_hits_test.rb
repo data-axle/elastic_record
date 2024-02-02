@@ -37,6 +37,27 @@ class ElasticRecord::FromSearchHitsTest < Minitest::Test
     assert_equal 25..30, document.manager['estimated_age']
   end
 
+  def test_id
+    document = Project.from_search_hit({
+      '_id' => 'elastic_id',
+      '_source' => {
+        'name' => 'foo',
+        'id' => 'source_id',
+      }
+    })
+
+    assert_equal 'source_id', document.id
+
+    document = Project.from_search_hit({
+      '_id' => 'elastic_id',
+      '_source' => {
+        'name' => 'foo',
+      }
+    })
+
+    assert_equal 'elastic_id', document.id
+  end
+
   private
 
     def manager
