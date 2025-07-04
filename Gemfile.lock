@@ -78,7 +78,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     arelastic (3.4.1)
     builder (3.2.4)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.3.4)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -172,6 +172,7 @@ PLATFORMS
 
 DEPENDENCIES
   arelastic
+  concurrent-ruby (= 1.3.4)
   dotenv-rails
   elastic_record!
   oj
