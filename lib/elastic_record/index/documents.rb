@@ -115,24 +115,21 @@ module ElasticRecord
           connection.bulk_actions = []
 
           yield.tap do
-            if current_bulk_batch.any?
-              body = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-              results = connection.json_post("/_bulk?#{options.to_query}", body)
-              verify_bulk_results(results)
-            end
+            json_post_bulk(options) if current_bulk_batch.any?
           end
         ensure
           connection.bulk_actions = nil
         end
 
-        def verify_bulk_results(results)
-          return unless results.is_a?(Hash)
+        def json_post_bulk(options)
+          body    = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+          results = connection.json_post("/_bulk?#{options.to_query}", body)
 
-          errors = results['items'].select do |item|
-            item.values.first['error']
+          if results.is_a?(Hash)
+            errors = results['items'].select { |item| item.values.first['error'] }
+
+            raise ElasticRecord::BulkError.new(errors) unless errors.empty?
           end
-
-          raise ElasticRecord::BulkError.new(errors) unless errors.empty?
         end
     end
   end
