@@ -42,6 +42,8 @@ module ElasticRecord
 
       response = http_request_with_retry(method, path, payload)
 
+      raise_connection_error(response, payload) unless (200..299).cover?(response.code.to_i)
+
       response_body = ActiveSupport::JSON.decode(response.body)
       response_body['error'] ? raise_connection_error(response, payload) : response_body
     end

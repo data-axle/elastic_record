@@ -30,6 +30,17 @@ class ElasticRecord::ConnectionTest < Minitest::Test
     assert_equal expected, connection.json_put("/test")
   end
 
+  def test_json_request_400_errors
+    stub_es_request(:get, "/test").to_return(status: 413, body: 'client intended to send too large a body')
+
+    error =
+      assert_raises ElasticRecord::ConnectionError do
+        connection.json_get("/test")
+      end
+
+    assert_equal '413', error.status_code
+  end
+
   def test_json_request_with_valid_error_status
     request  = { 'some' => 'payload' }
     response = { 'error' => 'Doing it wrong' }
