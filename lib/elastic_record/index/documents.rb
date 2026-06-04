@@ -30,8 +30,7 @@ module ElasticRecord
           instructions = { _index: index_name, _id: id }
           instructions[:routing] = routing if routing
 
-          batch << { index: instructions }
-          batch << document
+          batch << [{ index: instructions }, document]
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?routing=#{routing}" if routing
@@ -52,8 +51,7 @@ module ElasticRecord
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:routing] = routing if routing
 
-          batch << { update: instructions }
-          batch << params
+          batch << [{ update: instructions }, params]
         else
           path = "/#{index_name}/_update/#{id}?retry_on_conflict=3"
           path << "&routing=#{routing}" if routing
@@ -68,7 +66,7 @@ module ElasticRecord
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:routing] = routing if routing
-          batch << { delete: instructions }
+          batch << [{ delete: instructions }]
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?routing=#{routing}" if routing
@@ -124,8 +122,10 @@ module ElasticRecord
         ACTIONS_PER_BULK = 1_000
 
         def json_post_bulk(options)
-          current_bulk_batch.each_slice(ACTIONS_PER_BULK) do |actions|
-            body    = actions.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+          slice_size = options.delete(:actions_per_bulk) || ACTIONS_PER_BULK
+
+          current_bulk_batch.each_slice(slice_size) do |actions|
+            body    = actions.flatten.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
             results = connection.json_post("/_bulk?#{options.to_query}", body)
 
             if results.is_a?(Hash)
