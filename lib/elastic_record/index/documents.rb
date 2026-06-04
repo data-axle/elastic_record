@@ -121,16 +121,18 @@ module ElasticRecord
           connection.bulk_actions = nil
         end
 
+        ACTIONS_PER_BULK = 1_000
+
         def json_post_bulk(options)
-          # chunk into 1000 actions at a time
-          # add error handling for "client intended to send too large body"
-          body    = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-          results = connection.json_post("/_bulk?#{options.to_query}", body)
+          current_bulk_batch.each_slice(ACTIONS_PER_BULK) do |actions|
+            body    = actions.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+            results = connection.json_post("/_bulk?#{options.to_query}", body)
 
-          if results.is_a?(Hash)
-            errors = results['items'].select { |item| item.values.first['error'] }
+            if results.is_a?(Hash)
+              errors = results['items'].select { |item| item.values.first['error'] }
 
-            raise ElasticRecord::BulkError.new(errors) unless errors.empty?
+              raise ElasticRecord::BulkError.new(errors) unless errors.empty?
+            end
           end
         end
     end
