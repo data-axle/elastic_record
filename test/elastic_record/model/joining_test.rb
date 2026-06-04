@@ -104,11 +104,14 @@ class ElasticRecord::Model::JoiningTest < Minitest::Test
       index.index_record(son)
 
       expected = [
-        {index: {_index: index.alias_name, _id: 9}},
-        {"name" => "Queen Victoria", "arbitrary" => {"name" => "mother"}},
-        {index: {_index: index.alias_name, _id: 10, routing: "9"}},
-        {"name" => "King Edward VII", "warehouse_id" => "9", "arbitrary" => {"name" => "son", "parent" => "9"}}
-
+        [
+          { index: { _index: index.alias_name, _id: 9 } },
+          { "name" => "Queen Victoria", "arbitrary" => { "name" => "mother" } },
+        ],
+        [
+          { index: { _index: index.alias_name, _id: 10, routing: "9" } },
+          { "name" => "King Edward VII", "warehouse_id" => "9", "arbitrary" => { "name" => "son", "parent" => "9" } },
+        ],
       ]
 
       assert_equal expected, index.current_bulk_batch
