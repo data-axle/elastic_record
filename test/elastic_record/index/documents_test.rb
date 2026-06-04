@@ -88,15 +88,15 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
 
       expected = [
         [
-          { index: { _index: index.alias_name, _id: "5" } },
-          { color: "green" }
+          { index: { _index: index.alias_name, _id: '5' } },
+          { color: 'green' }
         ],
         [
-          { update: { _index: "widgets", _id: "5", retry_on_conflict: 3 } },
-          { doc: { color: "blue" }, doc_as_upsert: true }
+          { update: { _index: 'widgets', _id: '5', retry_on_conflict: 3 } },
+          { doc: { color: 'blue' }, doc_as_upsert: true }
         ],
         [
-          {delete: { _index: index.alias_name, _id: "3", retry_on_conflict: 3 } }
+          {delete: { _index: index.alias_name, _id: '3', retry_on_conflict: 3 } }
         ],
       ]
 
@@ -195,8 +195,8 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
 
         expected = [
           [
-            { index: { _index: index.alias_name, _id: "5" } },
-            { color: "green" },
+            { index: { _index: index.alias_name, _id: '5' } },
+            { color: 'green' },
           ]
         ]
 
