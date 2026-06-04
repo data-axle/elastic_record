@@ -87,17 +87,59 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
       index.delete_document '3'
 
       expected = [
-        {index: {_index: index.alias_name, _id: "5"}},
-        {color: "green"},
-        {update: {_index: "widgets", _id: "5", retry_on_conflict: 3}},
-        {doc: {color: "blue"}, doc_as_upsert: true},
-        {delete: {_index: index.alias_name, _id: "3", retry_on_conflict: 3}}
+        [
+          { index: { _index: index.alias_name, _id: '5' } },
+          { color: 'green' }
+        ],
+        [
+          { update: { _index: 'widgets', _id: '5', retry_on_conflict: 3 } },
+          { doc: { color: 'blue' }, doc_as_upsert: true }
+        ],
+        [
+          {delete: { _index: index.alias_name, _id: '3', retry_on_conflict: 3 } }
+        ],
       ]
 
       assert_equal expected, index.current_bulk_batch
     end
 
     assert_nil index.current_bulk_batch
+  end
+
+  def test_bulk_batched
+    assert_nil index.current_bulk_batch
+
+    connection = index.connection
+    post_calls = []
+
+    # stub to collect post_calls:
+    connection.define_singleton_method(:json_post) do |endpoint, body|
+      post_calls << [endpoint, body]
+    end
+
+    begin
+      index.bulk(actions_per_bulk: 2) do
+        index.index_document '5', { color: 'green' }
+        index.delete_document '3'
+        index.update_document '5', { color: 'blue' }
+        index.update_document '5', { color: 'orange' }
+        index.update_document '4', { color: 'black' }
+      end
+
+      assert_equal 3, post_calls.length
+      expected_body = <<~DOC
+        {"index":{"_index":"widgets","_id":"5"}}
+        {"color":"green"}
+        {"delete":{"_index":"widgets","_id":"3","retry_on_conflict":3}}
+      DOC
+      assert_equal ['/_bulk?', expected_body], post_calls.first
+      assert_nil index.current_bulk_batch
+    ensure
+      class << connection
+        remove_method :json_post
+      end
+    end
+
   end
 
   def test_bulk_nested
@@ -152,8 +194,10 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
         InheritedWidget.elastic_index.index_document '5', { color: 'green' }
 
         expected = [
-          {index: {_index: index.alias_name, _id: "5"}},
-          {color: "green"}
+          [
+            { index: { _index: index.alias_name, _id: '5' } },
+            { color: 'green' },
+          ]
         ]
 
 

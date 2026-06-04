@@ -30,8 +30,7 @@ module ElasticRecord
           instructions = { _index: index_name, _id: id }
           instructions[:routing] = routing if routing
 
-          batch << { index: instructions }
-          batch << document
+          batch << [{ index: instructions }, document]
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?routing=#{routing}" if routing
@@ -52,8 +51,7 @@ module ElasticRecord
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:routing] = routing if routing
 
-          batch << { update: instructions }
-          batch << params
+          batch << [{ update: instructions }, params]
         else
           path = "/#{index_name}/_update/#{id}?retry_on_conflict=3"
           path << "&routing=#{routing}" if routing
@@ -68,7 +66,7 @@ module ElasticRecord
         if batch = current_bulk_batch
           instructions = { _index: index_name, _id: id, retry_on_conflict: 3 }
           instructions[:routing] = routing if routing
-          batch << { delete: instructions }
+          batch << [{ delete: instructions }]
         else
           path = "/#{index_name}/_doc/#{id}"
           path << "?routing=#{routing}" if routing
@@ -121,14 +119,20 @@ module ElasticRecord
           connection.bulk_actions = nil
         end
 
+        ACTIONS_PER_BULK = 1_000
+
         def json_post_bulk(options)
-          body    = current_bulk_batch.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
-          results = connection.json_post("/_bulk?#{options.to_query}", body)
+          slice_size = options.delete(:actions_per_bulk) || ACTIONS_PER_BULK
 
-          if results.is_a?(Hash)
-            errors = results['items'].select { |item| item.values.first['error'] }
+          current_bulk_batch.each_slice(slice_size) do |actions|
+            body    = actions.flatten.map { |action| "#{ActiveSupport::JSON.encode(action)}\n" }.join
+            results = connection.json_post("/_bulk?#{options.to_query}", body)
 
-            raise ElasticRecord::BulkError.new(errors) unless errors.empty?
+            if results.is_a?(Hash)
+              errors = results['items'].select { |item| item.values.first['error'] }
+
+              raise ElasticRecord::BulkError.new(errors) unless errors.empty?
+            end
           end
         end
     end
