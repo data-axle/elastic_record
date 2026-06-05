@@ -22,7 +22,7 @@ module ElasticRecord
     end
 
     def json_get(path, json = nil)
-      json_request :get, path, json
+      json_request :get, path, json, consider_ok: 404
     end
 
     def json_post(path, json = nil)
@@ -34,15 +34,19 @@ module ElasticRecord
     end
 
     def json_delete(path, json = nil)
-      json_request :delete, path, json
+      json_request :delete, path, json, consider_ok: 404
     end
 
-    def json_request(method, path, payload)
+    def json_request(method, path, payload, consider_ok: [])
       payload = ActiveSupport::JSON.encode(payload) if payload.is_a?(Hash)
 
       response = http_request_with_retry(method, path, payload)
 
-      raise_connection_error(response, payload) unless (200..299).cover?(response.code.to_i)
+      code = response.code.to_i
+
+      unless (200..299).cover?(code) || Array.wrap(consider_ok).include?(code)
+        raise_connection_error(response, payload)
+      end
 
       response_body = ActiveSupport::JSON.decode(response.body)
       response_body['error'] ? raise_connection_error(response, payload) : response_body
