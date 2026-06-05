@@ -31,24 +31,24 @@ class ElasticRecord::ConnectionTest < Minitest::Test
   end
 
   def test_json_get_413_error
-    stub_es_request(:get, "/test").to_return(status: 413, body: 'client intended to send too large a body')
+    stub_es_request(:get, '/test').to_return(status: 413, body: 'client intended to send too large a body')
 
     error =
       assert_raises ElasticRecord::ConnectionError do
-        connection.json_get("/test")
+        connection.json_get('/test')
       end
 
     assert_equal '413', error.status_code
   end
 
   def test_json_get_404_error
-    response = { error: { type: "index_not_found_exception" } }
+    response = { error: { type: 'index_not_found_exception' } }
 
-    stub_es_request(:get, "/test").to_return(status: 404, body: response.to_json)
+    stub_es_request(:get, '/test').to_return(status: 404, body: response.to_json)
 
     error =
       assert_raises ElasticRecord::ConnectionError do
-        connection.json_get("/test")
+        connection.json_get('/test')
       end
 
     expected = {
