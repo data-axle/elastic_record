@@ -73,6 +73,17 @@ class ElasticRecord::ConnectionTest < Minitest::Test
     assert_equal response, result
   end
 
+  def test_json_delete_404_without_error
+    request  = { 'id' => 'expired_pit' }
+    response = { 'succeeded' => false, 'num_freed' => 0 }
+
+    stub_es_request(:delete, '/_pit').to_return(status: 404, body: response.to_json)
+
+    result = connection.json_delete('/_pit', request.to_json)
+
+    assert_equal response, result
+  end
+
   def test_json_request_with_valid_error_status
     request  = { 'some' => 'payload' }
     response = { 'error' => 'Doing it wrong' }
