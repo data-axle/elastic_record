@@ -66,8 +66,8 @@ class ElasticRecord::ConnectionTest < Minitest::Test
     result =
       begin
         connection.json_get('/places/_doc/123')
-      rescue
-        raise StandardError.new('"get" requests without error bodies should not raise!')
+      rescue ElasticRecord::ConnectionError
+        flunk('404 GET without error should not raise')
       end
 
     assert_equal response, result
@@ -79,7 +79,12 @@ class ElasticRecord::ConnectionTest < Minitest::Test
 
     stub_es_request(:delete, '/_pit').to_return(status: 404, body: response.to_json)
 
-    result = connection.json_delete('/_pit', request.to_json)
+    result =
+      begin
+        connection.json_delete('/_pit', request.to_json)
+      rescue ElasticRecord::ConnectionError
+        flunk('404 DELETE without error should not raise')
+      end
 
     assert_equal response, result
   end
