@@ -18,11 +18,11 @@ module ElasticRecord
     end
 
     def head(path)
-      http_request_with_retry(:head, path).code
+      http_request_with_retry(:head, path, nil, [404]).code
     end
 
     def json_get(path, json = nil)
-      json_request :get, path, json
+      json_request :get, path, json, ok_statuses: [404]
     end
 
     def json_post(path, json = nil)
@@ -34,25 +34,30 @@ module ElasticRecord
     end
 
     def json_delete(path, json = nil)
-      json_request :delete, path, json
+      json_request :delete, path, json, ok_statuses: [404]
     end
 
-    def json_request(method, path, payload)
+    def json_request(method, path, payload, ok_statuses: [])
       payload = ActiveSupport::JSON.encode(payload) if payload.is_a?(Hash)
 
-      response = http_request_with_retry(method, path, payload)
+      response = http_request_with_retry(method, path, payload, ok_statuses)
 
       response_body = ActiveSupport::JSON.decode(response.body)
       response_body['error'] ? raise_connection_error(response, payload) : response_body
     end
 
-    def http_request_with_retry(method, path, payload = nil)
+    STATUS_200 = (200..299).freeze
+
+    def http_request_with_retry(method, path, payload = nil, ok_statuses = [])
       with_retry do
         response = http_request(method, path, payload)
+        code = response.code.to_i
 
-        raise_connection_error(response, payload) if response.code.to_i >= 500
-
-        response
+        if STATUS_200.cover?(code) || ok_statuses.include?(code)
+          response
+        else
+          raise_connection_error(response, payload)
+        end
       end
     end
 

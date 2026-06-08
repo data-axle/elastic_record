@@ -30,6 +30,65 @@ class ElasticRecord::ConnectionTest < Minitest::Test
     assert_equal expected, connection.json_put("/test")
   end
 
+  def test_json_get_413_no_error
+    stub_es_request(:get, '/test').to_return(status: 413, body: 'client intended to send too large a body')
+
+    error =
+      assert_raises ElasticRecord::ConnectionError do
+        connection.json_get('/test')
+      end
+
+    assert_equal '413', error.status_code
+  end
+
+  def test_json_get_404_with_error
+    response = { error: { type: 'index_not_found_exception' } }
+
+    stub_es_request(:get, '/test').to_return(status: 404, body: response.to_json)
+
+    error =
+      assert_raises ElasticRecord::ConnectionError do
+        connection.json_get('/test')
+      end
+
+    expected = {
+      elasticsearch_response: response,
+      request_payload:        nil,
+    }.to_json
+    assert_equal expected, error.message
+  end
+
+  def test_json_get_404_without_error
+    response = { '_index' => 'places', '_id' => '123', 'found' => false }
+
+    stub_es_request(:get, '/places/_doc/123').to_return(status: 404, body: response.to_json)
+
+    result =
+      begin
+        connection.json_get('/places/_doc/123')
+      rescue ElasticRecord::ConnectionError
+        flunk('404 GET without error should not raise')
+      end
+
+    assert_equal response, result
+  end
+
+  def test_json_delete_404_without_error
+    request  = { 'id' => 'expired_pit' }
+    response = { 'succeeded' => false, 'num_freed' => 0 }
+
+    stub_es_request(:delete, '/_pit').to_return(status: 404, body: response.to_json)
+
+    result =
+      begin
+        connection.json_delete('/_pit', request.to_json)
+      rescue ElasticRecord::ConnectionError
+        flunk('404 DELETE without error should not raise')
+      end
+
+    assert_equal response, result
+  end
+
   def test_json_request_with_valid_error_status
     request  = { 'some' => 'payload' }
     response = { 'error' => 'Doing it wrong' }
