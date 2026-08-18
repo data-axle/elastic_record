@@ -104,19 +104,21 @@ module ElasticRecord
       end
 
       def current_bulk_batch
-        connection.bulk_actions
+        Thread.current[BULK_ACTIONS_KEY]
       end
 
       private
 
+        BULK_ACTIONS_KEY = 'elastic_record_bulk_actions'
+
         def start_new_bulk_batch(options, &block)
-          connection.bulk_actions = []
+          Thread.current[BULK_ACTIONS_KEY] = []
 
           yield.tap do
             json_post_bulk(options) if current_bulk_batch.any?
           end
         ensure
-          connection.bulk_actions = nil
+          Thread.current[BULK_ACTIONS_KEY] = nil
         end
 
         ACTIONS_PER_BULK = 1_000
