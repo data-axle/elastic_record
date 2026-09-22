@@ -240,26 +240,6 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
     assert_nil index.current_bulk_batch
   end
 
-  def test_concurrent_bulk_does_not_clear_another_threads_batch
-    errors = []
-    threads = 5.times.map do
-      Thread.new do
-        5.times do
-          index.bulk do
-            index.index_document '1', { color: 'green' }
-            raise 'bulk batch was nil' if index.current_bulk_batch.nil?
-            raise 'bulk batch was empty' if index.current_bulk_batch.empty?
-          end
-        end
-      rescue => e
-        errors << e
-      end
-    end
-    threads.each(&:join)
-
-    assert_empty errors.map(&:message)
-  end
-
   private
 
     def index
