@@ -5,7 +5,6 @@ module ElasticRecord
     attr_accessor :servers, :options
     attr_accessor :request_count, :current_server
     attr_accessor :max_request_count
-    attr_accessor :bulk_actions
     def initialize(servers, options = {})
       self.servers = Array(servers)
 
@@ -15,6 +14,14 @@ module ElasticRecord
       self.max_request_count  = 100
       self.options            = options.symbolize_keys
       self.bulk_actions       = nil
+    end
+
+    def bulk_actions
+      Thread.current[bulk_actions_key]
+    end
+
+    def bulk_actions=(actions)
+      Thread.current[bulk_actions_key] = actions
     end
 
     def head(path)
@@ -88,6 +95,10 @@ module ElasticRecord
     end
 
     private
+
+      def bulk_actions_key
+        @bulk_actions_key ||= :"elastic_record_bulk_actions_#{object_id}"
+      end
 
       def next_server
         if @shuffled_servers.nil?

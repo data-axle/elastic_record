@@ -214,6 +214,32 @@ class ElasticRecord::Index::DocumentsTest < Minitest::Test
     assert_equal 42, return_value
   end
 
+  def test_bulk_is_isolated_per_thread
+    other_ids = Queue.new
+    errors = []
+
+    index.bulk do
+      index.index_document 'main', { color: 'green' }
+
+      thread = Thread.new do
+        index.bulk do
+          index.index_document 'other', { color: 'blue' }
+          other_ids << index.current_bulk_batch.map { |action| action.dig(0, :index, :_id) }
+        end
+      rescue => e
+        errors << e
+      end
+      thread.join
+
+      main_ids = index.current_bulk_batch.map { |action| action.dig(0, :index, :_id) }
+      assert_equal ['main'], main_ids
+    end
+
+    assert_empty errors
+    assert_equal ['other'], other_ids.pop
+    assert_nil index.current_bulk_batch
+  end
+
   private
 
     def index

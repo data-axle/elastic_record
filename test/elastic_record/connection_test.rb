@@ -11,6 +11,30 @@ class ElasticRecord::ConnectionTest < Minitest::Test
     assert_equal expected, ElasticRecord::Connection.new('foo', 'lol' => 'rofl').options
   end
 
+  def test_bulk_actions_are_isolated_between_threads
+    connection = ElasticRecord::Connection.new('foo')
+    connection.bulk_actions = [:main]
+
+    worker_actions = Thread.new do
+      connection.bulk_actions = [:worker]
+      connection.bulk_actions
+    end.value
+
+    assert_equal [:worker], worker_actions
+    assert_equal [:main], connection.bulk_actions
+  end
+
+  def test_bulk_actions_are_isolated_between_connections
+    first_connection  = ElasticRecord::Connection.new('foo')
+    second_connection = ElasticRecord::Connection.new('bar')
+
+    first_connection.bulk_actions  = [:first]
+    second_connection.bulk_actions = [:second]
+
+    assert_equal [:first], first_connection.bulk_actions
+    assert_equal [:second], second_connection.bulk_actions
+  end
+
   def test_head
     stub_es_request(:head, "/success").to_return(status: 200)
 

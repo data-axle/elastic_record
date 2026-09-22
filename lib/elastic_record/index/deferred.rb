@@ -11,12 +11,18 @@ module ElasticRecord
         attr_accessor :index
         attr_accessor :deferred_actions
         attr_accessor :writes_made
-        attr_accessor :bulk_actions
 
         def initialize(index)
           @index = index
-          @bulk_actions = nil
           reset!
+        end
+
+        def bulk_actions
+          Thread.current[bulk_actions_key]
+        end
+
+        def bulk_actions=(actions)
+          Thread.current[bulk_actions_key] = actions
         end
 
         def reset!
@@ -34,6 +40,10 @@ module ElasticRecord
         end
 
         private
+          def bulk_actions_key
+            @bulk_actions_key ||= :"elastic_record_bulk_actions_#{object_id}"
+          end
+
           def method_missing(method, *args, &block)
             super unless index.real_connection.respond_to?(method)
 
