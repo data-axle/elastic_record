@@ -12,14 +12,17 @@ module ElasticRecord
       end
 
       def search_results
-        @search_results ||= begin
+        @search_results ||= klass.elastic_index.search(as_elastic, options_for_hits_search)
+      end
+
+      private
+
+        def options_for_hits_search
           options = { typed_keys: true, track_total_hits: true }
           options[:search_type] = search_type_value if search_type_value
           options[:_source] = klass.elastic_index.load_from_source
-
-          klass.elastic_index.search(as_elastic, options)
+          options
         end
-      end
     end
   end
 end
